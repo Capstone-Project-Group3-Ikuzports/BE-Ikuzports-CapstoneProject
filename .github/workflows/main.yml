@@ -1,0 +1,29 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Connect to server using SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            sudo chmod 777 /var/run/docker.sock
+            cd /home/ubuntu/group_project/BE
+            git pull origin main
+            docker stop ikuzportsContainer
+            docker rm  ikuzportsContainer
+            docker rmi ikuzports-images:latest
+            docker build -t immersive-dashboard-images:latest .
+            docker run -d -p 8080:8080 -e SERVER_PORT=${{ secrets.SERVER_PORT }} -e DB_USERNAME=${{ secrets.DB_USERNAME }} -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} -e DB_HOST=${{ secrets.DB_HOST }} -e DB_PORT=${{ secrets.DB_PORT }} -e DB_NAME=${{ secrets.DB_NAME }} -e AWS_REGION=${{ secrets.AWS_REGION }} -e ACCESS_KEY_IAM=${{ secrets.ACCESS_KEY_IAM }} -e SECRET_KEY_IAM=${{ secrets. SECRET_KEY_IAM }} -e AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }} --name ikuzportsContainer ikuzports-images:latest
+
