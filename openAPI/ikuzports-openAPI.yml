@@ -1,0 +1,1093 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Ikuzports - API
+  description: Api documentation for Ikuzports
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/RAMADINAAINIRIZKI/Ikuzports/1.0.0
+
+paths: 
+  /auth: 
+    post : 
+      tags:
+        - auth
+      summary: Login to system
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              example: 
+                email: "messi@gmail.com"
+                password: "qwerty"
+      responses: 
+        '200':
+          description: Login success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success login"
+                data: 
+                  id: 1
+                  email: "messi@gmail.com"
+                  token: "asjkdawbekaj"
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404'        
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /users:
+    post:
+      tags: 
+       - users
+      summary: Insert user data
+      requestBody:
+        required: true
+        content: 
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Lionel Messi"
+                email:
+                  type: string
+                  example: "messi@gmail.com"
+                password:
+                  type: string
+                  example: "qwerty"
+                phone_number:
+                  type: string
+                  example: "0812345678"
+                address:
+                  type: string
+                  example: "Jl. Sepak Bola"
+                city:
+                  type: string
+                  example: "Bandung"
+                user_image:
+                  type: string
+                  format: binary
+                  example: "link"
+                gender:
+                  type: string
+                  enum:
+                    - M
+                    - F
+                biodata:
+                  type: string
+                  example: "saya suka sepak bola"
+                  
+            encoding:
+              user_image:
+                contentType: images/png, images/jpeg
+      responses: 
+        '200':
+          description: Insert success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success insert user data"
+        '400':
+          $ref: '#/components/responses/400'          
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /users/{users_id}: 
+    get:
+      tags: 
+       - users
+      summary: Get user data by ID
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: users_id
+          description: "id user"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: List user data by user ID success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  id: 1
+                  name: "Lionel Messi"
+                  email: "messi@gmail.com"
+                  phone_number: "0812345678"
+                  address: "Jl. Sepak Bola"
+                  city: "Bandung"
+                  user_images: "url"
+                  gender: "M"
+                  biodata: "saya suka sepak bola"
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404' 
+        '500':
+          $ref: '#/components/responses/500'
+    
+    put:
+      tags: 
+       - users
+      summary: Update user data
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: users_id
+          description: "id user"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content: 
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Lionel Messi"
+                email:
+                  type: string
+                  example: "messi@gmail.com"
+                password:
+                  type: string
+                  example: "qwerty"
+                phone_number:
+                  type: string
+                  example: "0812345678"
+                address:
+                  type: string
+                  example: "Jl. Sepak Bola"
+                city:
+                  type: string
+                  example: "Bandung"
+                user_image:
+                  type: string
+                  format: binary
+                  example: "link"
+                gender:
+                  type: string
+                  enum:
+                    - M
+                    - F
+                biodata:
+                  type: string
+                  example: "saya suka sepak bola"
+                
+            encoding:
+             user_image:
+                contentType: images/png, images/jpeg
+      responses: 
+        '200':
+          description: Update success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success update user data"
+        '400':
+          $ref: '#/components/responses/400'          
+        '500':
+          $ref: '#/components/responses/500'
+    
+    delete:
+      tags: 
+       - users
+      summary: Delete user data by ID
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: users_id
+          description: "id user"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses: 
+        '200':
+          description: Delete success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success delete user data by id"
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404' 
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /users/{users_id}/clubs: 
+    get:
+      tags: 
+       - users
+      summary: Get club data by user ID
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: users_id
+          description: "id user"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: List club data by user ID success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  id: 1
+                  name: "Lionel Messi"
+                  clubs:
+                    - id: 1
+                      name: "Barcelona"
+                      address: "Jl. Pahlawan"
+                      city: "Bandung"
+                      category_id: 1
+                      description: "Klub fans sepakbola se Bandung Raya"
+                      logo: "url"
+                      member_total: 5
+                    - id: 2
+                      name: "Lakers"
+                      address: "Jl. Soekarno Hatta"
+                      city: "Bandung"
+                      category_id: 2
+                      description: "Klub fans basket se Bandung Raya"
+                      logo: "url"
+                      member_total: 8
+                  
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404' 
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /users/{users_id}/products: 
+    get:
+      tags: 
+       - users
+      summary: Get product data by user ID
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: users_id
+          description: "id user"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: List product data by user ID success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  id: 1
+                  name: "Lionel Messi"
+                  products:
+                    - id: 1
+                      name: "Sepatu Bola"
+                      price: 250000
+                      quantity: 6
+                      description: "Sepatu bagus"
+                      category_id: 1
+                    - id: 2
+                      name: "Jersey"
+                      price: 75000
+                      quantity: 10
+                      description: "Jersey Langka"
+                      category_id: 2
+                  
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404' 
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /users/{users_id}/events: 
+    get:
+      tags: 
+       - users
+      summary: Get events data by user ID
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: users_id
+          description: "id user"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: List events data by user ID success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  id: 1
+                  name: "Lionel Messi"
+                  events:
+                    - id: 1
+                      name: "Pertandingan Sepak Bola Bandung Raya"
+                      address: "Lapangan Gasibu"
+                      city: "Bandung"
+                      category_id: 1
+                      start_date: "2023-1-1"
+                      end_date: "2023-1-2"
+                      total_participant: 11
+                      organizer_name: "Ronaldo"
+                      image_event: "link"
+                    - id: 2
+                      name: "Pertandingan Basket Bandung Raya"
+                      address: "Lapangan Arcamanik"
+                      city: "Bandung"
+                      category_id: 2
+                      start_date: "2023-1-5"
+                      end_date: "2023-1-5"
+                      total_participant: 2
+                      organizer_name: "Yao Ming"
+                      image_event: "link"
+                  
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404' 
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /users/{users_id}/transactions: 
+    get:
+      tags: 
+       - users
+      summary: Get transaction data by user ID
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: users_id
+          description: "id user"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: List transaction data by user ID success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  id: 1
+                  name: "Lionel Messi"
+                  transactions:
+                    - id: 1
+                      total_quantity: 1
+                      total_price: 25000
+                      product_id: 3
+                      payment_method: "BCA VA"
+                      status_payment: "Paid"
+                      virtual_account: "0000-0000-00"
+                      transaction_time: "2022-12-25 08:32:44"
+                    - id: 2
+                      total_quantity: 2
+                      total_price: 38000
+                      product_id: 4
+                      payment_method: "BCA VA"
+                      status_payment: "Paid"
+                      virtual_account: "0000-0000-00"
+                      transaction_time: "2022-12-28 14:06:11"
+                  
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404' 
+        '500':
+          $ref: '#/components/responses/500'  
+  
+  /events:
+    post:
+      tags: 
+       - events
+      summary: Insert events data
+      requestBody:
+        required: true
+        content: 
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Pertandingan Sepak Bola Bandung Raya"
+                address:
+                  type: string
+                  example: "Lapangan Gasibu"
+                city:
+                  type: string
+                  example: "Bandung"
+                category_id:
+                  type: integer
+                  example: 1
+                start_date:
+                  type: string
+                  example: "2023-1-1"
+                end_date:
+                  type: string
+                  example: "2023-1-2"
+                organizer_name:
+                  type: string
+                  example: "Ronaldo"
+                image_event:
+                  type: string
+                  format: binary
+                  example: "link"
+                  
+            encoding:
+              image_event:
+                contentType: images/png, images/jpeg
+      responses: 
+        '200':
+          description: Insert success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success insert user data"
+        '400':
+          $ref: '#/components/responses/400'          
+        '500':
+          $ref: '#/components/responses/500'
+    
+    get:
+      tags: 
+       - events
+      summary: Get all event data
+      security: 
+        - JWTAuth: []
+      responses:
+        '200':
+          description: List all event data success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  - id: 1
+                    name: "Pertandingan Sepak Bola Bandung Raya"
+                    address: "Lapangan Gasibu"
+                    city: "Bandung"
+                    category_id: 1
+                    start_date: "2023-1-1"
+                    end_date: "2023-1-2"
+                    total_participant: 11
+                    organizer_name: "Ronaldo"
+                    image_event: "link"
+                  - id: 2
+                    name: "Pertandingan Basket Bandung Raya"
+                    address: "Lapangan Arcamanik"
+                    city: "Bandung"
+                    category_id: 2
+                    start_date: "2023-1-5"
+                    end_date: "2023-1-5"
+                    total_participant: 2
+                    organizer_name: "Yao Ming"
+                    image_event: "link"
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /events/{events_id}: 
+    get:
+      tags: 
+       - events
+      summary: Get event data by event ID
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: events_id
+          description: "id events"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: List events data by events ID success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  id: 1
+                  name: "Pertandingan Sepak Bola Bandung Raya"
+                  address: "Lapangan Gasibu"
+                  city: "Bandung"
+                  category_id: 1
+                  start_date: "2023-1-1"
+                  end_date: "2023-1-2"
+                  total_participant: 11
+                  organizer_name: "Ronaldo"
+                  image_event: "link"
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404' 
+        '500':
+          $ref: '#/components/responses/500'
+    
+    put:
+      tags: 
+       - events
+      summary: Update events data
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: events_id
+          description: "id events"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content: 
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Pertandingan Sepak Bola Bandung Raya"
+                address:
+                  type: string
+                  example: "Lapangan Gasibu"
+                city:
+                  type: string
+                  example: "Bandung"
+                category_id:
+                  type: integer
+                  example: 1
+                start_date:
+                  type: string
+                  example: "2023-1-1"
+                end_date:
+                  type: string
+                  example: "2023-1-2"
+                organizer_name:
+                  type: string
+                  example: "Ronaldo"
+                image_event:
+                  type: string
+                  format: binary
+                  example: "link"
+                  
+            encoding:
+              image_event:
+                contentType: images/png, images/jpeg
+      responses: 
+        '200':
+          description: Insert success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success update event data"
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404' 
+        '500':
+          $ref: '#/components/responses/500'
+    
+    delete:
+      tags: 
+       - events
+      summary: Delete event data by ID
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: events_id
+          description: "id events"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses: 
+        '200':
+          description: Delete success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success delete event data by event id"
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404' 
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /clubs:
+    post:
+      tags: 
+       - clubs
+      summary: Insert clubs data
+      requestBody:
+        required: true
+        content: 
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Barcelona"
+                address:
+                  type: string
+                  example: "Jl. Pahlawan"
+                city:
+                  type: string
+                  example: "Bandung"
+                category_id:
+                  type: integer
+                  example: 1
+                description:
+                  type: string
+                  example: "Klub fans sepakbola se Bandung Raya"
+                logo:
+                  type: string
+                  format: binary
+                  example: "link"
+                terms_condition:
+                  type: string
+                  example: "Syarat dan Ketentuan masuk klub ....."
+                  
+            encoding:
+              logo:
+                contentType: images/png, images/jpeg
+      responses: 
+        '200':
+          description: Insert success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success insert club data"
+        '400':
+          $ref: '#/components/responses/400'          
+        '500':
+          $ref: '#/components/responses/500'
+    
+    get:
+      tags: 
+       - clubs
+      summary: Get all club data
+      security: 
+        - JWTAuth: []
+      responses:
+        '200':
+          description: List all club data success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  - id: 1
+                    name: "Barcelona"
+                    address: "Jl. Pahlawan"
+                    city: "Bandung"
+                    category_id: 1
+                    description: "Klub fans sepakbola se Bandung Raya"
+                    logo: "url"
+                    member_total: 5
+                  - id: 2
+                    name: "Lakers"
+                    address: "Jl. Soekarno Hatta"
+                    city: "Bandung"
+                    category_id: 2
+                    description: "Klub fans basket se Bandung Raya"
+                    logo: "url"
+                    member_total: 8
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /clubs/{clubs_id}: 
+    get:
+      tags: 
+       - clubs
+      summary: Get club data by club ID
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: clubs_id
+          description: "id clubs"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: List clubs data by clubs ID success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  id: 1
+                  name: "Barcelona"
+                  address: "Jl. Pahlawan"
+                  city: "Bandung"
+                  category_id: 1
+                  description: "Klub fans sepakbola se Bandung Raya"
+                  logo: "url"
+                  member_total: 5
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404' 
+        '500':
+          $ref: '#/components/responses/500'
+    
+    put:
+      tags: 
+       - clubs
+      summary: Update club data
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: clubs_id
+          description: "id clubs"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content: 
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Barcelona"
+                address:
+                  type: string
+                  example: "Jl. Pahlawan"
+                city:
+                  type: string
+                  example: "Bandung"
+                category_id:
+                  type: integer
+                  example: 1
+                description:
+                  type: string
+                  example: "Klub fans sepakbola se Bandung Raya"
+                logo:
+                  type: string
+                  format: binary
+                  example: "link"
+                terms_condition:
+                  type: string
+                  example: "Syarat dan Ketentuan masuk klub ....."
+                  
+            encoding:
+              logo:
+                contentType: images/png, images/jpeg
+      responses: 
+        '200':
+          description: Insert success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success update club data"
+        '400':
+          $ref: '#/components/responses/400'          
+        '500':
+          $ref: '#/components/responses/500'
+    
+    delete:
+      tags: 
+       - clubs
+      summary: Delete club data by ID
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: clubs_id
+          description: "id clubs"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses: 
+        '200':
+          description: Delete success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success delete club data by event id"
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404' 
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /clubs/{clubs_id}/agreements: 
+    get:
+      tags: 
+       - clubs
+      summary: Get agreement data
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: clubs_id
+          description: "id clubs"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Get agreement success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  id: 1
+                  terms_condition: "Syarat dan Ketentuan masuk klub ....."
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404' 
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /clubs/{clubs_id}/chats: 
+    get:
+      tags: 
+       - clubs
+      summary: Get chat data
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: clubs_id
+          description: "id clubs"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Get chat data by club id success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  - id: 1
+                    user_id: 1
+                    message: "Besok jadi ga?"
+                  - id: 2
+                    user_id: 2
+                    message: "gajadi"
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404' 
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /clubs/{clubs_id}/galeries: 
+    get:
+      tags: 
+       - clubs
+      summary: Get galeries data
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: clubs_id
+          description: "id clubs"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Get galeries data by club id success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  - id: 1
+                    url: "link"
+                    caption: "Lari bareng"
+                  - id: 2
+                    url: "link"
+                    caption: "berenang bareng"
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404' 
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /clubs/{clubs_id}/activities: 
+    get:
+      tags: 
+       - clubs
+      summary: Get activity data
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: clubs_id
+          description: "id clubs"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Get activity data by club id success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  - id: 1
+                    name: "friendly match"
+                    start_date: "2023-1-1"
+                    end_date: "2023-1-2"
+                    location: "Lapangan gasibu"
+                    activity_detail: "5 vs 5 friendly match"
+                  - id: 2
+                    name: "lari bareng"
+                    start_date: "2023-1-5"
+                    end_date: "2023-1-5"
+                    location: "Taman lansia"
+                    activity_detail: "lari pagi bareng"
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404' 
+        '500':
+          $ref: '#/components/responses/500'
+  
+components:  
+  securitySchemes:
+    JWTAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: "use Token"
+  
+  schemas:
+    ResponseWithoutData:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+
+  responses:
+      '404':
+        description: Not Found
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/ResponseWithoutData'
+            example: 
+              status: "failed"
+              message: "data not found"
+      '400':
+        description: failed.
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/ResponseWithoutData'
+            example: 
+              status: "failed"
+              message: "operation failed"
+      '500':
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/ResponseWithoutData'
+            example:
+              status: "failed"
+              message: "internal server error"
