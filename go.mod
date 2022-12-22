@@ -1,4 +1,4 @@
-module github.com/Capstone-Project-Group3-Ikuzports/BE-Ikuzports-CapstoneProject
+module ikuzports
 
 go 1.19
 
