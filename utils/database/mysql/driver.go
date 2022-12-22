@@ -34,12 +34,12 @@ func InitDB(cfg *config.AppConfig) *gorm.DB {
 func migrateDB(db *gorm.DB) {
 	db.AutoMigrate(&user.User{})
 	db.AutoMigrate(&club.Club{})
+	db.AutoMigrate(&event.Category{})
 	db.AutoMigrate(&chat.Chat{})
 	db.AutoMigrate(&clubActivity.ClubActivity{})
 	db.AutoMigrate(&club.Aggreement{})
 	db.AutoMigrate(&galery.Galery{})
 	db.AutoMigrate(&clubMember.ClubMember{})
-	db.AutoMigrate(&event.Category{})
 	db.AutoMigrate(&event.EventParticipant{})
 	db.AutoMigrate(&event.Event{})
 	db.AutoMigrate(&transaction.Transaction{})
