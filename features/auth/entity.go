@@ -3,16 +3,18 @@ package auth
 import "time"
 
 type Core struct {
-	ID              uint
-	FullName        string
-	Email           string `validate:"required,email"`
-	Password        string `validate:"required"`
-	Phone           string
-	Gender          string
-	ProfileImageUrl string
-	Role            string
-	CreatedAt       time.Time
-	UpdatedAt       time.Time
+	ID          uint
+	Name        string
+	Email       string `validate:"required,email"`
+	Password    string `validate:"required"`
+	PhoneNumber string
+	Address     string
+	City        string
+	UserImage   string
+	Gender      string
+	Biodata     string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 type ServiceInterface interface {

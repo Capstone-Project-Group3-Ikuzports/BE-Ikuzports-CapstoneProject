@@ -110,3 +110,47 @@ func (repo *userRepository) FindUser(email string) (result user.Core, err error)
 
 	return result, nil
 }
+
+// GetClubs implements user.RepositoryInterface
+func (repo *userRepository) GetClubs(id int) (data []user.Club, err error) {
+	var club []Club
+	tx := repo.db.Where("user_id = ?", id).Find(&club)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	var dataCore = toClubList(club)
+	return dataCore, nil
+}
+
+// GetEvents implements user.RepositoryInterface
+func (repo *userRepository) GetEvents(id int) (data []user.Event, err error) {
+	var event []Event
+	tx := repo.db.Where("user_id = ?", id).Find(&event)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	var dataCore = toEventList(event)
+	return dataCore, nil
+}
+
+// GetProducts implements user.RepositoryInterface
+func (repo *userRepository) GetProducts(id int) (data []user.Product, err error) {
+	var products []Product
+	tx := repo.db.Where("user_id = ?", id).Find(&products)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	var dataCore = toProductList(products)
+	return dataCore, nil
+}
+
+// GetTransactions implements user.RepositoryInterface
+func (repo *userRepository) GetTransactions(id int) (data []user.Transaction, err error) {
+	var transaction []Transaction
+	tx := repo.db.Where("user_id = ?", id).Find(&transaction)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	var dataCore = toTransactionList(transaction)
+	return dataCore, nil
+}
