@@ -8,32 +8,36 @@ import (
 )
 
 type User struct {
-	ID              uint
-	FullName        string
-	Email           string
-	Password        string
-	Phone           string
-	Gender          string
-	ProfileImageUrl string
-	Role            string
-	CreatedAt       time.Time
-	UpdatedAt       time.Time
-	DeletedAt       gorm.DeletedAt
+	ID          uint
+	Name        string
+	Email       string
+	Password    string
+	PhoneNumber string
+	Address     string
+	City        string
+	UserImage   string
+	Gender      string
+	Biodata     string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	DeletedAt   gorm.DeletedAt
 }
 
 //DTO
 
 func (dataModel User) toCore() auth.Core {
 	return auth.Core{
-		ID:              dataModel.ID,
-		FullName:        dataModel.FullName,
-		Email:           dataModel.Email,
-		Password:        dataModel.Password,
-		Phone:           dataModel.Phone,
-		Gender:          dataModel.Gender,
-		ProfileImageUrl: dataModel.ProfileImageUrl,
-		Role:            dataModel.Role,
-		CreatedAt:       dataModel.CreatedAt,
-		UpdatedAt:       dataModel.UpdatedAt,
+		ID:          dataModel.ID,
+		Name:        dataModel.Name,
+		Email:       dataModel.Email,
+		Password:    dataModel.Password,
+		PhoneNumber: dataModel.PhoneNumber,
+		Address:     dataModel.Address,
+		City:        dataModel.City,
+		Gender:      dataModel.Gender,
+		UserImage:   dataModel.UserImage,
+		Biodata:     dataModel.Biodata,
+		CreatedAt:   dataModel.CreatedAt,
+		UpdatedAt:   dataModel.UpdatedAt,
 	}
 }

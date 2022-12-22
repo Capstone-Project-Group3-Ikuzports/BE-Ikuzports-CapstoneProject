@@ -51,7 +51,7 @@ func (service *authService) Login(dataCore auth.Core) (auth.Core, string, error)
 		return auth.Core{}, "", errors.New("failed to login, password didn't match, please check password again")
 	}
 
-	token, errToken := middlewares.CreateToken(int(result.ID), result.FullName)
+	token, errToken := middlewares.CreateToken(int(result.ID), result.Name)
 	if errToken != nil {
 		log.Error(errToken.Error())
 		return auth.Core{}, "", errors.New("failed to login, error on generate token, please check password again")

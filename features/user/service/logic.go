@@ -55,9 +55,9 @@ func (service *userService) Create(input user.Core, c echo.Context) (err error) 
 			return errors.New("Failed. Cannot Upload Data.")
 		}
 		log.Print(res)
-		input.ProfileImageUrl = res
+		input.UserImage = res
 	} else {
-		input.ProfileImageUrl = "https://www.hostpapa.com/knowledgebase/wp-content/uploads/2018/04/1-13.png"
+		input.UserImage = "https://www.hostpapa.com/knowledgebase/wp-content/uploads/2018/04/1-13.png"
 	}
 
 	bytePass, errEncrypt := bcrypt.GenerateFromPassword([]byte(input.Password), 10)
@@ -67,8 +67,6 @@ func (service *userService) Create(input user.Core, c echo.Context) (err error) 
 	}
 
 	input.Password = string(bytePass)
-
-	input.Role = "User"
 	errCreate := service.userRepository.Create(input)
 	if errCreate != nil {
 		log.Error(errCreate.Error())
@@ -79,13 +77,9 @@ func (service *userService) Create(input user.Core, c echo.Context) (err error) 
 }
 
 // GetAll implements user.ServiceInterface
-func (service *userService) GetAll(query string) (data []user.Core, err error) {
+func (service *userService) GetAll() (data []user.Core, err error) {
 
-	if query == "" {
-		data, err = service.userRepository.GetAll()
-	} else {
-		data, err = service.userRepository.GetAllWithSearch(query)
-	}
+	data, err = service.userRepository.GetAll()
 
 	if err != nil {
 		helper.LogDebug(err)
@@ -140,7 +134,7 @@ func (service *userService) Update(input user.Core, id int, c echo.Context) erro
 	// helper.LogDebug("\n\n\n find email input  ", input.Email, "--- id ", id)
 	// helper.LogDebug("\n\n\n find email data  ", data.Email, "--- id ", data.ID)
 
-	if (data.Email == input.Email) && (data.ID != uint(id)) {
+	if (data.Email == input.Email) && (data.ID != uint(id)) && input.Email != "" {
 		return errors.New("Failed. Email " + input.Email + " already exist at other user. Please pick another email.")
 	}
 
@@ -156,9 +150,9 @@ func (service *userService) Update(input user.Core, id int, c echo.Context) erro
 			return errors.New("Failed. Cannot Upload Data.")
 		}
 		log.Print(res)
-		input.ProfileImageUrl = res
+		input.UserImage = res
 	} else {
-		input.ProfileImageUrl = "https://www.hostpapa.com/knowledgebase/wp-content/uploads/2018/04/1-13.png"
+		input.UserImage = "https://www.hostpapa.com/knowledgebase/wp-content/uploads/2018/04/1-13.png"
 	}
 
 	// proses
@@ -186,4 +180,68 @@ func (service *userService) Delete(id int) error {
 		return helper.ServiceErrorMsg(err)
 	}
 	return nil
+}
+
+// GetClubs implements user.ServiceInterface
+func (service *userService) GetClubs(id int) (data []user.Club, err error) {
+	data, err = service.userRepository.GetClubs(id)
+	if err != nil {
+		log.Error(err.Error())
+		return data, helper.ServiceErrorMsg(err)
+	}
+
+	if len(data) == 0 {
+		helper.LogDebug("Get data success. No data.")
+		return nil, errors.New("Get data success. No data.")
+	}
+
+	return data, err
+}
+
+// GetEvents implements user.ServiceInterface
+func (service *userService) GetEvents(id int) (data []user.Event, err error) {
+	data, err = service.userRepository.GetEvents(id)
+	if err != nil {
+		log.Error(err.Error())
+		return data, helper.ServiceErrorMsg(err)
+	}
+
+	if len(data) == 0 {
+		helper.LogDebug("Get data success. No data.")
+		return nil, errors.New("Get data success. No data.")
+	}
+
+	return data, err
+}
+
+// GetProducts implements user.ServiceInterface
+func (service *userService) GetProducts(id int) (data []user.Product, err error) {
+	data, err = service.userRepository.GetProducts(id)
+	if err != nil {
+		log.Error(err.Error())
+		return data, helper.ServiceErrorMsg(err)
+	}
+
+	if len(data) == 0 {
+		helper.LogDebug("Get data success. No data.")
+		return nil, errors.New("Get data success. No data.")
+	}
+
+	return data, err
+}
+
+// GetTransactions implements user.ServiceInterface
+func (service *userService) GetTransactions(id int) (data []user.Transaction, err error) {
+	data, err = service.userRepository.GetTransactions(id)
+	if err != nil {
+		log.Error(err.Error())
+		return data, helper.ServiceErrorMsg(err)
+	}
+
+	if len(data) == 0 {
+		helper.LogDebug("Get data success. No data.")
+		return nil, errors.New("Get data success. No data.")
+	}
+
+	return data, err
 }
