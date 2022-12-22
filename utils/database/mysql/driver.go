@@ -3,6 +3,15 @@ package mysql
 import (
 	"fmt"
 	"ikuzports/config"
+	chat "ikuzports/features/chat/repository"
+	club "ikuzports/features/club/repository"
+	clubActivity "ikuzports/features/clubActivity/repository"
+	clubMember "ikuzports/features/clubMember/repository"
+	event "ikuzports/features/event/repository"
+	galery "ikuzports/features/galery/repository"
+	product "ikuzports/features/product/repository"
+	productImage "ikuzports/features/productImage/repository"
+	transaction "ikuzports/features/transaction/repository"
 	user "ikuzports/features/user/repository"
 	"log"
 
@@ -24,18 +33,18 @@ func InitDB(cfg *config.AppConfig) *gorm.DB {
 
 func migrateDB(db *gorm.DB) {
 	db.AutoMigrate(&user.User{})
-	db.AutoMigrate(&user.Club{})
-	db.AutoMigrate(&user.Chat{})
-	db.AutoMigrate(&user.ClubActivity{})
-	db.AutoMigrate(&user.Aggreement{})
-	db.AutoMigrate(&user.Galery{})
-	db.AutoMigrate(&user.ClubMember{})
-	db.AutoMigrate(&user.Category{})
-	db.AutoMigrate(&user.EventParticipant{})
-	db.AutoMigrate(&user.Event{})
-	db.AutoMigrate(&user.Transaction{})
-	db.AutoMigrate(&user.ItemCategory{})
-	db.AutoMigrate(&user.ProductImage{})
-	db.AutoMigrate(&user.Product{})
+	db.AutoMigrate(&club.Club{})
+	db.AutoMigrate(&chat.Chat{})
+	db.AutoMigrate(&clubActivity.ClubActivity{})
+	db.AutoMigrate(&club.Aggreement{})
+	db.AutoMigrate(&galery.Galery{})
+	db.AutoMigrate(&clubMember.ClubMember{})
+	db.AutoMigrate(&event.Category{})
+	db.AutoMigrate(&event.EventParticipant{})
+	db.AutoMigrate(&event.Event{})
+	db.AutoMigrate(&transaction.Transaction{})
+	db.AutoMigrate(&product.ItemCategory{})
+	db.AutoMigrate(&productImage.ProductImage{})
+	db.AutoMigrate(&product.Product{})
 
 }

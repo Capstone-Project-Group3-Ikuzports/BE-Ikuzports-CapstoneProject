@@ -1,6 +1,11 @@
 package repository
 
 import (
+	_chat "ikuzports/features/chat/repository"
+	_member "ikuzports/features/clubMember/repository"
+	_event "ikuzports/features/event/repository"
+	_product "ikuzports/features/product/repository"
+	_transaction "ikuzports/features/transaction/repository"
 	_user "ikuzports/features/user"
 	"time"
 
@@ -10,88 +15,34 @@ import (
 // struct gorm model
 type User struct {
 	gorm.Model
-	Name        string `validate:"required"`
-	Email       string `validate:"required,email,unique"`
-	Password    string `validate:"required"`
-	PhoneNumber string `validate:"required"`
-	Address     string
-	City        string
-	UserImage   string
-	Gender      string
-	Biodata     string
-	Club        []ClubMember
-	Event       []EventParticipant
-	Transaction []Transaction
-	Product     []Product
-	Chat        []Chat
-}
-
-type ClubMember struct {
-	gorm.Model
-	UserID uint
-	ClubID uint
-	Status string
-}
-
-type Chat struct {
-	gorm.Model
-	UserID  uint
-	ClubID  uint
-	Message string
+	Name             string `validate:"required"`
+	Email            string `validate:"required,email,unique"`
+	Password         string `validate:"required"`
+	PhoneNumber      string `validate:"required"`
+	Address          string
+	City             string
+	UserImage        string
+	Gender           string
+	Biodata          string
+	Club             []_member.ClubMember
+	EventParticipant []_event.EventParticipant
+	Event            []_event.Event
+	Transaction      []_transaction.Transaction
+	Product          []_product.Product
+	Chat             []_chat.Chat
 }
 
 type Club struct {
 	gorm.Model
-	Name         string
-	Address      string
-	City         string
-	CategoryID   uint
-	Description  string
-	Logo         string
-	MemberTotal  int
-	ClubMember   []ClubMember
-	Chat         []Chat
-	ClubActivity []ClubActivity
-	Galery       []Galery
-	Aggreement   []Aggreement
+	Name        string
+	Address     string
+	City        string
+	CategoryID  uint
+	Description string
+	Logo        string
+	MemberTotal int
 }
 
-type ClubActivity struct {
-	gorm.Model
-	ClubID         uint
-	Name           string
-	StartDate      time.Time
-	EndDtae        time.Time
-	Location       string
-	ActivityDetail string
-}
-type Galery struct {
-	gorm.Model
-	Url     string
-	ClubID  uint
-	Caption string
-}
-
-type Aggreement struct {
-	ClubID         uint
-	TermsCondition string
-	CreatedAt      time.Time
-	UpdateAt       time.Time
-	DeletedAt      time.Time
-}
-type Category struct {
-	gorm.Model
-	Name   string
-	Clubs  []Club
-	Events []Event
-}
-
-type EventParticipant struct {
-	gorm.Model
-	UserID  uint
-	EventID uint
-	Status  string
-}
 type Event struct {
 	gorm.Model
 	Name             string
@@ -104,7 +55,6 @@ type Event struct {
 	TotalParticipant int
 	OrganizerName    string
 	Status           string
-	EventMember      []EventParticipant
 }
 
 type Transaction struct {
@@ -128,20 +78,6 @@ type Product struct {
 	Description    string
 	UserID         uint
 	ItemCategoryID uint
-	Transaction    []Transaction
-	ProductImage   []ProductImage
-}
-
-type ProductImage struct {
-	gorm.Model
-	Url       string
-	ProductID uint
-}
-
-type ItemCategory struct {
-	gorm.Model
-	Name    string
-	Product []Product
 }
 
 // mapping
