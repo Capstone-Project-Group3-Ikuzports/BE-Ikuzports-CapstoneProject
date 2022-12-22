@@ -19,7 +19,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             sudo chmod 777 /var/run/docker.sock
-            cd /home/ubuntu/group_project/BE
+            cd /home/faqihassyfa/BE-Ikuzports-CapstoneProject
             git pull origin main
             docker stop ikuzportsContainer
             docker rm  ikuzportsContainer

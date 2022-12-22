@@ -450,6 +450,8 @@ paths:
       tags: 
        - events
       summary: Insert events data
+      security: 
+        - JWTAuth: []
       requestBody:
         required: true
         content: 
@@ -505,8 +507,21 @@ paths:
       tags: 
        - events
       summary: Get all event data
-      security: 
-        - JWTAuth: []
+      parameters:
+        - name: club_category
+          description: "category club"
+          required: false
+          in: query
+          schema: 
+            type: string
+            example: "Sepak Bola"
+        - name: city
+          description: "city"
+          required: false
+          in: query
+          schema: 
+            type: string
+            example: "bandung"
       responses:
         '200':
           description: List all event data success
@@ -683,6 +698,8 @@ paths:
       tags: 
        - clubs
       summary: Insert clubs data
+      security: 
+        - JWTAuth: []
       requestBody:
         required: true
         content: 
@@ -737,6 +754,21 @@ paths:
       summary: Get all club data
       security: 
         - JWTAuth: []
+      parameters:
+        - name: club_category
+          description: "category club"
+          required: false
+          in: query
+          schema: 
+            type: string
+            example: "Sepak Bola"
+        - name: city
+          description: "city"
+          required: false
+          in: query
+          schema: 
+            type: string
+            example: "bandung"
       responses:
         '200':
           description: List all club data success
@@ -1043,6 +1075,937 @@ paths:
         '500':
           $ref: '#/components/responses/500'
   
+  /activities: 
+    get:
+      tags: 
+       - activities
+      summary: Get activity data
+      security: 
+        - JWTAuth: []
+      responses:
+        '200':
+          description: Get all activity data success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  - id: 1
+                    club_id: 1
+                    name: "friendly match"
+                    start_date: "2023-1-1"
+                    end_date: "2023-1-2"
+                    location: "Lapangan gasibu"
+                    activity_detail: "5 vs 5 friendly match"
+                  - id: 2
+                    club_id: 1
+                    name: "lari bareng"
+                    start_date: "2023-1-5"
+                    end_date: "2023-1-5"
+                    location: "Taman lansia"
+                    activity_detail: "lari pagi bareng"
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404' 
+        '500':
+          $ref: '#/components/responses/500'
+    
+    post:
+      tags: 
+       - activities
+      summary: Insert activity data
+      security: 
+        - JWTAuth: []
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              example: 
+                club_id: 1
+                name: "lari bareng"
+                start_date: "2023-1-5"
+                end_date: "2023-1-5"
+                location: "Taman lansia"
+                activity_detail: "lari pagi bareng"
+      responses: 
+        '200':
+          description: Insert success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success insert activities data"
+        '400':
+          $ref: '#/components/responses/400'          
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /activities/{activities_id}:
+    put:
+      tags: 
+       - activities
+      summary: Insert activity data
+      parameters:
+        - name: activities_id
+          description: "id activities"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      security: 
+        - JWTAuth: []
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              example: 
+                club_id: 1
+                name: "lari bareng"
+                start_date: "2023-1-5"
+                end_date: "2023-1-5"
+                location: "Taman lansia"
+                activity_detail: "lari pagi bareng"
+      responses: 
+        '200':
+          description: Insert success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success update activities data"
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404' 
+        '500':
+          $ref: '#/components/responses/500'
+          
+  /galeries:
+    get:
+      tags: 
+       - galeries
+      summary: Get all galeries data
+      security: 
+        - JWTAuth: []
+      responses:
+        '200':
+          description: List all galery data success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  - id: 1
+                    url: "link"
+                    club_id: 1
+                    caption: "foto main bola"
+                  - id: 2
+                    url: "link"
+                    club_id: 1
+                    caption: "foto lari-lari"
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+    
+    post:
+      tags: 
+       - galeries
+      summary: Insert galery data
+      security: 
+        - JWTAuth: []
+      requestBody:
+        required: true
+        content: 
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: binary
+                  example: "link"
+                club_id:
+                  type: integer
+                  example: 1
+                caption:
+                  type: string
+                  example: "Pertandingan Sepak Bola"
+                  
+            encoding:
+              url:
+                contentType: images/png, images/jpeg
+      responses: 
+        '200':
+          description: Insert galery data success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success insert galery data"
+        '400':
+          $ref: '#/components/responses/400'          
+        '500':
+          $ref: '#/components/responses/500'  
+  
+  /galeries/{galeries_id}:
+    get:
+      tags: 
+       - galeries
+      summary: Get all galeries data
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: galeries_id
+          description: "id galeries"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: List galery data by galery id success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  id: 1
+                  url: "link"
+                  club_id: 1
+                  caption: "foto main bola"
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+    
+    put:
+      tags: 
+       - galeries
+      summary: Update galery data
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: galeries_id
+          description: "id galeries"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content: 
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: binary
+                  example: "link"
+                club_id:
+                  type: integer
+                  example: 1
+                caption:
+                  type: string
+                  example: "Pertandingan Sepak Bola"
+                  
+            encoding:
+              url:
+                contentType: images/png, images/jpeg
+      responses: 
+        '200':
+          description: Update success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success update galery data"
+        '400':
+          $ref: '#/components/responses/400'          
+        '500':
+          $ref: '#/components/responses/500'
+  
+    delete:
+      tags: 
+       - galeries
+      summary: Delete galery data by ID
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: galeries_id
+          description: "id galeries"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses: 
+        '200':
+          description: Delete success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success delete galery data by galery id"
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404' 
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /members:
+    get:
+      tags: 
+       - members
+      summary: Get all members data
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: status
+          description: "status member"
+          required: false
+          in: query
+          schema: 
+            type: string
+            example: "pending"
+      responses:
+        '200':
+          description: List all member data success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  - id: 1
+                    user_id: 1
+                    club_id: 1
+                    status: "Owner"
+                  - id: 2
+                    user_id: 2
+                    club_id: 1
+                    status: "Member"
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+    
+    post:
+      tags: 
+       - members
+      summary: Insert member data
+      security: 
+        - JWTAuth: []
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              example: 
+                user_id: 2
+                club_id: 1
+                status: "Member"
+      responses: 
+        '200':
+          description: Insert success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success insert members data"
+        '400':
+          $ref: '#/components/responses/400'          
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /products:
+    get:
+      tags: 
+       - products
+      summary: Get all product data
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: product_category
+          description: "category product"
+          required: false
+          in: query
+          schema: 
+            type: string
+            example: "sepatu"
+        - name: city
+          description: "city"
+          required: false
+          in: query
+          schema: 
+            type: string
+            example: "bandung"
+      responses:
+        '200':
+          description: List all product data success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  - id: 1
+                    name: "Sepatu Bola"
+                    price: 250000
+                    quantity: 6
+                    description: "Sepatu bagus"
+                    user_id: 1
+                    category_id: 1
+                  - id: 2
+                    name: "Jersey"
+                    price: 75000
+                    quantity: 10
+                    description: "Jersey Langka"
+                    user_id: 1
+                    category_id: 2
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+    
+    post:
+      tags: 
+       - products
+      summary: Insert product data
+      security: 
+        - JWTAuth: []
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              example: 
+                name: "Jersey"
+                price: 75000
+                quantity: 10
+                description: "Jersey Langka"
+                category_id: 2
+      responses: 
+        '200':
+          description: Insert success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success insert activities data"
+        '400':
+          $ref: '#/components/responses/400'          
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /products/{products_id}:
+    get:
+      tags: 
+       - products
+      summary: Get all product data
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: products_id
+          description: "id products"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: List product data by galery id success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  id: 2
+                  name: "Jersey"
+                  price: 75000
+                  quantity: 10
+                  description: "Jersey Langka"
+                  user_id: 1
+                  category_id: 2
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+    
+    put: 
+      tags: 
+       - products
+      summary: Insert product data
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: products_id
+          description: "id products"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              example: 
+                name: "Jersey"
+                price: 75000
+                quantity: 10
+                description: "Jersey Langka"
+                category_id: 2
+      responses: 
+        '200':
+          description: Update success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success update product data"
+        '400':
+          $ref: '#/components/responses/400'          
+        '500':
+          $ref: '#/components/responses/500'
+    
+    delete:
+      tags: 
+       - products
+      summary: Delete product data by ID
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: products_id
+          description: "id product"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses: 
+        '200':
+          description: Delete success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success delete product data by galery id"
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404' 
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /products/{products_id}/product_images:
+    get:
+      tags: 
+       - products
+      summary: Get all image data by product id
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: products_id
+          description: "id products"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: List image data by product id success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  - id: 1
+                    url: "link"
+                  - id: 2
+                    url: "link"
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /product_images:
+    get:
+      tags: 
+       - products_images
+      summary: Get all product images data
+      security: 
+        - JWTAuth: []
+      responses:
+        '200':
+          description: List all product images data success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  - id: 1
+                    url: "link"
+                    product_id: 1
+                  - id: 2
+                    url: "link"
+                    product_id: 1
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+    
+    post:
+      tags: 
+       - products_images
+      summary: Insert product images data
+      security: 
+        - JWTAuth: []
+      requestBody:
+        required: true
+        content: 
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                product_images:
+                  type: string
+                  format: binary
+                  example: "link"
+                products_id:
+                  type: integer
+                  example: 1
+                  
+            encoding:
+              product_images:
+                contentType: images/png, images/jpeg
+      responses: 
+        '200':
+          description: Insert success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success insert product images data"
+        '400':
+          $ref: '#/components/responses/400'          
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /product_images/{product_images_id}:
+    get:
+      tags: 
+       - products_images
+      summary: Get all product images data
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: product_images_id
+          description: "id products images"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: List product images data by product images id success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  id: 1
+                  url: "link"
+                  product_id: 1
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /transactions:
+    get:
+      tags: 
+       - transactions
+      summary: Get all transactions data
+      security: 
+        - JWTAuth: []
+      responses:
+        '200':
+          description: List all transactions data success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  - id: 1
+                    total_quantity: 1
+                    total_price: 25000
+                    product_id: 3
+                    payment_method: "BCA VA"
+                    status_payment: "Paid"
+                    virtual_account: "0000-0000-00"
+                    transaction_time: "2022-12-25 08:32:44"
+                  - id: 2
+                    total_quantity: 2
+                    total_price: 38000
+                    product_id: 4
+                    payment_method: "BCA VA"
+                    status_payment: "Paid"
+                    virtual_account: "0000-0000-00"
+                    transaction_time: "2022-12-28 14:06:11"
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+    
+    post:
+      tags: 
+       - transactions
+      summary: Insert transaction data
+      security: 
+        - JWTAuth: []
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              example: 
+                total_quantity: 1
+                total_price: 25000
+                product_id: 3
+                payment_method: "BCA VA"
+                transaction_id: 1
+                status_payment: "Paid"
+                virtual_account: "0000-0000-00"
+                transaction_time: "2022-12-25 08:32:44"
+      responses: 
+        '200':
+          description: Insert success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success insert transaction data"
+        '400':
+          $ref: '#/components/responses/400'          
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /transactions/{transactions_id}:
+    get:
+      tags: 
+       - transactions
+      summary: Get transactions data by id
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: transactions_id
+          description: "id transactions"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: List transactions data by id success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  id: 1
+                  total_quantity: 1
+                  total_price: 25000
+                  product_id: 3
+                  payment_method: "BCA VA"
+                  status_payment: "Paid"
+                  virtual_account: "0000-0000-00"
+                  transaction_time: "2022-12-25 08:32:44"
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+    
+    put:
+      tags: 
+       - transactions
+      summary: Update transaction data
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: transactions_id
+          description: "id transactions"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              example: 
+                total_quantity: 1
+                total_price: 25000
+                product_id: 3
+                payment_method: "BCA VA"
+                transaction_id: 1
+                status_payment: "Paid"
+                virtual_account: "0000-0000-00"
+                transaction_time: "2022-12-25 08:32:44"
+      responses: 
+        '200':
+          description: Update success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success update transaction data"
+        '400':
+          $ref: '#/components/responses/400'          
+        '500':
+          $ref: '#/components/responses/500'
+    
+  /chats:
+    get:
+      tags: 
+       - chats
+      summary: Get all chat data
+      security: 
+        - JWTAuth: []
+      responses:
+        '200':
+          description: Get all chat data success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  - id: 1
+                    user_id: 1
+                    club_id: 1
+                    message: "Besok jadi ga?"
+                  - id: 2
+                    user_id: 2
+                    club_id: 1
+                    message: "gajadi"
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+    
+    post:
+      tags: 
+       - chats
+      summary: Insert chat data
+      security: 
+        - JWTAuth: []
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              example: 
+                user_id: 1
+                club_id: 1
+                message: "Besok jadi ga?"
+      responses: 
+        '200':
+          description: Insert success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success insert chat data"
+        '400':
+          $ref: '#/components/responses/400'          
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /chats/{chats_id}:
+    delete:
+      tags: 
+       - chats
+      summary: Delete chat data by ID
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: chats_id
+          description: "id chat"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses: 
+        '200':
+          description: Delete success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success delete chat data by chat id"
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404' 
+        '500':
+          $ref: '#/components/responses/500'
+          
 components:  
   securitySchemes:
     JWTAuth:
@@ -1059,7 +2022,218 @@ components:
           type: string
         message:
           type: string
-
+          
+    UsersSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Lionel Messi"
+        email:
+          type: string
+          example: "messi@gmail.com"
+        password:
+          type: string
+          example: "qwerty"
+        phone_number:
+          type: string
+          example: "0812345678"
+        address:
+          type: string
+          example: "Jl. Sepak Bola"
+        city:
+          type: string
+          example: "Bandung"
+        user_image:
+          type: string
+          format: binary
+          example: "link"
+        gender:
+          type: string
+          example: "Laki-laki"
+        biodata:
+          type: string
+          example: "saya suka sepak bola"
+    
+    EventsSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Pertandingan Sepak Bola Bandung Raya"
+        user_id:
+          type: integer
+          format: int64
+          example: 1
+        address:
+          type: string
+          example: "Lapangan Gasibu"
+        city:
+          type: string
+          example: "Bandung"
+        category_id:
+          type: integer
+          format: int64
+          example: 1
+        start_date:
+          type: string
+          example: "2023-1-1"
+        end_date:
+          type: string
+          example: "2023-1-2"
+        total_participant:
+          type: integer
+          format: int64
+          example: 11
+        organizer_name:
+          type: string
+          example: "Ronaldo"
+        image_event:
+          type: string
+          format: binary
+          example: "link"
+        
+    ClubsSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Barcelona"
+        address:
+          type: string
+          example: "Jl. Pahlawan"
+        city:
+          type: string
+          example: "Bandung"
+        category_id:
+          type: integer
+          format: int64
+          example: 1
+        description:
+          type: string
+          example: "Klub fans sepakbola se Bandung Raya"
+        logo:
+          type: string
+          format: binary
+          example: "link"
+        member_total:
+          type: integer
+          format: int64
+          example: 5
+        terms_condition:
+          type: string
+          example: "Syarat dan Ketentuan masuk klub ....."
+        
+    ActivitiesSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        club_id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "lari bareng"
+        start_date:
+          type: string
+          example: "2023-1-1"
+        end_date:
+          type: string
+          example: "2023-1-2"
+        location:
+          type: string
+          example: "Taman lansia"
+        activity_detail:
+          type: string
+          example: "lari pagi bareng"
+    
+    GaleriesSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        url:
+          type: string
+          format: binary
+          example: "link"
+        club_id:
+          type: integer
+          format: int64
+          example: 1
+        caption:
+          type: string
+          example: "foto main bola"
+          
+    MembersSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        user_id:
+          type: integer
+          format: int64
+          example: 1
+        club_id:
+          type: integer
+          format: int64
+          example: 1
+        status:
+          type: string
+          enum: 
+            - owner
+            - member
+            - pending
+            - rejected
+    
+    ProductsSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Jersey"
+        price:
+          type: number
+          example: 75000
+        quantity:
+          type: integer
+          format: int64
+          example: 10
+        description:
+          type: string
+          example: "Jersey Langka"
+        user_id:
+          type: integer
+          format: int64
+          example: 1
+        category_id:
+          type: integer
+          format: int64
+          example: 1
+    
   responses:
       '404':
         description: Not Found
