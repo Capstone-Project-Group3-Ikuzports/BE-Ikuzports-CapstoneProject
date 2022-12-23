@@ -1,9 +1,11 @@
 package delivery
 
 import (
+	"errors"
 	"ikuzports/features/user"
 	"ikuzports/middlewares"
 	"ikuzports/utils/helper"
+	"ikuzports/utils/thirdparty"
 	"net/http"
 	"strconv"
 	"strings"
@@ -76,7 +78,18 @@ func (delivery *UserDelivery) Create(c echo.Context) error {
 	}
 
 	dataCore := toCore(userInput)
-	err := delivery.userService.Create(dataCore, c)
+	// upload foto
+	file, _ := c.FormFile("user_image")
+	if file != nil {
+		res, err := thirdparty.UploadProfile(c, "user_image")
+		if err != nil {
+			return errors.New("Failed. Cannot Upload Data.")
+		}
+		dataCore.UserImage = res
+	} else {
+		dataCore.UserImage = "https://www.hostpapa.com/knowledgebase/wp-content/uploads/2018/04/1-13.png"
+	}
+	err := delivery.userService.Create(dataCore)
 	if err != nil {
 		if strings.Contains(err.Error(), "Error:Field validation") {
 			return c.JSON(http.StatusBadRequest, helper.FailedResponse("Some field cannot empty. Details : "+err.Error()))
@@ -103,7 +116,19 @@ func (delivery *UserDelivery) Update(c echo.Context) error {
 	}
 
 	dataCore := toCore(userInput)
-	err := delivery.userService.Update(dataCore, id, c)
+	// upload foto
+	file, _ := c.FormFile("user_image")
+	if file != nil {
+		res, err := thirdparty.UploadProfile(c, "user_image")
+		if err != nil {
+			return errors.New("Failed. Cannot Upload Data.")
+		}
+		userInput.UserImage = res
+	} else {
+		userInput.UserImage = "https://www.hostpapa.com/knowledgebase/wp-content/uploads/2018/04/1-13.png"
+	}
+
+	err := delivery.userService.Update(dataCore, id)
 	if err != nil {
 		if strings.Contains(err.Error(), "Error:Field validation") {
 			return c.JSON(http.StatusBadRequest, helper.FailedResponse("Some field cannot Empty. Details : "+err.Error()))

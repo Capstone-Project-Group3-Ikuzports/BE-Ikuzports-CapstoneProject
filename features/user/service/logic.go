@@ -4,12 +4,10 @@ import (
 	"errors"
 	"ikuzports/features/user"
 	"ikuzports/utils/helper"
-	"ikuzports/utils/thirdparty"
 
 	"strings"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -27,7 +25,7 @@ func New(repo user.RepositoryInterface) user.ServiceInterface {
 }
 
 // Create implements user.ServiceInterface
-func (service *userService) Create(input user.Core, c echo.Context) (err error) {
+func (service *userService) Create(input user.Core) (err error) {
 	// validasi input
 	if errValidate := service.validate.Struct(input); errValidate != nil {
 		return errValidate
@@ -45,19 +43,6 @@ func (service *userService) Create(input user.Core, c echo.Context) (err error) 
 
 	if errFindEmail != nil && !strings.Contains(errFindEmail.Error(), "found") {
 		return helper.ServiceErrorMsg(errFindEmail)
-	}
-
-	// upload foto
-	file, _ := c.FormFile("file")
-	if file != nil {
-		res, err := thirdparty.UploadProfile(c)
-		if err != nil {
-			return errors.New("Failed. Cannot Upload Data.")
-		}
-		log.Print(res)
-		input.UserImage = res
-	} else {
-		input.UserImage = "https://www.hostpapa.com/knowledgebase/wp-content/uploads/2018/04/1-13.png"
 	}
 
 	bytePass, errEncrypt := bcrypt.GenerateFromPassword([]byte(input.Password), 10)
@@ -110,7 +95,7 @@ func (service *userService) GetById(id int) (data user.Core, err error) {
 
 }
 
-func (service *userService) Update(input user.Core, id int, c echo.Context) error {
+func (service *userService) Update(input user.Core, id int) error {
 	// validasi input
 	if errValidate := service.validate.Struct(input); errValidate != nil {
 		return errValidate
@@ -140,19 +125,6 @@ func (service *userService) Update(input user.Core, id int, c echo.Context) erro
 
 	if errFindEmail != nil && !strings.Contains(errFindEmail.Error(), "found") {
 		return helper.ServiceErrorMsg(errFindEmail)
-	}
-
-	// upload foto
-	file, _ := c.FormFile("file")
-	if file != nil {
-		res, err := thirdparty.UploadProfile(c)
-		if err != nil {
-			return errors.New("Failed. Cannot Upload Data.")
-		}
-		log.Print(res)
-		input.UserImage = res
-	} else {
-		input.UserImage = "https://www.hostpapa.com/knowledgebase/wp-content/uploads/2018/04/1-13.png"
 	}
 
 	// proses

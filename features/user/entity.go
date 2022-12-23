@@ -2,8 +2,6 @@ package user
 
 import (
 	"time"
-
-	"github.com/labstack/echo/v4"
 )
 
 type Core struct {
@@ -13,7 +11,6 @@ type Core struct {
 	Password    string `valiidate:"required"`
 	PhoneNumber string `valiidate:"required"`
 	Address     string
-	City        string
 	UserImage   string
 	Gender      string
 	Biodata     string
@@ -70,9 +67,9 @@ type Product struct {
 
 type ServiceInterface interface {
 	GetAll() (data []Core, err error)
-	Create(input Core, c echo.Context) error
+	Create(input Core) error
 	GetById(id int) (data Core, err error)
-	Update(input Core, id int, c echo.Context) error
+	Update(input Core, id int) error
 	Delete(id int) error
 	GetClubs(id int) (data []Club, err error)
 	GetProducts(id int) (data []Product, err error)

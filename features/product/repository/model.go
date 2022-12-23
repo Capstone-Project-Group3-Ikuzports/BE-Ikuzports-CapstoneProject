@@ -11,7 +11,6 @@ type Product struct {
 	gorm.Model
 	Name           string
 	Price          int
-	Quantity       int
 	Description    string
 	UserID         uint
 	ItemCategoryID uint
