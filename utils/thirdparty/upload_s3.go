@@ -38,9 +38,9 @@ func String(length int) string {
 
 // UPLOAD TO AWS S3
 
-func UploadProfile(c echo.Context) (string, error) {
+func UploadProfile(c echo.Context, image string) (string, error) {
 
-	file, fileheader, err := c.Request().FormFile("file")
+	file, fileheader, err := c.Request().FormFile(image)
 	if err != nil {
 		log.Print(err)
 		return "", err
@@ -64,10 +64,10 @@ func UploadProfile(c echo.Context) (string, error) {
 	uploader := s3manager.NewUploader(s3Session)
 
 	input := &s3manager.UploadInput{
-		Bucket:      aws.String(os.Getenv("AWS_BUCKET_NAME")),                       // bucket's name
-		Key:         aws.String("profile/" + randomStr + "-" + fileheader.Filename), // files destination location
-		Body:        file,                                                           // content of the file
-		ContentType: aws.String("image/jpg"),                                        // content type
+		Bucket:      aws.String(os.Getenv("AWS_BUCKET_NAME")),                           // bucket's name
+		Key:         aws.String("testetstets/" + randomStr + "-" + fileheader.Filename), // files destination location
+		Body:        file,                                                               // content of the file
+		ContentType: aws.String("image/jpg"),                                            // content type
 	}
 	res, err := uploader.UploadWithContext(context.Background(), input)
 

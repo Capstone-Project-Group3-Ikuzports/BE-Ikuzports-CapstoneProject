@@ -10,8 +10,9 @@ type ClubActivity struct {
 	gorm.Model
 	ClubID         uint
 	Name           string
-	StartDate      time.Time
-	EndDtae        time.Time
+	StartHour      time.Time
+	EndHour        time.Time
+	Day            string
 	Location       string
 	ActivityDetail string
 }

@@ -114,7 +114,7 @@ func (repo *userRepository) FindUser(email string) (result user.Core, err error)
 // GetClubs implements user.RepositoryInterface
 func (repo *userRepository) GetClubs(id int) (data []user.Club, err error) {
 	var club []Club
-	tx := repo.db.Where("user_id = ?", id).Find(&club)
+	tx := repo.db.Where("id = ?", id).Find(&club)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
