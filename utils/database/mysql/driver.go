@@ -37,7 +37,6 @@ func migrateDB(db *gorm.DB) {
 	db.AutoMigrate(&event.Category{})
 	db.AutoMigrate(&chat.Chat{})
 	db.AutoMigrate(&clubActivity.ClubActivity{})
-	db.AutoMigrate(&club.Aggreement{})
 	db.AutoMigrate(&galery.Galery{})
 	db.AutoMigrate(&clubMember.ClubMember{})
 	db.AutoMigrate(&event.EventParticipant{})
