@@ -18,6 +18,7 @@ type Club struct {
 	CategoryID   uint
 	Description  string
 	Logo         string
+	JoinedMember int
 	MemberTotal  int
 	Rule         string
 	Requirement  string
@@ -37,37 +38,43 @@ type ClubMember struct {
 type Category struct {
 	gorm.Model
 	Name string
+	Club []Club
 }
 
 func fromCore(dataCore club.Core) Club {
 	clubGorm := Club{
-		Name:        dataCore.Name,
-		Address:     dataCore.Address,
-		City:        dataCore.City,
-		CategoryID:  dataCore.CategoryID,
-		Description: dataCore.Description,
-		Logo:        dataCore.Logo,
-		MemberTotal: dataCore.MemberTotal,
-		Rule:        dataCore.Rule,
-		Requirement: dataCore.Requirement,
+		Name:         dataCore.Name,
+		Address:      dataCore.Address,
+		City:         dataCore.City,
+		CategoryID:   dataCore.CategoryID,
+		Description:  dataCore.Description,
+		Logo:         dataCore.Logo,
+		JoinedMember: dataCore.JoinedMember,
+		MemberTotal:  dataCore.MemberTotal,
+		Rule:         dataCore.Rule,
+		Requirement:  dataCore.Requirement,
 	}
 	return clubGorm
 }
 func (dataCore *Club) toCore() club.Core {
-	return club.Core{
-		ID:          dataCore.ID,
-		Name:        dataCore.Name,
-		Address:     dataCore.Address,
-		City:        dataCore.City,
-		CategoryID:  dataCore.CategoryID,
-		Description: dataCore.Description,
-		Logo:        dataCore.Logo,
-		MemberTotal: dataCore.MemberTotal,
-		Rule:        dataCore.Rule,
-		Requirement: dataCore.Requirement,
-		CreatedAt:   dataCore.CreatedAt,
-		UpdateAt:    dataCore.UpdatedAt,
+	dataModel := club.Core{
+		ID:           dataCore.ID,
+		Name:         dataCore.Name,
+		Address:      dataCore.Address,
+		City:         dataCore.City,
+		CategoryID:   dataCore.CategoryID,
+		Description:  dataCore.Description,
+		Logo:         dataCore.Logo,
+		JoinedMember: dataCore.JoinedMember,
+		MemberTotal:  dataCore.MemberTotal,
+		Rule:         dataCore.Rule,
+		Requirement:  dataCore.Requirement,
+		Category: club.Category{
+			ID:   dataCore.Category.ID,
+			Name: dataCore.Category.Name,
+		},
 	}
+	return dataModel
 }
 
 func toCoreList(dataModel []Club) []club.Core {
@@ -76,4 +83,13 @@ func toCoreList(dataModel []Club) []club.Core {
 		dataCore = append(dataCore, v.toCore())
 	}
 	return dataCore
+}
+
+func (dataCore *ClubMember) toCoreMember() club.Status {
+	return club.Status{
+		ID:     dataCore.ID,
+		UserID: dataCore.UserID,
+		ClubID: dataCore.ClubID,
+		Status: dataCore.Status,
+	}
 }

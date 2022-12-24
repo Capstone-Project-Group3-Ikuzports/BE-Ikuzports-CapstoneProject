@@ -31,6 +31,7 @@ func New(service club.ServiceInterface, e *echo.Echo) {
 	// e.GET("/clubs/:id/chats", handler.GetChats, middlewares.JWTMiddleware())
 	// e.GET("/clubs/:id/galleries", handler.GetGalleries, middlewares.JWTMiddleware())
 	// e.GET("/clubs/:id/activities", handler.GetActivities, middlewares.JWTMiddleware())
+
 }
 
 func (delivery *ClubDelivery) Create(c echo.Context) error {
@@ -126,6 +127,11 @@ func (delivery *ClubDelivery) Update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error binding data. "+errBind.Error()))
 	}
 
+	userId := middlewares.ExtractTokenUserId(c)
+	if userId < 1 {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
+	}
+
 	dataCore := toCore(clubInput)
 	file, _ := c.FormFile("logo")
 	if file != nil {
@@ -139,7 +145,7 @@ func (delivery *ClubDelivery) Update(c echo.Context) error {
 		dataCore.Logo = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfA4x4hFqzMJRG8mkELzikjEXLgNu-ImEzEA&usqp=CAU"
 	}
 
-	err := delivery.clubService.Update(dataCore, id)
+	err := delivery.clubService.Update(dataCore, id, userId)
 	if err != nil {
 		if strings.Contains(err.Error(), "Error:Field validation") {
 			return c.JSON(http.StatusBadRequest, helper.FailedResponse("Some field cannot Empty. Details : "+err.Error()))
@@ -156,7 +162,11 @@ func (delivery *ClubDelivery) Delete(c echo.Context) error {
 	if errConv != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
 	}
-	err := delivery.clubService.Delete(id)
+	userId := middlewares.ExtractTokenUserId(c)
+	if userId < 1 {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
+	}
+	err := delivery.clubService.Delete(id, userId)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
 	}
