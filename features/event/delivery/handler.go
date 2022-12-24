@@ -35,7 +35,7 @@ func (delivery *EventDelivery) Create(c echo.Context) error {
 
 	dataCore := toCore(eventInput)
 
-	file, _ := c.FormFile("event_image")
+	file, _ := c.FormFile("image_event")
 	if file != nil {
 		res, err := thirdparty.UploadProfile(c, "image_event")
 		if err != nil {
