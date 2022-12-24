@@ -73,16 +73,14 @@ func (delivery *ClubDelivery) Create(c echo.Context) error {
 func (delivery *ClubDelivery) GetAll(c echo.Context) error {
 	queryName := c.QueryParam("name")
 	queryCity := c.QueryParam("city")
-	queryCategory := c.QueryParam("category")
-
-	helper.LogDebug("\n\n\nULALA")
+	queryCategoryID, _ := strconv.Atoi(c.QueryParam("category_id"))
 
 	// debug cek query param masuk
 	helper.LogDebug("\n isi queryName = ", queryName)
 	helper.LogDebug("\n isi queryCity= ", queryCity)
-	helper.LogDebug("\n isi queryCategory = ", queryCategory)
+	helper.LogDebug("\n isi queryCategoryID = ", queryCategoryID)
 
-	results, err := delivery.clubService.GetAll(queryName, queryCity, queryCategory)
+	results, err := delivery.clubService.GetAll(queryName, queryCity, queryCategoryID)
 	if err != nil {
 		if strings.Contains(err.Error(), "Get data success. No data.") {
 			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))

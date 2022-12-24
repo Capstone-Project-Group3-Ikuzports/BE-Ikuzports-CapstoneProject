@@ -57,7 +57,7 @@ func (delivery *ClubMemberDelivery) Create(c echo.Context) error {
 	memberInput := MemberRequest{}
 	errBind := c.Bind(&memberInput)
 	if errBind != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Add new mentee, semua field harus diisi"+errBind.Error()))
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Add new member, semua field harus diisi"+errBind.Error()))
 	}
 	userId := middlewares.ExtractTokenUserId(c)
 	if userId < 1 {
