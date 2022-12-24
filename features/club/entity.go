@@ -30,7 +30,7 @@ type Status struct {
 }
 
 type ServiceInterface interface {
-	GetAll(queryName, queryCity, queryCategory string) (data []Core, err error)
+	GetAll(queryName string, queryCity string, queryCategoryID int) (data []Core, err error)
 	Create(input Core, id int) error
 	GetById(id int) (data Core, err error)
 	Update(input Core, id int, userId int) error

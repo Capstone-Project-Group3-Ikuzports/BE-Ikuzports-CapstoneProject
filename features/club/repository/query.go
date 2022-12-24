@@ -118,7 +118,7 @@ func (repo *clubRepository) Update(input club.Core, id int) error {
 		return tx.Error
 	}
 	if tx.RowsAffected == 0 {
-		return errors.New("update user failed")
+		return errors.New("update failed")
 	}
 	return nil
 }
