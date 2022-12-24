@@ -26,7 +26,8 @@ func New(service clubMember.ServiceInterface, e *echo.Echo) {
 }
 
 func (delivery *ClubMemberDelivery) GetAll(c echo.Context) error {
-	results, err := delivery.clubMemberService.GetAll()
+	queryStatus := c.QueryParam("status")
+	results, err := delivery.clubMemberService.GetAll(queryStatus)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error read data"))
 	}
@@ -62,9 +63,9 @@ func (delivery *ClubMemberDelivery) Create(c echo.Context) error {
 	if userId < 1 {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
 	}
-
+	memberInput.UserID = uint(userId)
 	dataCore := toCore(memberInput)
-	err := delivery.clubMemberService.Create(dataCore, userId)
+	err := delivery.clubMemberService.Create(dataCore)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("internal server error"+err.Error()))
 	}

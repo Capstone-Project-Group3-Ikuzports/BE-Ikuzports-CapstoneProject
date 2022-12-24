@@ -11,13 +11,16 @@ type Core struct {
 }
 
 type ServiceInterface interface {
-	GetAll() (data []Core, err error)
-	Create(input Core, id int) error
+	GetAll(queryStatus string) (data []Core, err error)
+	Create(input Core) error
 	GetById(id int) (data Core, err error)
 }
 
 type RepositoryInterface interface {
 	GetAll() (data []Core, err error)
-	Create(input Core, id int) error
+	GetAllByStatus(queryStatus string) (data []Core, err error)
+	Create(input Core) error
 	GetById(id int) (data Core, err error)
+	FindMember(id, idUser int) (data Core, err error)
+	UpdateMember(id int) error
 }

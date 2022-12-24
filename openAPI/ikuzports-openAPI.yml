@@ -726,9 +726,15 @@ paths:
                   type: string
                   format: binary
                   example: "link"
-                terms_condition:
+                member_total:
+                  type: integer
+                  example: "20"
+                rule: 
                   type: string
-                  example: "Syarat dan Ketentuan masuk klub ....."
+                  example: "tidak boleh merokok"
+                requirement:
+                  type: string
+                  example: "mempunyai sepatu, berumur diatas 15 tahun"
                   
             encoding:
               logo:
@@ -782,9 +788,13 @@ paths:
                     address: "Jl. Pahlawan"
                     city: "Bandung"
                     category_id: 1
+                    category_name: "Sepak Bola"
                     description: "Klub fans sepakbola se Bandung Raya"
                     logo: "url"
-                    member_total: 5
+                    joined_member: 5
+                    member_total: 10
+                    rule: "tidak boleh merokok"
+                    requirement: "mempunyai sepatu bola"
                   - id: 2
                     name: "Lakers"
                     address: "Jl. Soekarno Hatta"
@@ -792,7 +802,10 @@ paths:
                     category_id: 2
                     description: "Klub fans basket se Bandung Raya"
                     logo: "url"
-                    member_total: 8
+                    joined_member: 5
+                    member_total: 10
+                    rule: "tidak ada ujaran kebencian"
+                    requirement: "berusia diatas 15 tahun"
         '400':
           $ref: '#/components/responses/400'
         '500':
@@ -826,9 +839,13 @@ paths:
                   address: "Jl. Pahlawan"
                   city: "Bandung"
                   category_id: 1
+                  category_name: "Sepak Bola"
                   description: "Klub fans sepakbola se Bandung Raya"
                   logo: "url"
-                  member_total: 5
+                  joined_member: 5
+                  member_total: 10
+                  rule: "tidak boleh merokok"
+                  requirement: "mempunyai sepatu bola"
         '400':
           $ref: '#/components/responses/400'
         '404':
@@ -876,9 +893,15 @@ paths:
                   type: string
                   format: binary
                   example: "link"
-                terms_condition:
+                member_total:
+                  type: integer
+                  example: "20"
+                rule: 
                   type: string
-                  example: "Syarat dan Ketentuan masuk klub ....."
+                  example: "tidak boleh merokok"
+                requirement:
+                  type: string
+                  example: "mempunyai sepatu, berumur diatas 15 tahun"
                   
             encoding:
               logo:
@@ -2128,13 +2151,20 @@ components:
           type: string
           format: binary
           example: "link"
-        member_total:
+        joined_member:
           type: integer
           format: int64
           example: 5
-        terms_condition:
+        member_total:
+          type: integer
+          format: int64
+          example: 20
+        rule:
           type: string
-          example: "Syarat dan Ketentuan masuk klub ....."
+          example: "Tidak boleh merokok"
+        requirement:
+          type: string
+          example: "Usia minimal 15 tahun, tidak merokok ..."
         
     ActivitiesSchema:
       type: object
