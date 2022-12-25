@@ -121,3 +121,18 @@ func (service *clubService) Delete(id int, userId int) error {
 	}
 	return nil
 }
+
+// // GetMembers implements club.ServiceInterface
+// func (service *clubService) GetMembers(id int) (data []clubMember.Core, err error) {
+// 	data, err = service.clubRepository.GetMembers(id)
+// 	if err != nil {
+// 		log.Error(err.Error())
+// 		return data, helper.ServiceErrorMsg(err)
+// 	}
+
+// 	if len(data) == 0 {
+// 		return nil, errors.New("Get data success. No data")
+// 	}
+
+// 	return data, err
+// }
