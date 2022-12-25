@@ -33,6 +33,10 @@ import (
 	clubActivityRepo "ikuzports/features/clubActivity/repository"
 	clubActivityService "ikuzports/features/clubActivity/service"
 
+	galeryDelivery "ikuzports/features/galery/delivery"
+	galeryRepo "ikuzports/features/galery/repository"
+	galeryService "ikuzports/features/galery/service"
+
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
@@ -47,12 +51,13 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	authDelivery.New(authServiceFactory, e)
 
 	clubMemberRepoFactory := clubMemberRepo.New(db)
-	clubMemberServiceFactory := clubMemberService.New(clubMemberRepoFactory)
-	clubMemberDelivery.New(clubMemberServiceFactory, e)
 
 	clubRepoFactory := clubRepo.New(db)
 	clubServiceFactory := clubService.New(clubRepoFactory, clubMemberRepoFactory)
 	clubDelivery.New(clubServiceFactory, e)
+
+	clubMemberServiceFactory := clubMemberService.New(clubMemberRepoFactory, clubRepoFactory)
+	clubMemberDelivery.New(clubMemberServiceFactory, e)
 
 	participantRepoFactory := participantRepo.New(db)
 	participantServiceFactory := participantService.New(participantRepoFactory)
@@ -69,4 +74,8 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	clubActivityRepoFactory := clubActivityRepo.New(db)
 	clubActivityServiceFactory := clubActivityService.New(clubActivityRepoFactory, clubRepoFactory)
 	clubActivityDelivery.New(clubActivityServiceFactory, e)
+
+	galeryRepoFactory := galeryRepo.New(db)
+	galeryServiceFactory := galeryService.New(galeryRepoFactory, clubRepoFactory)
+	galeryDelivery.New(galeryServiceFactory, e)
 }
