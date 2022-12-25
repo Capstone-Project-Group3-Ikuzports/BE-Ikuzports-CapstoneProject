@@ -65,7 +65,7 @@ func (repo *clubMemberRepository) UpdateMember(id int) error {
 func (repo *clubMemberRepository) GetAll() (data []clubMember.Core, err error) {
 	var member []ClubMember
 
-	tx := repo.db.Find(&member)
+	tx := repo.db.Preload("User").Find(&member)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
@@ -91,7 +91,7 @@ func (repo *clubMemberRepository) GetAllByStatus(queryStatus string) (data []clu
 func (repo *clubMemberRepository) GetById(id int) (data clubMember.Core, err error) {
 	var member ClubMember
 
-	tx := repo.db.First(&member, id)
+	tx := repo.db.Preload("User").First(&member, id)
 	if tx.Error != nil {
 		return data, tx.Error
 	}
