@@ -34,7 +34,7 @@ func (delivery *ClubMemberDelivery) GetAll(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error read data"))
 	}
 	dataRespon := fromCoreList(results)
-	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("success read all users", dataRespon))
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("success read all club members", dataRespon))
 }
 
 func (delivery *ClubMemberDelivery) GetById(c echo.Context) error {
@@ -53,7 +53,7 @@ func (delivery *ClubMemberDelivery) GetById(c echo.Context) error {
 
 	dataResponse := fromCore(results)
 
-	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read club members.", dataResponse))
 }
 func (delivery *ClubMemberDelivery) Create(c echo.Context) error {
 	memberInput := MemberRequest{}

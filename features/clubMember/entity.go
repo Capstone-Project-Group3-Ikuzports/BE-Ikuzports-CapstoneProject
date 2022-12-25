@@ -5,9 +5,18 @@ import "time"
 type Core struct {
 	ID        uint
 	UserID    uint
+	User      User
 	ClubID    uint
 	Status    string
 	CreatedAt time.Time
+}
+
+type User struct {
+	ID           uint
+	Name         string
+	Gender       string
+	Phone_number string
+	ClubMember   []Core
 }
 
 type ServiceInterface interface {

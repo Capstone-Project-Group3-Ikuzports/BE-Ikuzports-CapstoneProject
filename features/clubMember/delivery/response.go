@@ -5,18 +5,24 @@ import (
 )
 
 type MemberResponse struct {
-	ID     uint   `json:"id" form:"id"`
-	UserID uint   `json:"user_id" form:"user_id"`
-	ClubID uint   `json:"club_id" form:"club_id"`
-	Status string `json:"status" form:"status"`
+	ID              uint   `json:"id" form:"id"`
+	UserID          uint   `json:"user_id" form:"user_id"`
+	UserName        string `json:"name" form:"name"`
+	UserGender      string `json:"gender" form:"gender"`
+	UserPhoneNumber string `json:"phone_number" form:"phone_number"`
+	ClubID          uint   `json:"club_id" form:"club_id"`
+	Status          string `json:"status" form:"status"`
 }
 
 func fromCore(dataCore clubMember.Core) MemberResponse {
 	return MemberResponse{
-		ID:     dataCore.ID,
-		UserID: dataCore.UserID,
-		ClubID: dataCore.ClubID,
-		Status: dataCore.Status,
+		ID:              dataCore.ID,
+		UserID:          dataCore.UserID,
+		UserName:        dataCore.User.Name,
+		UserGender:      dataCore.User.Gender,
+		UserPhoneNumber: dataCore.User.Phone_number,
+		ClubID:          dataCore.ClubID,
+		Status:          dataCore.Status,
 	}
 }
 
