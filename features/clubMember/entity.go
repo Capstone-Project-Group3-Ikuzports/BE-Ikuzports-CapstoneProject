@@ -14,6 +14,7 @@ type ServiceInterface interface {
 	GetAll(queryStatus string) (data []Core, err error)
 	Create(input Core) error
 	GetById(id int) (data Core, err error)
+	Delete(id int, userId int) error
 }
 
 type RepositoryInterface interface {
@@ -21,6 +22,7 @@ type RepositoryInterface interface {
 	GetAllByStatus(queryStatus string) (data []Core, err error)
 	Create(input Core) error
 	GetById(id int) (data Core, err error)
+	Delete(id int) error
 	FindMember(id, idUser int) (data Core, err error)
 	UpdateMember(id int) error
 }

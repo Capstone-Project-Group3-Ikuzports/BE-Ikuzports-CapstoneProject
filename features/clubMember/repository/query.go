@@ -49,13 +49,13 @@ func (repo *clubMemberRepository) FindMember(id int, idUser int) (data clubMembe
 
 // UpdateMember implements clubMember.RepositoryInterface
 func (repo *clubMemberRepository) UpdateMember(id int) error {
-	tx := repo.db.Exec("UPDATE clubs SET joined_member = (SELECT COUNT(user_id) FROM club_members WHERE club_id = ?) WHERE id = ?", id, id)
+	tx := repo.db.Exec("UPDATE clubs SET joined_member = (SELECT COUNT(user_id) FROM club_members WHERE club_id = ? and deleted_at is null) WHERE id = ?", id, id)
 	if tx.Error != nil {
-		return errors.New("failed update total_participant data")
+		return tx.Error
 	}
 
 	if tx.RowsAffected == 0 {
-		return errors.New("failed update total_participant data")
+		return errors.New("failed update joined member data")
 	}
 
 	return nil
@@ -101,4 +101,17 @@ func (repo *clubMemberRepository) GetById(id int) (data clubMember.Core, err err
 
 	var dataCore = member.toCore()
 	return dataCore, nil
+}
+
+// Delete implements clubMember.RepositoryInterface
+func (repo *clubMemberRepository) Delete(id int) error {
+	var member ClubMember
+	tx := repo.db.Delete(&member, id) // proses delete
+	if tx.Error != nil {
+		return tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return errors.New("delete failed")
+	}
+	return nil
 }
