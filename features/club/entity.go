@@ -1,6 +1,9 @@
 package club
 
-import "time"
+import (
+	// _members "ikuzports/features/clubMember"
+	"time"
+)
 
 type Core struct {
 	ID           uint
@@ -35,6 +38,7 @@ type ServiceInterface interface {
 	GetById(id int) (data Core, err error)
 	Update(input Core, id int, userId int) error
 	Delete(id int, userId int) error
+	// GetMembers(id int) (data []_members.Core, err error)
 	// GetChats(id int) (data []Club, err error)
 	// GetGaleries(id int) (data []Product, err error)
 	// GetActivities(id int) (data []Event, err error)
@@ -49,6 +53,7 @@ type RepositoryInterface interface {
 	Delete(id int) error
 	GetLastID() (id int, err error)
 	UpdateMember(id int) (rows int, err error)
+	// GetMembers(id int) (data []_members.Core, err error)
 	// GetChats(id int) (data []Club, err error)
 	// GetGaleries(id int) (data []Product, err error)
 	// GetActivities(id int) (data []Event, err error)

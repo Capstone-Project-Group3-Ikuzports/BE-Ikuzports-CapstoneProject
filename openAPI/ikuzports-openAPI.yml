@@ -2047,10 +2047,12 @@ paths:
                 example: 
                   - id: 1
                     user_id: 1
+                    user_name: Budi
                     club_id: 1
                     message: "Besok jadi ga?"
                   - id: 2
                     user_id: 2
+                    user_name: Andi
                     club_id: 1
                     message: "gajadi"
         '400':

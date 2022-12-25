@@ -93,3 +93,11 @@ func (dataCore *ClubMember) toCoreMember() club.Status {
 		Status: dataCore.Status,
 	}
 }
+
+func toCoreMemberList(dataModel []ClubMember) []club.Status {
+	var dataCore []club.Status
+	for _, v := range dataModel {
+		dataCore = append(dataCore, v.toCoreMember())
+	}
+	return dataCore
+}
