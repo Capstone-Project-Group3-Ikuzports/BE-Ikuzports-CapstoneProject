@@ -20,6 +20,7 @@ type User struct {
 	Password         string `validate:"required"`
 	PhoneNumber      string `validate:"required"`
 	Address          string
+	City             string
 	UserImage        string
 	Gender           string
 	Biodata          string
@@ -89,6 +90,7 @@ func fromCore(dataCore _user.Core) User {
 		Password:    dataCore.Password,
 		PhoneNumber: dataCore.PhoneNumber,
 		Address:     dataCore.Address,
+		City:        dataCore.City,
 		UserImage:   dataCore.UserImage,
 		Gender:      dataCore.Gender,
 		Biodata:     dataCore.Biodata,
@@ -105,6 +107,7 @@ func (dataModel *User) toCore() _user.Core {
 		Password:    dataModel.Password,
 		PhoneNumber: dataModel.PhoneNumber,
 		Address:     dataModel.Address,
+		City:        dataModel.City,
 		UserImage:   dataModel.UserImage,
 		Gender:      dataModel.Gender,
 		Biodata:     dataModel.Biodata,

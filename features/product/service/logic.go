@@ -1,1 +1,95 @@
 package service
+
+import (
+	"errors"
+	"ikuzports/features/product"
+	"ikuzports/features/user"
+	"ikuzports/utils/helper"
+
+	"github.com/go-playground/validator/v10"
+	"github.com/labstack/gommon/log"
+)
+
+type productService struct {
+	productRepository product.RepositoryInterface
+	userRepository    user.RepositoryInterface
+	validate          *validator.Validate
+}
+
+func New(repo product.RepositoryInterface, repoUser user.RepositoryInterface) product.ServiceInterface {
+	return &productService{
+		productRepository: repo,
+		userRepository:    repoUser,
+		validate:          validator.New(),
+	}
+}
+
+func (service *productService) GetAll(queryItemCategoryID int, queryCity, queryName string) (data []product.ProductCore, err error) {
+	if queryName == "" && queryCity == "" && queryItemCategoryID == 0 {
+		data, err = service.productRepository.GetAll()
+	} else {
+		data, err = service.productRepository.GetAllFilter(queryItemCategoryID, queryCity, queryName)
+	}
+
+	if err != nil {
+		helper.LogDebug(err)
+		return nil, helper.ServiceErrorMsg(err)
+	}
+
+	if len(data) == 0 {
+		helper.LogDebug("Get data success. No data.")
+		return nil, errors.New("Get data success. No data.")
+	}
+
+	return data, nil
+}
+
+func (service *productService) Create(input product.ProductCore) (err error) {
+	if errValidate := service.validate.Struct(input); errValidate != nil {
+		return errValidate
+	}
+
+	res, errID := service.userRepository.GetById(input.UserID)
+	if errID != nil {
+		log.Error(err.Error())
+		return helper.ServiceErrorMsg(err)
+	}
+
+	input.City = res.City
+
+	_, err = service.productRepository.Create(input)
+	if err != nil {
+		log.Error(err.Error())
+		return helper.ServiceErrorMsg(err)
+	}
+
+	return nil
+}
+
+func (service *productService) GetByID(id int) (data product.ProductCore, err error) {
+	data, err = service.productRepository.GetByID(id)
+	if err != nil {
+		log.Error(err.Error())
+		return product.ProductCore{}, helper.ServiceErrorMsg(err)
+	}
+
+	return data, nil
+}
+
+func (service *productService) Update(id int, input product.ProductCore) (err error) {
+	_, err = service.productRepository.Update(id, input)
+	if err != nil {
+		log.Error(err.Error())
+		return helper.ServiceErrorMsg(err)
+	}
+	return nil
+}
+
+func (service *productService) Delete(id int) (err error) {
+	_, err = service.productRepository.Delete(id)
+	if err != nil {
+		log.Error(err.Error())
+		return helper.ServiceErrorMsg(err)
+	}
+	return nil
+}
