@@ -4,6 +4,8 @@ import (
 	"errors"
 	"ikuzports/features/club"
 
+	// _members "ikuzports/features/clubMember"
+
 	"gorm.io/gorm"
 )
 
@@ -118,7 +120,7 @@ func (repo *clubRepository) Update(input club.Core, id int) error {
 		return tx.Error
 	}
 	if tx.RowsAffected == 0 {
-		return errors.New("update user failed")
+		return errors.New("update failed")
 	}
 	return nil
 }
@@ -148,3 +150,14 @@ func (repo *clubRepository) Delete(id int) error {
 	}
 	return nil
 }
+
+// // GetMembers implements club.RepositoryInterface
+// func (repo *clubRepository) GetMembers(id int) (data []_members.Core, err error) {
+// 	var members []ClubMember
+// 	tx := repo.db.Where("id = ?", id).Find(&members)
+// 	if tx.Error != nil {
+// 		return nil, tx.Error
+// 	}
+// 	var dataCore = toCoreMemberList(members)
+// 	return dataCore, nil
+// }

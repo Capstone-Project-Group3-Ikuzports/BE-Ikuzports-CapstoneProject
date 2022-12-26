@@ -9,8 +9,17 @@ import (
 type ClubMember struct {
 	gorm.Model
 	UserID uint
+	User   User
 	ClubID uint
 	Status string
+}
+
+type User struct {
+	gorm.Model
+	Name         string
+	Gender       string
+	Phone_number string
+	ClubMember   []ClubMember
 }
 
 func fromCore(dataCore clubMember.Core) ClubMember {
@@ -24,6 +33,12 @@ func (dataCore *ClubMember) toCore() clubMember.Core {
 	return clubMember.Core{
 		ID:     dataCore.ID,
 		UserID: dataCore.UserID,
+		User: clubMember.User{
+			ID:           dataCore.User.ID,
+			Name:         dataCore.User.Name,
+			Gender:       dataCore.User.Gender,
+			Phone_number: dataCore.User.Phone_number,
+		},
 		ClubID: dataCore.ClubID,
 		Status: dataCore.Status,
 	}

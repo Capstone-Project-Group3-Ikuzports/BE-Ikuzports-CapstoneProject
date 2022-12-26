@@ -28,6 +28,7 @@ func New(service club.ServiceInterface, e *echo.Echo) {
 	e.POST("/clubs", handler.Create, middlewares.JWTMiddleware())
 	e.PUT("/clubs/:id", handler.Update, middlewares.JWTMiddleware())
 	e.DELETE("/clubs/:id", handler.Delete, middlewares.JWTMiddleware())
+	// e.GET("/clubs/:id/members", handler.GetMembers, middlewares.JWTMiddleware())
 	// e.GET("/clubs/:id/chats", handler.GetChats, middlewares.JWTMiddleware())
 	// e.GET("/clubs/:id/galleries", handler.GetGalleries, middlewares.JWTMiddleware())
 	// e.GET("/clubs/:id/activities", handler.GetActivities, middlewares.JWTMiddleware())
@@ -73,16 +74,14 @@ func (delivery *ClubDelivery) Create(c echo.Context) error {
 func (delivery *ClubDelivery) GetAll(c echo.Context) error {
 	queryName := c.QueryParam("name")
 	queryCity := c.QueryParam("city")
-	queryCategory := c.QueryParam("category")
-
-	helper.LogDebug("\n\n\nULALA")
+	queryCategoryID, _ := strconv.Atoi(c.QueryParam("category_id"))
 
 	// debug cek query param masuk
 	helper.LogDebug("\n isi queryName = ", queryName)
 	helper.LogDebug("\n isi queryCity= ", queryCity)
-	helper.LogDebug("\n isi queryCategory = ", queryCategory)
+	helper.LogDebug("\n isi queryCategoryID = ", queryCategoryID)
 
-	results, err := delivery.clubService.GetAll(queryName, queryCity, queryCategory)
+	results, err := delivery.clubService.GetAll(queryName, queryCity, queryCategoryID)
 	if err != nil {
 		if strings.Contains(err.Error(), "Get data success. No data.") {
 			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
@@ -173,3 +172,122 @@ func (delivery *ClubDelivery) Delete(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, helper.SuccessResponse("Success delete data."))
 }
+
+// func (delivery *ClubDelivery) GetMembers(c echo.Context) error {
+// 	idParam := c.Param("id")
+// 	id, errConv := strconv.Atoi(idParam)
+// 	if errConv != nil {
+// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
+// 	}
+
+// 	userId := middlewares.ExtractTokenUserId(c)
+// 	if userId < 1 {
+// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
+// 	}
+
+// 	if userId != id {
+// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
+// 	}
+
+// 	// process
+// 	results, err := delivery.clubService.GetMembers(userId)
+// 	if err != nil {
+// 		if strings.Contains(err.Error(), "Get data success. No data.") {
+// 			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
+// 		}
+// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
+// 	}
+
+// 	dataResponse := fromClubList(results)
+
+// 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
+// }
+
+// func (delivery *ClubDelivery) GetProducts(c echo.Context) error {
+// 	idParam := c.Param("id")
+// 	id, errConv := strconv.Atoi(idParam)
+// 	if errConv != nil {
+// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
+// 	}
+
+// 	userId := middlewares.ExtractTokenUserId(c)
+// 	if userId < 1 {
+// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
+// 	}
+
+// 	if userId != id {
+// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
+// 	}
+
+// 	// process
+// 	results, err := delivery.clubService.GetProducts(id)
+// 	if err != nil {
+// 		if strings.Contains(err.Error(), "Get data success. No data.") {
+// 			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
+// 		}
+// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
+// 	}
+
+// 	dataResponse := fromProductList(results)
+
+// 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
+// }
+
+// func (delivery *ClubDelivery) GetEvents(c echo.Context) error {
+// 	idParam := c.Param("id")
+// 	id, errConv := strconv.Atoi(idParam)
+// 	if errConv != nil {
+// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
+// 	}
+
+// 	userId := middlewares.ExtractTokenUserId(c)
+// 	if userId < 1 {
+// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
+// 	}
+
+// 	if userId != id {
+// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
+// 	}
+
+// 	// process
+// 	results, err := delivery.clubService.GetEvents(id)
+// 	if err != nil {
+// 		if strings.Contains(err.Error(), "Get data success. No data.") {
+// 			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
+// 		}
+// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
+// 	}
+
+// 	dataResponse := fromEventList(results)
+
+// 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
+// }
+
+// func (delivery *ClubDelivery) GetTransactions(c echo.Context) error {
+// 	idParam := c.Param("id")
+// 	id, errConv := strconv.Atoi(idParam)
+// 	if errConv != nil {
+// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
+// 	}
+
+// 	userId := middlewares.ExtractTokenUserId(c)
+// 	if userId < 1 {
+// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
+// 	}
+
+// 	if userId != id {
+// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
+// 	}
+
+// 	results, err := delivery.clubService.GetTransactions(id)
+// 	if err != nil {
+// 		if strings.Contains(err.Error(), "Get data success. No data.") {
+// 			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
+// 		}
+// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
+// 	}
+
+// 	dataResponse := fromTransactionList(results)
+
+// 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
+// }

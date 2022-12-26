@@ -952,11 +952,11 @@ paths:
         '500':
           $ref: '#/components/responses/500'
   
-  /clubs/{clubs_id}/agreements: 
+  /clubs/{clubs_id}/members: 
     get:
       tags: 
        - clubs
-      summary: Get agreement data
+      summary: Get data members by club id
       security: 
         - JWTAuth: []
       parameters:
@@ -967,6 +967,13 @@ paths:
           schema: 
             type: integer
             example: 1
+        - name: status
+          description: "get member by status"
+          required: false
+          in: query
+          schema: 
+            type: string
+            example: Requested
       responses:
         '200':
           description: Get agreement success
@@ -975,15 +982,27 @@ paths:
               schema:
                 type: object
                 example: 
-                  id: 1
-                  terms_condition: "Syarat dan Ketentuan masuk klub ....."
+                  - id: 1
+                    user_id : 1
+                    user_name : "Budi"
+                    gender : "Laki-laki"
+                    phone_number : "0812345"
+                    club_id : 10
+                    status : "member"
+                  - id: 2
+                    user_id : 2
+                    user_name : "Andi"
+                    gender : "Laki-laki"
+                    phone_number : "0812345"
+                    club_id : 10
+                    status : "member"
         '400':
           $ref: '#/components/responses/400'
         '404':
           $ref: '#/components/responses/404' 
         '500':
           $ref: '#/components/responses/500'
-  
+ 
   /clubs/{clubs_id}/chats: 
     get:
       tags: 
@@ -1423,10 +1442,16 @@ paths:
                 example: 
                   - id: 1
                     user_id: 1
+                    name : Budi 
+                    gender : Male 
+                    phone_number : 0812345
                     club_id: 1
                     status: "Owner"
                   - id: 2
                     user_id: 2
+                    name : Budi 
+                    gender : Male 
+                    phone_number : 0812345
                     club_id: 1
                     status: "Member"
         '400':
@@ -1462,6 +1487,73 @@ paths:
                 message: "success insert members data"
         '400':
           $ref: '#/components/responses/400'          
+        '500':
+          $ref: '#/components/responses/500'
+
+  /members/{members_id}:
+    get:
+      tags: 
+       - members
+      summary: Get members data by id
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: members_id
+          description: "id members"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: succes get members data by members id
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  id: 1
+                  user_id: 2
+                  name : Budi 
+                  gender : Male 
+                  phone_number : 0812345
+                  club_id: 1
+                  status: "Owner"
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+    delete: 
+      tags: 
+       - members
+      summary: Delete member from club
+      security: 
+        - JWTAuth: []
+      parameters:
+        - name: members
+          description: "id clubs"
+          required: true
+          in: path
+          schema: 
+            type: integer
+            example: 1
+      responses: 
+        '200':
+          description: Delete success
+          content: 
+            application/json:
+             schema:
+              type: object
+              example:
+                status: "success"
+                message: "success delete member from club"
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404' 
         '500':
           $ref: '#/components/responses/500'
   
@@ -1955,10 +2047,12 @@ paths:
                 example: 
                   - id: 1
                     user_id: 1
+                    user_name: Budi
                     club_id: 1
                     message: "Besok jadi ga?"
                   - id: 2
                     user_id: 2
+                    user_name: Andi
                     club_id: 1
                     message: "gajadi"
         '400':

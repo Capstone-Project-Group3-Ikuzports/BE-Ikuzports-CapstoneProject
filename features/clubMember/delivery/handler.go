@@ -20,9 +20,11 @@ func New(service clubMember.ServiceInterface, e *echo.Echo) {
 		clubMemberService: service,
 	}
 
-	e.GET("/club_members", handler.GetAll, middlewares.JWTMiddleware())
-	e.GET("/club_members/:id", handler.GetById, middlewares.JWTMiddleware())
-	e.POST("/club_members", handler.Create, middlewares.JWTMiddleware())
+	e.GET("/members", handler.GetAll, middlewares.JWTMiddleware())
+	e.GET("/members/:id", handler.GetById, middlewares.JWTMiddleware())
+	e.POST("/members", handler.Create, middlewares.JWTMiddleware())
+	e.DELETE("/members/:id", handler.Delete, middlewares.JWTMiddleware())
+
 }
 
 func (delivery *ClubMemberDelivery) GetAll(c echo.Context) error {
@@ -32,7 +34,7 @@ func (delivery *ClubMemberDelivery) GetAll(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error read data"))
 	}
 	dataRespon := fromCoreList(results)
-	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("success read all users", dataRespon))
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("success read all club members", dataRespon))
 }
 
 func (delivery *ClubMemberDelivery) GetById(c echo.Context) error {
@@ -51,13 +53,13 @@ func (delivery *ClubMemberDelivery) GetById(c echo.Context) error {
 
 	dataResponse := fromCore(results)
 
-	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read club members.", dataResponse))
 }
 func (delivery *ClubMemberDelivery) Create(c echo.Context) error {
 	memberInput := MemberRequest{}
 	errBind := c.Bind(&memberInput)
 	if errBind != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Add new mentee, semua field harus diisi"+errBind.Error()))
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Add new member, semua field harus diisi"+errBind.Error()))
 	}
 	userId := middlewares.ExtractTokenUserId(c)
 	if userId < 1 {
@@ -70,4 +72,22 @@ func (delivery *ClubMemberDelivery) Create(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("internal server error"+err.Error()))
 	}
 	return c.JSON(http.StatusCreated, helper.SuccessResponse("Success create data"))
+}
+
+func (delivery *ClubMemberDelivery) Delete(c echo.Context) error {
+	idParam := c.Param("id")
+	id, errConv := strconv.Atoi(idParam)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
+	}
+	userId := middlewares.ExtractTokenUserId(c)
+	if userId < 1 {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
+	}
+
+	err := delivery.clubMemberService.Delete(id, userId)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("internal server error"+err.Error()))
+	}
+	return c.JSON(http.StatusCreated, helper.SuccessResponse("success delete member"))
 }

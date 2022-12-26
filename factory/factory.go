@@ -29,9 +29,21 @@ import (
 	categoryRepo "ikuzports/features/category/repository"
 	categoryService "ikuzports/features/category/service"
 
+	clubActivityDelivery "ikuzports/features/clubActivity/delivery"
+	clubActivityRepo "ikuzports/features/clubActivity/repository"
+	clubActivityService "ikuzports/features/clubActivity/service"
+
 	productDelivery "ikuzports/features/product/delivery"
 	productRepo "ikuzports/features/product/repository"
 	productService "ikuzports/features/product/service"
+
+	galeryDelivery "ikuzports/features/galery/delivery"
+	galeryRepo "ikuzports/features/galery/repository"
+	galeryService "ikuzports/features/galery/service"
+
+	chatDelivery "ikuzports/features/chat/delivery"
+	chatRepo "ikuzports/features/chat/repository"
+	chatService "ikuzports/features/chat/service"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -47,12 +59,13 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	authDelivery.New(authServiceFactory, e)
 
 	clubMemberRepoFactory := clubMemberRepo.New(db)
-	clubMemberServiceFactory := clubMemberService.New(clubMemberRepoFactory)
-	clubMemberDelivery.New(clubMemberServiceFactory, e)
 
 	clubRepoFactory := clubRepo.New(db)
 	clubServiceFactory := clubService.New(clubRepoFactory, clubMemberRepoFactory)
 	clubDelivery.New(clubServiceFactory, e)
+
+	clubMemberServiceFactory := clubMemberService.New(clubMemberRepoFactory, clubRepoFactory)
+	clubMemberDelivery.New(clubMemberServiceFactory, e)
 
 	participantRepoFactory := participantRepo.New(db)
 	participantServiceFactory := participantService.New(participantRepoFactory)
@@ -69,4 +82,16 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	productRepoFactory := productRepo.New(db)
 	productServiceFactory := productService.New(productRepoFactory, userRepoFactory)
 	productDelivery.New(productServiceFactory, e)
+
+	clubActivityRepoFactory := clubActivityRepo.New(db)
+	clubActivityServiceFactory := clubActivityService.New(clubActivityRepoFactory, clubRepoFactory)
+	clubActivityDelivery.New(clubActivityServiceFactory, e)
+
+	galeryRepoFactory := galeryRepo.New(db)
+	galeryServiceFactory := galeryService.New(galeryRepoFactory, clubRepoFactory)
+	galeryDelivery.New(galeryServiceFactory, e)
+
+	chatRepoFactory := chatRepo.New(db)
+	chatServiceFactory := chatService.New(chatRepoFactory)
+	chatDelivery.New(chatServiceFactory, e)
 }

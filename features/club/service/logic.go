@@ -5,7 +5,6 @@ import (
 	"ikuzports/features/club"
 	"ikuzports/features/clubMember"
 	"ikuzports/utils/helper"
-	"strconv"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/gommon/log"
@@ -58,11 +57,8 @@ func (service *clubService) Create(input club.Core, id int) error {
 }
 
 // GetAll implements club.ServiceInterface
-func (service *clubService) GetAll(queryName, queryCity, queryCategory string) (data []club.Core, err error) {
-	queryCategoryID, _ := strconv.Atoi(queryCategory)
-	// if err != nil {
-	// 	return nil, helper.ServiceErrorMsg(err)
-	// }
+func (service *clubService) GetAll(queryName string, queryCity string, queryCategoryID int) (data []club.Core, err error) {
+
 	if queryName == "" && queryCity == "" && queryCategoryID == 0 {
 		data, err = service.clubRepository.GetAll()
 	} else {
@@ -125,3 +121,18 @@ func (service *clubService) Delete(id int, userId int) error {
 	}
 	return nil
 }
+
+// // GetMembers implements club.ServiceInterface
+// func (service *clubService) GetMembers(id int) (data []clubMember.Core, err error) {
+// 	data, err = service.clubRepository.GetMembers(id)
+// 	if err != nil {
+// 		log.Error(err.Error())
+// 		return data, helper.ServiceErrorMsg(err)
+// 	}
+
+// 	if len(data) == 0 {
+// 		return nil, errors.New("Get data success. No data")
+// 	}
+
+// 	return data, err
+// }
