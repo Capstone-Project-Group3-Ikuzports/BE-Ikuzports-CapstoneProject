@@ -84,89 +84,89 @@ func fromCoreList(dataCore []user.Core) []UserResponse {
 	return dataResponse
 }
 
-func fromClub(dataCore user.Club) ClubResponse {
-	return ClubResponse{
-		ID:          dataCore.ID,
-		Name:        dataCore.Name,
-		Address:     dataCore.Address,
-		City:        dataCore.City,
-		Category:    dataCore.CategoryID,
-		Description: dataCore.Description,
-		Logo:        dataCore.Logo,
-		MemberTotal: dataCore.MemberTotal,
-	}
-}
+// func fromClub(dataCore user.Club) ClubResponse {
+// 	return ClubResponse{
+// 		ID:          dataCore.ID,
+// 		Name:        dataCore.Name,
+// 		Address:     dataCore.Address,
+// 		City:        dataCore.City,
+// 		Category:    dataCore.CategoryID,
+// 		Description: dataCore.Description,
+// 		Logo:        dataCore.Logo,
+// 		MemberTotal: dataCore.MemberTotal,
+// 	}
+// }
 
-func fromClubList(dataCore []user.Club) []ClubResponse {
-	var dataResponse []ClubResponse
-	for _, v := range dataCore {
-		dataResponse = append(dataResponse, fromClub(v))
-	}
-	return dataResponse
-}
+// func fromClubList(dataCore []user.Club) []ClubResponse {
+// 	var dataResponse []ClubResponse
+// 	for _, v := range dataCore {
+// 		dataResponse = append(dataResponse, fromClub(v))
+// 	}
+// 	return dataResponse
+// }
 
-func fromEvent(dataCore user.Event) EventResponse {
-	return EventResponse{
-		ID:               dataCore.ID,
-		UserID:           dataCore.UserID,
-		Name:             dataCore.Name,
-		Address:          dataCore.Address,
-		City:             dataCore.City,
-		CategoryID:       dataCore.CategoryID,
-		StartDate:        dataCore.StartDate,
-		EndDate:          dataCore.EndDate,
-		TotalParticipant: dataCore.TotalParticipant,
-		OrganizerName:    dataCore.OrganizerName,
-	}
-}
+// func fromEvent(dataCore user.Event) EventResponse {
+// 	return EventResponse{
+// 		ID:               dataCore.ID,
+// 		UserID:           dataCore.UserID,
+// 		Name:             dataCore.Name,
+// 		Address:          dataCore.Address,
+// 		City:             dataCore.City,
+// 		CategoryID:       dataCore.CategoryID,
+// 		StartDate:        dataCore.StartDate,
+// 		EndDate:          dataCore.EndDate,
+// 		TotalParticipant: dataCore.TotalParticipant,
+// 		OrganizerName:    dataCore.OrganizerName,
+// 	}
+// }
 
-func fromEventList(dataCore []user.Event) []EventResponse {
-	var dataResponse []EventResponse
-	for _, v := range dataCore {
-		dataResponse = append(dataResponse, fromEvent(v))
-	}
-	return dataResponse
-}
+// func fromEventList(dataCore []user.Event) []EventResponse {
+// 	var dataResponse []EventResponse
+// 	for _, v := range dataCore {
+// 		dataResponse = append(dataResponse, fromEvent(v))
+// 	}
+// 	return dataResponse
+// }
 
-func fromProduct(dataCore user.Product) ProductResponse {
-	return ProductResponse{
-		ID:             dataCore.ID,
-		Name:           dataCore.Name,
-		Price:          dataCore.Price,
-		Quantity:       dataCore.Quantity,
-		Description:    dataCore.Description,
-		UserID:         dataCore.UserID,
-		ItemCategoryID: dataCore.ItemCategoryID,
-	}
-}
+// func fromProduct(dataCore user.Product) ProductResponse {
+// 	return ProductResponse{
+// 		ID:             dataCore.ID,
+// 		Name:           dataCore.Name,
+// 		Price:          dataCore.Price,
+// 		Quantity:       dataCore.Quantity,
+// 		Description:    dataCore.Description,
+// 		UserID:         dataCore.UserID,
+// 		ItemCategoryID: dataCore.ItemCategoryID,
+// 	}
+// }
 
-func fromProductList(dataCore []user.Product) []ProductResponse {
-	var dataResponse []ProductResponse
-	for _, v := range dataCore {
-		dataResponse = append(dataResponse, fromProduct(v))
-	}
-	return dataResponse
-}
+// func fromProductList(dataCore []user.Product) []ProductResponse {
+// 	var dataResponse []ProductResponse
+// 	for _, v := range dataCore {
+// 		dataResponse = append(dataResponse, fromProduct(v))
+// 	}
+// 	return dataResponse
+// }
 
-func fromTransaction(dataCore user.Transaction) TransactionResponse {
-	return TransactionResponse{
-		ID:              dataCore.ID,
-		UserID:          dataCore.UserID,
-		TotalQuantity:   dataCore.TotalQuantity,
-		TotalPrice:      dataCore.TotalPrice,
-		ProductID:       dataCore.ProductID,
-		PaymentMethod:   dataCore.PaymentMethod,
-		TransactionID:   dataCore.TransactionID,
-		StatusPayment:   dataCore.StatusPayment,
-		VirtualAccount:  dataCore.VirtualAccount,
-		TransactionTime: dataCore.TransactionTime,
-	}
-}
+// func fromTransaction(dataCore user.Transaction) TransactionResponse {
+// 	return TransactionResponse{
+// 		ID:              dataCore.ID,
+// 		UserID:          dataCore.UserID,
+// 		TotalQuantity:   dataCore.TotalQuantity,
+// 		TotalPrice:      dataCore.TotalPrice,
+// 		ProductID:       dataCore.ProductID,
+// 		PaymentMethod:   dataCore.PaymentMethod,
+// 		TransactionID:   dataCore.TransactionID,
+// 		StatusPayment:   dataCore.StatusPayment,
+// 		VirtualAccount:  dataCore.VirtualAccount,
+// 		TransactionTime: dataCore.TransactionTime,
+// 	}
+// }
 
-func fromTransactionList(dataCore []user.Transaction) []TransactionResponse {
-	var dataResponse []TransactionResponse
-	for _, v := range dataCore {
-		dataResponse = append(dataResponse, fromTransaction(v))
-	}
-	return dataResponse
-}
+// func fromTransactionList(dataCore []user.Transaction) []TransactionResponse {
+// 	var dataResponse []TransactionResponse
+// 	for _, v := range dataCore {
+// 		dataResponse = append(dataResponse, fromTransaction(v))
+// 	}
+// 	return dataResponse
+// }

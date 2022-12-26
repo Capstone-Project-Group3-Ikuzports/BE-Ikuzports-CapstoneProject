@@ -5,8 +5,6 @@ import (
 	"ikuzports/features/user"
 	"ikuzports/utils/helper"
 
-	"strings"
-
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/gommon/log"
 	"golang.org/x/crypto/bcrypt"
@@ -33,15 +31,11 @@ func (service *userService) Create(input user.Core) (err error) {
 
 	// validasi email harus unik
 	data, errFindEmail := service.userRepository.FindUser(input.Email)
-
-	// helper.LogDebug("\n\n\n find email input  ", input.Email)
-	// helper.LogDebug("\n\n\n find email data  ", data.Email)
-
 	if data.Email == input.Email {
 		return errors.New("Email " + input.Email + " already exist. Please pick another email.")
 	}
 
-	if errFindEmail != nil && !strings.Contains(errFindEmail.Error(), "found") {
+	if errFindEmail != nil {
 		return helper.ServiceErrorMsg(errFindEmail)
 	}
 
@@ -105,25 +99,13 @@ func (service *userService) Update(input user.Core, id int) error {
 		generate, _ := bcrypt.GenerateFromPassword([]byte(input.Password), 10)
 		input.Password = string(generate)
 	}
-
-	// validasi user dgn id path param, apakah ada datanya di database
-	_, errFindId := service.userRepository.GetById(id)
-	if errFindId != nil {
-		log.Error(errFindId.Error())
-		return helper.ServiceErrorMsg(errFindId)
-	}
-
 	// validasi email harus unik pas update, kalau email nya sama dgn punya dia gpp
 	data, errFindEmail := service.userRepository.FindUser(input.Email)
-
-	// helper.LogDebug("\n\n\n find email input  ", input.Email, "--- id ", id)
-	// helper.LogDebug("\n\n\n find email data  ", data.Email, "--- id ", data.ID)
-
 	if (data.Email == input.Email) && (data.ID != uint(id)) && input.Email != "" {
 		return errors.New("Failed. Email " + input.Email + " already exist at other user. Please pick another email.")
 	}
 
-	if errFindEmail != nil && !strings.Contains(errFindEmail.Error(), "found") {
+	if errFindEmail != nil {
 		return helper.ServiceErrorMsg(errFindEmail)
 	}
 
@@ -138,13 +120,6 @@ func (service *userService) Update(input user.Core, id int) error {
 }
 
 func (service *userService) Delete(id int) error {
-	// validasi user dgn id path param, apakah ada datanya di database
-	_, errFindId := service.userRepository.GetById(id)
-	if errFindId != nil {
-		log.Error(errFindId.Error())
-		return helper.ServiceErrorMsg(errFindId)
-	}
-
 	// proses
 	err := service.userRepository.Delete(id)
 	if err != nil {
@@ -155,65 +130,65 @@ func (service *userService) Delete(id int) error {
 }
 
 // GetClubs implements user.ServiceInterface
-func (service *userService) GetClubs(id int) (data []user.Club, err error) {
-	data, err = service.userRepository.GetClubs(id)
-	if err != nil {
-		log.Error(err.Error())
-		return data, helper.ServiceErrorMsg(err)
-	}
+// func (service *userService) GetClubs(id int) (data []user.Club, err error) {
+// 	data, err = service.userRepository.GetClubs(id)
+// 	if err != nil {
+// 		log.Error(err.Error())
+// 		return data, helper.ServiceErrorMsg(err)
+// 	}
 
-	if len(data) == 0 {
-		helper.LogDebug("Get data success. No data.")
-		return nil, errors.New("Get data success. No data.")
-	}
+// 	if len(data) == 0 {
+// 		helper.LogDebug("Get data success. No data.")
+// 		return nil, errors.New("Get data success. No data.")
+// 	}
 
-	return data, err
-}
+// 	return data, err
+// }
 
-// GetEvents implements user.ServiceInterface
-func (service *userService) GetEvents(id int) (data []user.Event, err error) {
-	data, err = service.userRepository.GetEvents(id)
-	if err != nil {
-		log.Error(err.Error())
-		return data, helper.ServiceErrorMsg(err)
-	}
+// // GetEvents implements user.ServiceInterface
+// func (service *userService) GetEvents(id int) (data []user.Event, err error) {
+// 	data, err = service.userRepository.GetEvents(id)
+// 	if err != nil {
+// 		log.Error(err.Error())
+// 		return data, helper.ServiceErrorMsg(err)
+// 	}
 
-	if len(data) == 0 {
-		helper.LogDebug("Get data success. No data.")
-		return nil, errors.New("Get data success. No data.")
-	}
+// 	if len(data) == 0 {
+// 		helper.LogDebug("Get data success. No data.")
+// 		return nil, errors.New("Get data success. No data.")
+// 	}
 
-	return data, err
-}
+// 	return data, err
+// }
 
 // GetProducts implements user.ServiceInterface
-func (service *userService) GetProducts(id int) (data []user.Product, err error) {
-	data, err = service.userRepository.GetProducts(id)
-	if err != nil {
-		log.Error(err.Error())
-		return data, helper.ServiceErrorMsg(err)
-	}
+// func (service *userService) GetProducts(id int) (data []user.Product, err error) {
+// 	data, err = service.userRepository.GetProducts(id)
+// 	if err != nil {
+// 		log.Error(err.Error())
+// 		return data, helper.ServiceErrorMsg(err)
+// 	}
 
-	if len(data) == 0 {
-		helper.LogDebug("Get data success. No data.")
-		return nil, errors.New("Get data success. No data.")
-	}
+// 	if len(data) == 0 {
+// 		helper.LogDebug("Get data success. No data.")
+// 		return nil, errors.New("Get data success. No data.")
+// 	}
 
-	return data, err
-}
+// 	return data, err
+// }
 
-// GetTransactions implements user.ServiceInterface
-func (service *userService) GetTransactions(id int) (data []user.Transaction, err error) {
-	data, err = service.userRepository.GetTransactions(id)
-	if err != nil {
-		log.Error(err.Error())
-		return data, helper.ServiceErrorMsg(err)
-	}
+// // GetTransactions implements user.ServiceInterface
+// func (service *userService) GetTransactions(id int) (data []user.Transaction, err error) {
+// 	data, err = service.userRepository.GetTransactions(id)
+// 	if err != nil {
+// 		log.Error(err.Error())
+// 		return data, helper.ServiceErrorMsg(err)
+// 	}
 
-	if len(data) == 0 {
-		helper.LogDebug("Get data success. No data.")
-		return nil, errors.New("Get data success. No data.")
-	}
+// 	if len(data) == 0 {
+// 		helper.LogDebug("Get data success. No data.")
+// 		return nil, errors.New("Get data success. No data.")
+// 	}
 
-	return data, err
-}
+// 	return data, err
+// }

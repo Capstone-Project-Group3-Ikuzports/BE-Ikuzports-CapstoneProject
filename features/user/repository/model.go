@@ -2,12 +2,15 @@ package repository
 
 import (
 	_chat "ikuzports/features/chat/repository"
+	_club "ikuzports/features/club/repository"
+	"ikuzports/features/clubMember"
 	_member "ikuzports/features/clubMember/repository"
+	"ikuzports/features/event"
 	_event "ikuzports/features/event/repository"
+	"ikuzports/features/product"
 	_product "ikuzports/features/product/repository"
 	_transaction "ikuzports/features/transaction/repository"
-	_user "ikuzports/features/user"
-	"time"
+	"ikuzports/features/user"
 
 	"gorm.io/gorm"
 )
@@ -32,58 +35,32 @@ type User struct {
 	Chat             []_chat.Chat
 }
 
+type ClubMember struct {
+	_member.ClubMember
+	Club _club.Club
+}
+
 type Club struct {
-	gorm.Model
-	Name        string
-	Address     string
-	City        string
-	CategoryID  uint
-	Description string
-	Logo        string
-	MemberTotal int
+	_club.Club
+	Member []_member.ClubMember
 }
 
 type Event struct {
-	gorm.Model
-	Name             string
-	UserID           uint
-	Address          string
-	City             string
-	CategoryID       uint
-	StartDate        time.Time
-	EndDate          time.Time
-	TotalParticipant int
-	OrganizerName    string
-	Status           string
+	_event.Event
 }
 
 type Transaction struct {
-	gorm.Model
-	UserID          uint
-	TotalQuantity   int
-	TotalPrice      int
-	ProductID       uint
-	PaymentMethod   string
-	TransactionID   uint
-	StatusPayment   string
-	VirtualAccount  string
-	TransactionTime time.Time
+	_transaction.Transaction
 }
 
 type Product struct {
-	gorm.Model
-	Name           string
-	Price          int
-	Quantity       int
-	Description    string
-	UserID         uint
-	ItemCategoryID uint
+	_product.Product
 }
 
 // mapping
 
 // mengubah struct core ke struct model gorm
-func fromCore(dataCore _user.Core) User {
+func fromCore(dataCore user.Core) User {
 	userGorm := User{
 		Name:        dataCore.Name,
 		Email:       dataCore.Email,
@@ -99,8 +76,8 @@ func fromCore(dataCore _user.Core) User {
 }
 
 // mengubah struct model gorm ke struct core
-func (dataModel *User) toCore() _user.Core {
-	return _user.Core{
+func (dataModel *User) toCore() user.Core {
+	return user.Core{
 		ID:          dataModel.ID,
 		Name:        dataModel.Name,
 		Email:       dataModel.Email,
@@ -117,37 +94,42 @@ func (dataModel *User) toCore() _user.Core {
 }
 
 // mengubah slice struct model gorm ke slice struct core
-func toCoreList(dataModel []User) []_user.Core {
-	var dataCore []_user.Core
+func toCoreList(dataModel []User) []user.Core {
+	var dataCore []user.Core
 	for _, v := range dataModel {
 		dataCore = append(dataCore, v.toCore())
 	}
 	return dataCore
 }
 
-func (dataModel *Club) toCoreClub() _user.Club {
-	return _user.Club{
-		ID:          dataModel.ID,
-		Name:        dataModel.Name,
-		Address:     dataModel.Address,
-		City:        dataModel.City,
-		CategoryID:  dataModel.CategoryID,
-		Description: dataModel.Description,
-		Logo:        dataModel.Logo,
-		MemberTotal: dataModel.MemberTotal,
+func (dataModel *ClubMember) toCoreClub() clubMember.Core {
+	return clubMember.Core{
+		ID:     dataModel.ID,
+		UserID: dataModel.UserID,
+		ClubID: dataModel.ClubID,
+		Club: clubMember.Club{
+			ID:           dataModel.Club.ID,
+			Name:         dataModel.Club.Name,
+			Category:     dataModel.Club.Category.Name,
+			City:         dataModel.Club.City,
+			JoinedMember: uint(dataModel.Club.JoinedMember),
+			MemberTotal:  uint(dataModel.Club.MemberTotal),
+			Logo:         dataModel.Club.Logo,
+		},
+		Status: dataModel.Status,
 	}
 }
 
-func toClubList(dataModel []Club) []_user.Club {
-	var dataCore []_user.Club
+func toClubList(dataModel []ClubMember) []clubMember.Core {
+	var dataCore []clubMember.Core
 	for _, v := range dataModel {
 		dataCore = append(dataCore, v.toCoreClub())
 	}
 	return dataCore
 }
 
-func (dataModel *Event) toCoreEvent() _user.Event {
-	return _user.Event{
+func (dataModel *Event) toCoreEvent() event.EventCore {
+	return event.EventCore{
 		ID:               dataModel.ID,
 		Name:             dataModel.Name,
 		Address:          dataModel.Address,
@@ -156,56 +138,60 @@ func (dataModel *Event) toCoreEvent() _user.Event {
 		StartDate:        dataModel.StartDate,
 		EndDate:          dataModel.EndDate,
 		TotalParticipant: dataModel.TotalParticipant,
-		OrganizerName:    dataModel.OrganizerName,
+		User: event.User{
+			Name: dataModel.User.Name,
+		},
 	}
 }
 
-func toEventList(dataModel []Event) []_user.Event {
-	var dataCore []_user.Event
+func toEventList(dataModel []Event) []event.EventCore {
+	var dataCore []event.EventCore
 	for _, v := range dataModel {
 		dataCore = append(dataCore, v.toCoreEvent())
 	}
 	return dataCore
 }
 
-func (dataModel *Product) toCoreProduct() _user.Product {
-	return _user.Product{
+func (dataModel *Product) toCoreProduct() product.ProductCore {
+	return product.ProductCore{
 		ID:             dataModel.ID,
 		Name:           dataModel.Name,
-		Price:          dataModel.Price,
-		Quantity:       dataModel.Quantity,
+		Price:          uint(dataModel.Price),
 		Description:    dataModel.Description,
 		UserID:         dataModel.UserID,
 		ItemCategoryID: dataModel.ItemCategoryID,
+		ItemCategory: product.ItemCategory{
+			Name: dataModel.ItemCategory.Name,
+		},
 	}
 }
 
-func toProductList(dataModel []Product) []_user.Product {
-	var dataCore []_user.Product
+func toProductList(dataModel []Product) []product.ProductCore {
+	var dataCore []product.ProductCore
 	for _, v := range dataModel {
 		dataCore = append(dataCore, v.toCoreProduct())
 	}
 	return dataCore
 }
 
-func (dataModel *Transaction) toCoreTransaction() _user.Transaction {
-	return _user.Transaction{
-		ID:             dataModel.ID,
-		UserID:         dataModel.UserID,
-		TotalQuantity:  dataModel.TotalQuantity,
-		TotalPrice:     dataModel.TotalPrice,
-		ProductID:      dataModel.ProductID,
-		PaymentMethod:  dataModel.PaymentMethod,
-		TransactionID:  dataModel.TransactionID,
-		StatusPayment:  dataModel.StatusPayment,
-		VirtualAccount: dataModel.VirtualAccount,
-	}
-}
+// func (dataModel *Transaction) toCoreTransaction() user.Transaction {
+// 	return user.Transaction{
+// 		ID:             dataModel.ID,
+// 		UserID:         dataModel.UserID,
+// 		TotalQuantity:  dataModel.TotalQuantity,
+// 		TotalPrice:     dataModel.TotalPrice,
+// 		ProductID:      dataModel.ProductID,
+// 		PaymentMethod:  dataModel.PaymentMethod,
+// 		TransactionID:  dataModel.TransactionID,
+// 		StatusPayment:  dataModel.StatusPayment,
+// 		VirtualAccount: dataModel.VirtualAccount,
+// 	}
+// }
 
-func toTransactionList(dataModel []Transaction) []_user.Transaction {
-	var dataCore []_user.Transaction
-	for _, v := range dataModel {
-		dataCore = append(dataCore, v.toCoreTransaction())
-	}
-	return dataCore
-}
+// func toTransactionList(dataModel []Transaction) []user.Transaction {
+// 	var dataCore []user.Transaction
+// 	for _, v := range dataModel {
+// 		dataCore = append(dataCore, v.toCoreTransaction())
+// 	}
+// 	return dataCore
+// }
