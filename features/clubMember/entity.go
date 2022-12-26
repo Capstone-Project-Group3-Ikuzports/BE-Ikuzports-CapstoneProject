@@ -1,12 +1,15 @@
 package clubMember
 
-import "time"
+import (
+	"time"
+)
 
 type Core struct {
 	ID        uint
 	UserID    uint
 	User      User
 	ClubID    uint
+	Club      Club
 	Status    string
 	CreatedAt time.Time
 	DeletedAt time.Time
@@ -17,6 +20,17 @@ type User struct {
 	Name         string
 	Gender       string
 	Phone_number string
+	ClubMember   []Core
+}
+
+type Club struct {
+	ID           uint
+	Name         string
+	Category     string
+	City         string
+	JoinedMember uint
+	MemberTotal  uint
+	Logo         string
 	ClubMember   []Core
 }
 
