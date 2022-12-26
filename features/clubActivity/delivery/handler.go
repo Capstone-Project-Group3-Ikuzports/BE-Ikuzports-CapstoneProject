@@ -51,7 +51,7 @@ func (delivery *ClubActivityDelivery) GetAll(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error read data"))
 	}
 	dataRespon := fromCoreList(results)
-	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("success read all users", dataRespon))
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("success read all activity", dataRespon))
 }
 
 func (delivery *ClubActivityDelivery) Update(c echo.Context) error {
@@ -72,5 +72,5 @@ func (delivery *ClubActivityDelivery) Update(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("internal server error"+err.Error()))
 	}
-	return c.JSON(http.StatusCreated, helper.SuccessWithDataResponse("success update class", dataUpdateCore))
+	return c.JSON(http.StatusCreated, helper.SuccessResponse("success update activity"))
 }

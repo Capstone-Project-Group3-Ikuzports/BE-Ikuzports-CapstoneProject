@@ -24,6 +24,7 @@ func New(service clubMember.ServiceInterface, e *echo.Echo) {
 	e.GET("/members/:id", handler.GetById, middlewares.JWTMiddleware())
 	e.POST("/members", handler.Create, middlewares.JWTMiddleware())
 	e.DELETE("/members/:id", handler.Delete, middlewares.JWTMiddleware())
+	e.PUT("/members/:id", handler.Update, middlewares.JWTMiddleware())
 
 }
 
@@ -72,6 +73,31 @@ func (delivery *ClubMemberDelivery) Create(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("internal server error"+err.Error()))
 	}
 	return c.JSON(http.StatusCreated, helper.SuccessResponse("Success create data"))
+}
+
+func (delivery *ClubMemberDelivery) Update(c echo.Context) error {
+	idParam := c.Param("id")
+	id, errConv := strconv.Atoi(idParam)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
+	}
+
+	memberInput := MemberRequest{}
+	errBind := c.Bind(&memberInput)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Add new member, semua field harus diisi"+errBind.Error()))
+	}
+	userId := middlewares.ExtractTokenUserId(c)
+	if userId < 1 {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
+	}
+	memberInput.UserID = uint(userId)
+	dataCore := toCore(memberInput)
+	err := delivery.clubMemberService.Update(dataCore, id, userId)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("internal server error"+err.Error()))
+	}
+	return c.JSON(http.StatusCreated, helper.SuccessResponse("Success update data"))
 }
 
 func (delivery *ClubMemberDelivery) Delete(c echo.Context) error {

@@ -1,7 +1,10 @@
 package club
 
 import (
-	// _members "ikuzports/features/clubMember"
+	"ikuzports/features/chat"
+	"ikuzports/features/clubActivity"
+	_members "ikuzports/features/clubMember"
+	"ikuzports/features/galery"
 	"time"
 )
 
@@ -32,16 +35,23 @@ type Status struct {
 	Status string
 }
 
+type Chat struct {
+	chat.Core
+}
+
+type Galery struct {
+	galery.Core
+}
 type ServiceInterface interface {
 	GetAll(queryName string, queryCity string, queryCategoryID int) (data []Core, err error)
 	Create(input Core, id int) error
 	GetById(id int) (data Core, err error)
 	Update(input Core, id int, userId int) error
 	Delete(id int, userId int) error
-	// GetMembers(id int) (data []_members.Core, err error)
-	// GetChats(id int) (data []Club, err error)
-	// GetGaleries(id int) (data []Product, err error)
-	// GetActivities(id int) (data []Event, err error)
+	GetMembers(id int) (data []_members.Core, err error)
+	GetChats(id int) (data []chat.Core, err error)
+	GetGaleries(id int) (data []galery.Core, err error)
+	GetActivities(id int) (data []clubActivity.Core, err error)
 }
 
 type RepositoryInterface interface {
@@ -53,9 +63,9 @@ type RepositoryInterface interface {
 	Delete(id int) error
 	GetLastID() (id int, err error)
 	UpdateMember(id int) (rows int, err error)
-	// GetMembers(id int) (data []_members.Core, err error)
-	// GetChats(id int) (data []Club, err error)
-	// GetGaleries(id int) (data []Product, err error)
-	// GetActivities(id int) (data []Event, err error)
+	GetMembers(id int) (data []_members.Core, err error)
+	GetChats(id int) (data []chat.Core, err error)
+	GetGaleries(id int) (data []galery.Core, err error)
+	GetActivities(id int) (data []clubActivity.Core, err error)
 	GetStatus(id int, userId int) (data Status, err error)
 }
