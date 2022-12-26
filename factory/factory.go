@@ -33,6 +33,10 @@ import (
 	clubActivityRepo "ikuzports/features/clubActivity/repository"
 	clubActivityService "ikuzports/features/clubActivity/service"
 
+	productDelivery "ikuzports/features/product/delivery"
+	productRepo "ikuzports/features/product/repository"
+	productService "ikuzports/features/product/service"
+
 	galeryDelivery "ikuzports/features/galery/delivery"
 	galeryRepo "ikuzports/features/galery/repository"
 	galeryService "ikuzports/features/galery/service"
@@ -74,6 +78,10 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	categoryRepoFactory := categoryRepo.New(db)
 	categoryServiceFactory := categoryService.New(categoryRepoFactory)
 	categoryDelivery.New(categoryServiceFactory, e)
+
+	productRepoFactory := productRepo.New(db)
+	productServiceFactory := productService.New(productRepoFactory, userRepoFactory)
+	productDelivery.New(productServiceFactory, e)
 
 	clubActivityRepoFactory := clubActivityRepo.New(db)
 	clubActivityServiceFactory := clubActivityService.New(clubActivityRepoFactory, clubRepoFactory)

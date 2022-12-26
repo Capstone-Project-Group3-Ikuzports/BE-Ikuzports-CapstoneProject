@@ -11,6 +11,7 @@ type UserResponse struct {
 	Email       string `json:"email"`
 	PhoneNumber string `json:"phone_number"`
 	Address     string `json:"address"`
+	City        string `json:"city"`
 	UserImage   string `json:"user_image"`
 	Gender      string `json:"gender"`
 	Biodata     string `json:"biodata"`
@@ -68,6 +69,7 @@ func fromCore(dataCore user.Core) UserResponse {
 		Email:       dataCore.Email,
 		PhoneNumber: dataCore.PhoneNumber,
 		Address:     dataCore.Address,
+		City:        dataCore.City,
 		UserImage:   dataCore.UserImage,
 		Gender:      dataCore.Gender,
 		Biodata:     dataCore.Biodata,
