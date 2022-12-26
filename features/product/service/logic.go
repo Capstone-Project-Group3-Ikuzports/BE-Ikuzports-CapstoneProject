@@ -3,7 +3,6 @@ package service
 import (
 	"errors"
 	"ikuzports/features/product"
-	"ikuzports/features/user"
 	"ikuzports/utils/helper"
 
 	"github.com/go-playground/validator/v10"
@@ -12,14 +11,12 @@ import (
 
 type productService struct {
 	productRepository product.RepositoryInterface
-	userRepository    user.RepositoryInterface
 	validate          *validator.Validate
 }
 
-func New(repo product.RepositoryInterface, repoUser user.RepositoryInterface) product.ServiceInterface {
+func New(repo product.RepositoryInterface) product.ServiceInterface {
 	return &productService{
 		productRepository: repo,
-		userRepository:    repoUser,
 		validate:          validator.New(),
 	}
 }
@@ -48,14 +45,6 @@ func (service *productService) Create(input product.ProductCore) (err error) {
 	if errValidate := service.validate.Struct(input); errValidate != nil {
 		return errValidate
 	}
-
-	res, errID := service.userRepository.GetById(input.UserID)
-	if errID != nil {
-		log.Error(err.Error())
-		return helper.ServiceErrorMsg(err)
-	}
-
-	input.City = res.City
 
 	_, err = service.productRepository.Create(input)
 	if err != nil {

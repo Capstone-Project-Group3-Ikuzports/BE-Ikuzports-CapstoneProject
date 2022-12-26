@@ -2,7 +2,6 @@ package repository
 
 import (
 	"ikuzports/features/product"
-	_productImage "ikuzports/features/productImage/repository"
 	_transaction "ikuzports/features/transaction/repository"
 
 	"gorm.io/gorm"
@@ -19,7 +18,7 @@ type Product struct {
 	City           string
 	ItemCategory   ItemCategory
 	Transaction    []_transaction.Transaction
-	ProductImage   []_productImage.ProductImage
+	ProductImage   []ProductImage
 }
 
 type ItemCategory struct {
@@ -32,6 +31,12 @@ type User struct {
 	gorm.Model
 	Name string
 	City string
+}
+
+type ProductImage struct {
+	gorm.Model
+	URL       string
+	ProductID uint
 }
 
 func fromCore(dataModel product.ProductCore) Product {
@@ -56,6 +61,8 @@ func (dataModel *Product) toCore() product.ProductCore {
 		User:           dataModel.User.toCoreUser(),
 		ItemCategoryID: dataModel.ItemCategoryID,
 		ItemCategory:   dataModel.ItemCategory.toCoreItemCategory(),
+		City:           dataModel.City,
+		ProductImage:   toCoreListImage(dataModel.ProductImage),
 	}
 }
 
@@ -71,6 +78,21 @@ func (dataModel *User) toCoreUser() product.User {
 		ID:   dataModel.ID,
 		Name: dataModel.Name,
 	}
+}
+
+func (dataModel *ProductImage) toCoreProductImage() product.ProductImage {
+	return product.ProductImage{
+		ID:  dataModel.ID,
+		URL: dataModel.URL,
+	}
+}
+
+func toCoreListImage(dataModel []ProductImage) []product.ProductImage {
+	var dataCoreImage []product.ProductImage
+	for _, v := range dataModel {
+		dataCoreImage = append(dataCoreImage, v.toCoreProductImage())
+	}
+	return dataCoreImage
 }
 
 func toCoreList(dataModel []Product) []product.ProductCore {
