@@ -45,6 +45,10 @@ import (
 	chatRepo "ikuzports/features/chat/repository"
 	chatService "ikuzports/features/chat/service"
 
+	productImageDelivery "ikuzports/features/productImage/delivery"
+	productImageRepo "ikuzports/features/productImage/repository"
+	productImageService "ikuzports/features/productImage/service"
+
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
@@ -80,7 +84,7 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	categoryDelivery.New(categoryServiceFactory, e)
 
 	productRepoFactory := productRepo.New(db)
-	productServiceFactory := productService.New(productRepoFactory, userRepoFactory)
+	productServiceFactory := productService.New(productRepoFactory)
 	productDelivery.New(productServiceFactory, e)
 
 	clubActivityRepoFactory := clubActivityRepo.New(db)
@@ -94,4 +98,8 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	chatRepoFactory := chatRepo.New(db)
 	chatServiceFactory := chatService.New(chatRepoFactory)
 	chatDelivery.New(chatServiceFactory, e)
+
+	productImageRepoFactory := productImageRepo.New(db)
+	productImageServiceFactory := productImageService.New(productImageRepoFactory)
+	productImageDelivery.New(productImageServiceFactory, e)
 }

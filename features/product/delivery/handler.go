@@ -21,6 +21,7 @@ func New(service product.ServiceInterface, e *echo.Echo) {
 	e.GET("/products", handler.GetAll, middlewares.JWTMiddleware())
 	e.POST("/products", handler.Create, middlewares.JWTMiddleware())
 	e.GET("/products/:id", handler.GetByID, middlewares.JWTMiddleware())
+	e.GET("/products/:id/products_images", handler.GetByIDImages, middlewares.JWTMiddleware())
 	e.PUT("/products/:id", handler.Update, middlewares.JWTMiddleware())
 	e.DELETE("/products/:id", handler.Delete, middlewares.JWTMiddleware())
 }
@@ -70,6 +71,18 @@ func (delivery *ProductDelivery) GetByID(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error get product data by id"))
 	}
 	dataResp := fromCore(res)
+
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("success get product data by id", dataResp))
+}
+
+func (delivery *ProductDelivery) GetByIDImages(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	res, err := delivery.productService.GetByID(id)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error get product data by id"))
+	}
+	dataResp := fromImageCore(res)
 
 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("success get product data by id", dataResp))
 }

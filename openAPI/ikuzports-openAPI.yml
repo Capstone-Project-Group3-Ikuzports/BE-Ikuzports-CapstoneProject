@@ -445,6 +445,28 @@ paths:
         '500':
           $ref: '#/components/responses/500'  
   
+  /categories:
+    get:
+      tags: 
+       - categories
+      summary: Get all category data
+      responses:
+        '200':
+          description: List all category data success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  - id: 1
+                    name: "Sepak Bola"
+                  - id: 2
+                    name: "Basket"
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+  
   /events:
     post:
       tags: 
@@ -1594,6 +1616,7 @@ paths:
                     description: "Sepatu bagus"
                     user_id: 1
                     category_id: 1
+                    city: "Bandung"
                   - id: 2
                     name: "Jersey"
                     price: 75000
@@ -1601,6 +1624,7 @@ paths:
                     description: "Jersey Langka"
                     user_id: 1
                     category_id: 2
+                    city: "Cimahi"
         '400':
           $ref: '#/components/responses/400'
         '500':
@@ -1624,6 +1648,7 @@ paths:
                 quantity: 10
                 description: "Jersey Langka"
                 category_id: 2
+                city: "Bandung"
       responses: 
         '200':
           description: Insert success
@@ -1669,6 +1694,7 @@ paths:
                   description: "Jersey Langka"
                   user_id: 1
                   category_id: 2
+                  city: "Bandung"
         '400':
           $ref: '#/components/responses/400'
         '404':
@@ -1702,6 +1728,7 @@ paths:
                 quantity: 10
                 description: "Jersey Langka"
                 category_id: 2
+                city: "Bandung"
       responses: 
         '200':
           description: Update success

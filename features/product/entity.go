@@ -10,6 +10,7 @@ type ProductCore struct {
 	ItemCategoryID uint `validate:"required"`
 	ItemCategory   ItemCategory
 	City           string
+	ProductImage   []ProductImage
 }
 
 type ItemCategory struct {
@@ -21,6 +22,11 @@ type User struct {
 	ID   uint
 	Name string
 	City string
+}
+
+type ProductImage struct {
+	ID  uint
+	URL string
 }
 
 type RepositoryInterface interface {

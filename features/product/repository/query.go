@@ -60,7 +60,7 @@ func (repo *productRepository) Create(input product.ProductCore) (row int, err e
 
 func (repo *productRepository) GetByID(id int) (data product.ProductCore, err error) {
 	var product Product
-	tx := repo.db.Preload("User").Preload("ItemCategory").First(&product, id)
+	tx := repo.db.Preload("User").Preload("ItemCategory").Preload("ProductImage").First(&product, id)
 	if tx.Error != nil {
 		return data, tx.Error
 	}
