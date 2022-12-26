@@ -2,9 +2,12 @@ package repository
 
 import (
 	"errors"
+	"ikuzports/features/chat"
 	"ikuzports/features/club"
+	"ikuzports/features/clubActivity"
+	"ikuzports/features/galery"
 
-	// _members "ikuzports/features/clubMember"
+	_members "ikuzports/features/clubMember"
 
 	"gorm.io/gorm"
 )
@@ -151,13 +154,46 @@ func (repo *clubRepository) Delete(id int) error {
 	return nil
 }
 
-// // GetMembers implements club.RepositoryInterface
-// func (repo *clubRepository) GetMembers(id int) (data []_members.Core, err error) {
-// 	var members []ClubMember
-// 	tx := repo.db.Where("id = ?", id).Find(&members)
-// 	if tx.Error != nil {
-// 		return nil, tx.Error
-// 	}
-// 	var dataCore = toCoreMemberList(members)
-// 	return dataCore, nil
-// }
+// GetMembers implements club.RepositoryInterface
+func (repo *clubRepository) GetMembers(id int) (data []_members.Core, err error) {
+	var members []ClubMember
+	tx := repo.db.Where("club_id = ?", id).Preload("User").Find(&members)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	var dataCore = toCoreMembersList(members)
+	return dataCore, nil
+}
+
+// GetChats implements club.RepositoryInterface
+func (repo *clubRepository) GetChats(id int) (data []chat.Core, err error) {
+	var chats []Chat
+	tx := repo.db.Where("club_id = ?", id).Preload("User").Find(&chats)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	var dataCore = toCoreChatList(chats)
+	return dataCore, nil
+}
+
+// GetGaleries implements club.RepositoryInterface
+func (repo *clubRepository) GetGaleries(id int) (data []galery.Core, err error) {
+	var gallery []Galery
+	tx := repo.db.Where("club_id = ?", id).Find(&gallery)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	var dataCore = toCoreGaleryList(gallery)
+	return dataCore, nil
+}
+
+// GetActivities implements club.RepositoryInterface
+func (repo *clubRepository) GetActivities(id int) (data []clubActivity.Core, err error) {
+	var activities []ClubActivity
+	tx := repo.db.Where("club_id = ?", id).Find(&activities)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	var dataCore = toCoreActivityList(activities)
+	return dataCore, nil
+}

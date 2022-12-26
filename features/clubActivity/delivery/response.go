@@ -2,18 +2,17 @@ package delivery
 
 import (
 	"ikuzports/features/clubActivity"
-	"time"
 )
 
 type ActivityResponse struct {
-	ID             uint      `json:"id" form:"id"`
-	ClubID         uint      `json:"club_id" form:"club_id"`
-	Name           string    `json:"name" form:"name"`
-	StartTime      time.Time `json:"start_time" form:"start_time"`
-	EndTime        time.Time `json:"end_time" form:"end_time"`
-	Day            string    `json:"day" form:"day"`
-	Location       string    `json:"location" form:"location"`
-	ActivityDetail string    `json:"activity_detail" form:"activity_detail"`
+	ID             uint   `json:"id" form:"id"`
+	ClubID         uint   `json:"club_id" form:"club_id"`
+	Name           string `json:"name" form:"name"`
+	StartTime      string `json:"start_time" form:"start_time"`
+	EndTime        string `json:"end_time" form:"end_time"`
+	Day            string `json:"day" form:"day"`
+	Location       string `json:"location" form:"location"`
+	ActivityDetail string `json:"activity_detail" form:"activity_detail"`
 }
 
 func fromCore(dataCore clubActivity.Core) ActivityResponse {

@@ -2,9 +2,9 @@ package galery
 
 type Core struct {
 	ID      uint
-	Url     string
+	Url     string `validate:"required"`
 	ClubID  uint
-	Caption string
+	Caption string `validate:"required"`
 }
 
 type ServiceInterface interface {

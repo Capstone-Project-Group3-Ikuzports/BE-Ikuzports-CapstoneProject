@@ -9,6 +9,7 @@ type Core struct {
 	ClubID    uint
 	Status    string
 	CreatedAt time.Time
+	DeletedAt time.Time
 }
 
 type User struct {
@@ -22,6 +23,7 @@ type User struct {
 type ServiceInterface interface {
 	GetAll(queryStatus string) (data []Core, err error)
 	Create(input Core) error
+	Update(input Core, id int, userId int) error
 	GetById(id int) (data Core, err error)
 	Delete(id int, userId int) error
 }
@@ -30,6 +32,7 @@ type RepositoryInterface interface {
 	GetAll() (data []Core, err error)
 	GetAllByStatus(queryStatus string) (data []Core, err error)
 	Create(input Core) error
+	Update(input Core, id int) error
 	GetById(id int) (data Core, err error)
 	Delete(id int) error
 	FindMember(id, idUser int) (data Core, err error)

@@ -5,25 +5,29 @@ import (
 	"ikuzports/features/club"
 	"ikuzports/features/clubActivity"
 	"ikuzports/utils/helper"
+
+	"github.com/go-playground/validator/v10"
 )
 
 type clubActivityService struct {
 	clubActivityRepository clubActivity.RepositoryInterface
 	clubRepository         club.RepositoryInterface
-	// validate             *validator.Validate
+	validate               *validator.Validate
 }
 
 func New(repo clubActivity.RepositoryInterface, clubRepo club.RepositoryInterface) clubActivity.ServiceInterface {
 	return &clubActivityService{
 		clubActivityRepository: repo,
 		clubRepository:         clubRepo,
-		// validate:             validator.New(),
+		validate:               validator.New(),
 	}
 }
 
 // Create implements clubActivity.ServiceInterface
 func (service *clubActivityService) Create(input clubActivity.Core, idUser int) error {
-
+	if errValidate := service.validate.Struct(input); errValidate != nil {
+		return errValidate
+	}
 	dataMember, errCr := service.clubRepository.GetStatus(int(input.ClubID), idUser)
 	if errCr != nil {
 		return errors.New(" error update club. no data or you have not joined this club")

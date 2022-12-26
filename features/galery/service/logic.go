@@ -5,19 +5,21 @@ import (
 	"ikuzports/features/club"
 	"ikuzports/features/galery"
 	"ikuzports/utils/helper"
+
+	"github.com/go-playground/validator/v10"
 )
 
 type galeryService struct {
 	galeryRepository galery.RepositoryInterface
 	clubRepository   club.RepositoryInterface
-	// validate             *validator.Validate
+	validate         *validator.Validate
 }
 
 func New(repo galery.RepositoryInterface, repoClub club.RepositoryInterface) galery.ServiceInterface {
 	return &galeryService{
 		galeryRepository: repo,
 		clubRepository:   repoClub,
-		// validate:             validator.New(),
+		validate:         validator.New(),
 	}
 }
 
@@ -34,6 +36,9 @@ func (service *galeryService) GetAll() (data []galery.Core, err error) {
 
 // Create implements galery.ServiceInterface
 func (service *galeryService) Create(input galery.Core, id int) error {
+	if errValidate := service.validate.Struct(input); errValidate != nil {
+		return errValidate
+	}
 	dataMember, errCr := service.clubRepository.GetStatus(int(input.ClubID), id)
 	if errCr != nil {
 		return errors.New("error create galery. no data or you are not joined in this club")
