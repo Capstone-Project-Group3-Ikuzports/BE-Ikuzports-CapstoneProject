@@ -2,7 +2,6 @@ package delivery
 
 import (
 	"ikuzports/features/clubActivity"
-	"time"
 )
 
 type InsertRequest struct {
@@ -19,18 +18,18 @@ func toCore(dataCore InsertRequest) clubActivity.Core {
 	return clubActivity.Core{
 		ClubID:         dataCore.ClubID,
 		Name:           dataCore.Name,
-		StartTime:      timeParsing(dataCore.StartTime),
-		EndTime:        timeParsing(dataCore.EndTime),
+		StartTime:      dataCore.StartTime,
+		EndTime:        dataCore.EndTime,
 		Day:            dataCore.Day,
 		Location:       dataCore.Location,
 		ActivityDetail: dataCore.ActivityDetail,
 	}
 }
 
-func timeParsing(year string) (dateParsed time.Time) {
-	layoutFormat := "2006-01-02 15:04:05"
+// func timeParsing(year string) (dateParsed time.Time) {
+// 	layoutFormat := "15:04:05"
 
-	dateParsed, _ = time.Parse(layoutFormat, year)
+// 	dateParsed, _ = time.Parse(layoutFormat, year)
 
-	return dateParsed
-}
+// 	return dateParsed
+// }

@@ -28,10 +28,10 @@ func New(service club.ServiceInterface, e *echo.Echo) {
 	e.POST("/clubs", handler.Create, middlewares.JWTMiddleware())
 	e.PUT("/clubs/:id", handler.Update, middlewares.JWTMiddleware())
 	e.DELETE("/clubs/:id", handler.Delete, middlewares.JWTMiddleware())
-	// e.GET("/clubs/:id/members", handler.GetMembers, middlewares.JWTMiddleware())
-	// e.GET("/clubs/:id/chats", handler.GetChats, middlewares.JWTMiddleware())
-	// e.GET("/clubs/:id/galleries", handler.GetGalleries, middlewares.JWTMiddleware())
-	// e.GET("/clubs/:id/activities", handler.GetActivities, middlewares.JWTMiddleware())
+	e.GET("/clubs/:id/members", handler.GetMembers, middlewares.JWTMiddleware())
+	e.GET("/clubs/:id/chats", handler.GetChats, middlewares.JWTMiddleware())
+	e.GET("/clubs/:id/galeries", handler.GetGalleries, middlewares.JWTMiddleware())
+	e.GET("/clubs/:id/activities", handler.GetActivities, middlewares.JWTMiddleware())
 
 }
 
@@ -50,7 +50,7 @@ func (delivery *ClubDelivery) Create(c echo.Context) error {
 	if file != nil {
 		res, err := thirdparty.UploadProfile(c, "logo")
 		if err != nil {
-			return errors.New("Failed. Cannot Upload Data.")
+			return errors.New("failed. cannot upload data")
 		}
 		log.Print(res)
 		dataCore.Logo = res
@@ -83,7 +83,7 @@ func (delivery *ClubDelivery) GetAll(c echo.Context) error {
 
 	results, err := delivery.clubService.GetAll(queryName, queryCity, queryCategoryID)
 	if err != nil {
-		if strings.Contains(err.Error(), "Get data success. No data.") {
+		if strings.Contains(err.Error(), "Get data success. No data") {
 			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
 		}
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
@@ -102,7 +102,7 @@ func (delivery *ClubDelivery) GetById(c echo.Context) error {
 	}
 	results, err := delivery.clubService.GetById(id)
 	if err != nil {
-		if strings.Contains(err.Error(), "Get data success. No data.") {
+		if strings.Contains(err.Error(), "Get data success. No data") {
 			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
 		}
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
@@ -136,7 +136,7 @@ func (delivery *ClubDelivery) Update(c echo.Context) error {
 	if file != nil {
 		res, err := thirdparty.UploadProfile(c, "logo")
 		if err != nil {
-			return errors.New("Failed. Cannot Upload Data.")
+			return errors.New("failed. cannot upload data")
 		}
 		log.Print(res)
 		dataCore.Logo = res
@@ -173,121 +173,88 @@ func (delivery *ClubDelivery) Delete(c echo.Context) error {
 	return c.JSON(http.StatusOK, helper.SuccessResponse("Success delete data."))
 }
 
-// func (delivery *ClubDelivery) GetMembers(c echo.Context) error {
-// 	idParam := c.Param("id")
-// 	id, errConv := strconv.Atoi(idParam)
-// 	if errConv != nil {
-// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
-// 	}
+func (delivery *ClubDelivery) GetMembers(c echo.Context) error {
+	idParam := c.Param("id")
+	id, errConv := strconv.Atoi(idParam)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
+	}
 
-// 	userId := middlewares.ExtractTokenUserId(c)
-// 	if userId < 1 {
-// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
-// 	}
+	userId := middlewares.ExtractTokenUserId(c)
+	if userId < 1 {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
+	}
 
-// 	if userId != id {
-// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
-// 	}
+	// process
+	results, err := delivery.clubService.GetMembers(id)
+	if err != nil {
+		if strings.Contains(err.Error(), "Get data success. No data.") {
+			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
+		}
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
+	}
 
-// 	// process
-// 	results, err := delivery.clubService.GetMembers(userId)
-// 	if err != nil {
-// 		if strings.Contains(err.Error(), "Get data success. No data.") {
-// 			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
-// 		}
-// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
-// 	}
+	dataResponse := fromCoreMemberList(results)
 
-// 	dataResponse := fromClubList(results)
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read all members.", dataResponse))
+}
 
-// 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
-// }
+func (delivery *ClubDelivery) GetChats(c echo.Context) error {
+	idParam := c.Param("id")
+	id, errConv := strconv.Atoi(idParam)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
+	}
 
-// func (delivery *ClubDelivery) GetProducts(c echo.Context) error {
-// 	idParam := c.Param("id")
-// 	id, errConv := strconv.Atoi(idParam)
-// 	if errConv != nil {
-// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
-// 	}
+	results, err := delivery.clubService.GetChats(id)
+	if err != nil {
+		if strings.Contains(err.Error(), "Get data success. No data.") {
+			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
+		}
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
+	}
 
-// 	userId := middlewares.ExtractTokenUserId(c)
-// 	if userId < 1 {
-// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
-// 	}
+	dataResponse := fromCoreChatList(results)
 
-// 	if userId != id {
-// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
-// 	}
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read members.", dataResponse))
+}
 
-// 	// process
-// 	results, err := delivery.clubService.GetProducts(id)
-// 	if err != nil {
-// 		if strings.Contains(err.Error(), "Get data success. No data.") {
-// 			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
-// 		}
-// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
-// 	}
+func (delivery *ClubDelivery) GetGalleries(c echo.Context) error {
+	idParam := c.Param("id")
+	id, errConv := strconv.Atoi(idParam)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
+	}
 
-// 	dataResponse := fromProductList(results)
+	results, err := delivery.clubService.GetGaleries(id)
+	if err != nil {
+		if strings.Contains(err.Error(), "Get data success. No data.") {
+			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
+		}
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
+	}
 
-// 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
-// }
+	dataResponse := fromCoreGaleryList(results)
 
-// func (delivery *ClubDelivery) GetEvents(c echo.Context) error {
-// 	idParam := c.Param("id")
-// 	id, errConv := strconv.Atoi(idParam)
-// 	if errConv != nil {
-// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
-// 	}
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read all club galeries.", dataResponse))
+}
 
-// 	userId := middlewares.ExtractTokenUserId(c)
-// 	if userId < 1 {
-// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
-// 	}
+func (delivery *ClubDelivery) GetActivities(c echo.Context) error {
+	idParam := c.Param("id")
+	id, errConv := strconv.Atoi(idParam)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
+	}
 
-// 	if userId != id {
-// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
-// 	}
+	results, err := delivery.clubService.GetActivities(id)
+	if err != nil {
+		if strings.Contains(err.Error(), "Get data success. No data.") {
+			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
+		}
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
+	}
 
-// 	// process
-// 	results, err := delivery.clubService.GetEvents(id)
-// 	if err != nil {
-// 		if strings.Contains(err.Error(), "Get data success. No data.") {
-// 			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
-// 		}
-// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
-// 	}
+	dataResponse := fromCoreActivityList(results)
 
-// 	dataResponse := fromEventList(results)
-
-// 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
-// }
-
-// func (delivery *ClubDelivery) GetTransactions(c echo.Context) error {
-// 	idParam := c.Param("id")
-// 	id, errConv := strconv.Atoi(idParam)
-// 	if errConv != nil {
-// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
-// 	}
-
-// 	userId := middlewares.ExtractTokenUserId(c)
-// 	if userId < 1 {
-// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
-// 	}
-
-// 	if userId != id {
-// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
-// 	}
-
-// 	results, err := delivery.clubService.GetTransactions(id)
-// 	if err != nil {
-// 		if strings.Contains(err.Error(), "Get data success. No data.") {
-// 			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
-// 		}
-// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
-// 	}
-
-// 	dataResponse := fromTransactionList(results)
-
-// 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
-// }
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read all club activites.", dataResponse))
+}

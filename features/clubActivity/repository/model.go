@@ -2,7 +2,6 @@ package repository
 
 import (
 	"ikuzports/features/clubActivity"
-	"time"
 
 	"gorm.io/gorm"
 )
@@ -11,8 +10,8 @@ type ClubActivity struct {
 	gorm.Model
 	ClubID         uint
 	Name           string
-	StartTime      time.Time
-	EndTime        time.Time
+	StartTime      string
+	EndTime        string
 	Day            string
 	Location       string
 	ActivityDetail string

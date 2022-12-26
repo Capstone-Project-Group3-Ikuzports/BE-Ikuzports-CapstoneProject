@@ -1,17 +1,13 @@
 package clubActivity
 
-import (
-	"time"
-)
-
 type Core struct {
 	ID             uint
 	ClubID         uint
-	Name           string
-	StartTime      time.Time
-	EndTime        time.Time
-	Day            string
-	Location       string
+	Name           string `validate:"required"`
+	StartTime      string `validate:"required"`
+	EndTime        string `validate:"required"`
+	Day            string `validate:"required"`
+	Location       string `validate:"required"`
 	ActivityDetail string
 }
 

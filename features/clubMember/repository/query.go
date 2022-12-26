@@ -61,6 +61,19 @@ func (repo *clubMemberRepository) UpdateMember(id int) error {
 	return nil
 }
 
+// Update implements clubMember.RepositoryInterface
+func (repo *clubMemberRepository) Update(input clubMember.Core, id int) error {
+	memberGorm := fromCore(input)
+	tx := repo.db.Where("id= ?", id).Updates(memberGorm)
+	if tx.Error != nil {
+		return tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return errors.New("update failed")
+	}
+	return nil
+}
+
 // GetAll implements clubMember.RepositoryInterface
 func (repo *clubMemberRepository) GetAll() (data []clubMember.Core, err error) {
 	var member []ClubMember

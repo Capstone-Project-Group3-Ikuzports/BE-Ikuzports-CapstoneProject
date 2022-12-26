@@ -2,8 +2,11 @@ package service
 
 import (
 	"errors"
+	"ikuzports/features/chat"
 	"ikuzports/features/club"
+	"ikuzports/features/clubActivity"
 	"ikuzports/features/clubMember"
+	"ikuzports/features/galery"
 	"ikuzports/utils/helper"
 
 	"github.com/go-playground/validator/v10"
@@ -122,17 +125,58 @@ func (service *clubService) Delete(id int, userId int) error {
 	return nil
 }
 
-// // GetMembers implements club.ServiceInterface
-// func (service *clubService) GetMembers(id int) (data []clubMember.Core, err error) {
-// 	data, err = service.clubRepository.GetMembers(id)
-// 	if err != nil {
-// 		log.Error(err.Error())
-// 		return data, helper.ServiceErrorMsg(err)
-// 	}
+// GetMembers implements club.ServiceInterface
+func (service *clubService) GetMembers(id int) (data []clubMember.Core, err error) {
+	data, err = service.clubRepository.GetMembers(id)
+	if err != nil {
+		log.Error(err.Error())
+		return data, helper.ServiceErrorMsg(err)
+	}
 
-// 	if len(data) == 0 {
-// 		return nil, errors.New("Get data success. No data")
-// 	}
+	if len(data) == 0 {
+		return nil, errors.New("Get data success. No data")
+	}
+	return data, err
+}
 
-// 	return data, err
-// }
+// GetChats implements club.ServiceInterface
+func (service *clubService) GetChats(id int) (data []chat.Core, err error) {
+	data, err = service.clubRepository.GetChats(id)
+	if err != nil {
+		log.Error(err.Error())
+		return data, helper.ServiceErrorMsg(err)
+	}
+
+	if len(data) == 0 {
+		return nil, errors.New("Get data success. No data")
+	}
+	return data, err
+}
+
+// GetGaleries implements club.ServiceInterface
+func (service *clubService) GetGaleries(id int) (data []galery.Core, err error) {
+	data, err = service.clubRepository.GetGaleries(id)
+	if err != nil {
+		log.Error(err.Error())
+		return data, helper.ServiceErrorMsg(err)
+	}
+
+	if len(data) == 0 {
+		return nil, errors.New("Get data success. No data")
+	}
+	return data, err
+}
+
+// GetActivities implements club.ServiceInterface
+func (service *clubService) GetActivities(id int) (data []clubActivity.Core, err error) {
+	data, err = service.clubRepository.GetActivities(id)
+	if err != nil {
+		log.Error(err.Error())
+		return data, helper.ServiceErrorMsg(err)
+	}
+
+	if len(data) == 0 {
+		return nil, errors.New("Get data success. No data")
+	}
+	return data, err
+}

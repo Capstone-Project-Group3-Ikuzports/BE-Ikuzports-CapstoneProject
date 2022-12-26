@@ -23,7 +23,7 @@ func New(repo clubMember.RepositoryInterface, repoClub club.RepositoryInterface)
 
 // Create implements clubMember.ServiceInterface
 func (service *clubMemberService) Create(input clubMember.Core) error {
-	input.Status = "Member"
+	input.Status = "Requested"
 	dataMember, errCr := service.clubMemberRepository.FindMember(int(input.ClubID), int(input.UserID))
 	if errCr != nil {
 		errCreate := service.clubMemberRepository.Create(input)
@@ -31,7 +31,7 @@ func (service *clubMemberService) Create(input clubMember.Core) error {
 			return errors.New("failed to insert data, error query")
 		}
 	}
-	if dataMember.ClubID == input.ClubID && dataMember.UserID == input.UserID {
+	if dataMember.ClubID == input.ClubID && dataMember.UserID == input.UserID && dataMember.DeletedAt == input.DeletedAt {
 		return errors.New(" failed to join, you are already join in this club")
 	}
 	errPut := service.clubMemberRepository.UpdateMember(int(input.ClubID))
@@ -88,6 +88,29 @@ func (service *clubMemberService) Delete(id int, userId int) error {
 	errPut := service.clubMemberRepository.UpdateMember(int(data.ClubID))
 	if errPut != nil {
 		return errors.New("failed to update joined member, error query")
+	}
+	return nil
+}
+
+// Update implements clubMember.ServiceInterface
+func (service *clubMemberService) Update(input clubMember.Core, id int, userId int) error {
+	input.Status = "Member"
+	data, err := service.clubMemberRepository.GetById(id)
+	if err != nil {
+		return helper.ServiceErrorMsg(err)
+	}
+	dataMember, errCr := service.clubRepository.GetStatus(int(input.ClubID), userId)
+	if errCr != nil {
+		return errors.New("error delete member. no data or you are not joined in this club")
+	}
+	if data.UserID != uint(userId) {
+		if dataMember.Status != "Owner" {
+			return errors.New("failed update member, you are not the owner of the club")
+		}
+	}
+	errCreate := service.clubMemberRepository.Update(input, id)
+	if errCreate != nil {
+		return errors.New("failed to delete data, error query")
 	}
 	return nil
 }
