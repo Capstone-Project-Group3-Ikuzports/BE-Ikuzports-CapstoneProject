@@ -131,7 +131,7 @@ func (repo *userRepository) GetClubs(id int) (data []clubMember.Core, err error)
 // GetEvents implements user.RepositoryInterface
 func (repo *userRepository) GetEvents(id int) (data []event.EventCore, err error) {
 	var event []Event
-	tx := repo.db.Preload("User").Preload("Category").Where("user_id = ?", id).Find(&event)
+	tx := repo.db.Preload("Category").Preload("User").Where("user_id = ?", id).Find(&event)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
@@ -142,7 +142,7 @@ func (repo *userRepository) GetEvents(id int) (data []event.EventCore, err error
 // GetProducts implements user.RepositoryInterface
 func (repo *userRepository) GetProducts(id int) (data []product.ProductCore, err error) {
 	var products []Product
-	tx := repo.db.Preload("User").Preload("ItemCategory").Preload("ProductImage").Where("user_id = ?", id).Find(&products)
+	tx := repo.db.Preload("ProductImage").Preload("User").Preload("ItemCategory").Where("user_id = ?", id).Find(&products)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
