@@ -170,6 +170,8 @@ func (service *userService) GetProducts(id int) (data []product.ProductCore, err
 		return data, helper.ServiceErrorMsg(err)
 	}
 
+	helper.LogDebug("image: ", data)
+
 	if len(data) == 0 {
 		helper.LogDebug("Get data success. No data.")
 		return nil, errors.New("Get data success. No data.")
