@@ -82,3 +82,14 @@ func (service *productService) Delete(id int) (err error) {
 	}
 	return nil
 }
+
+// GetImages implements product.ServiceInterface
+func (service *productService) GetImages(id int) (data []product.ProductImage, err error) {
+	data, err = service.productRepository.GetImages(id)
+	if err != nil {
+		log.Error(err.Error())
+		return data, helper.ServiceErrorMsg(err)
+	}
+
+	return data, err
+}
