@@ -78,11 +78,11 @@ func (delivery *ProductDelivery) GetByID(c echo.Context) error {
 func (delivery *ProductDelivery) GetByIDImages(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 
-	res, err := delivery.productService.GetByID(id)
+	res, err := delivery.productService.GetImages(id)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error get product data by id"))
 	}
-	dataResp := fromImageCore(res)
+	dataResp := fromCoreListImage(res)
 
 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("success get product data by id", dataResp))
 }
