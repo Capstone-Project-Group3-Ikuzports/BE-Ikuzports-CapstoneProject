@@ -16,15 +16,22 @@ type Core struct {
 	CategoryID   uint   `validate:"required"`
 	Description  string
 	Logo         string
-	JoinedMember int
-	MemberTotal  int `validate:"required"`
+	JoinedMember uint
+	MemberTotal  uint `validate:"required"`
 	Rule         string
 	Requirement  string `validate:"required"`
 	Category     Category
+	Member       []ClubMember
 	CreatedAt    time.Time
 	UpdateAt     time.Time
 }
+
 type Category struct {
+	ID   uint
+	Name string
+}
+
+type User struct {
 	ID   uint
 	Name string
 }
@@ -41,6 +48,13 @@ type Chat struct {
 
 type Galery struct {
 	galery.Core
+}
+
+type ClubMember struct {
+	ID     uint
+	UserID uint
+	ClubID uint
+	Status string
 }
 type ServiceInterface interface {
 	GetAll(queryName string, queryCity string, queryCategoryID int) (data []Core, err error)

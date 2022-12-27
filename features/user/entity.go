@@ -49,9 +49,9 @@ type ServiceInterface interface {
 	GetById(id int) (data Core, err error)
 	Update(input Core, id int) error
 	Delete(id int) error
-	// GetClubs(id int) (data []clubMember.Core, err error)
-	// GetProducts(id int) (data []product.ProductCore, err error)
-	// GetEvents(id int) (data []event.EventCore, err error)
+	GetClubs(id int) (data []clubMember.Core, err error)
+	GetProducts(id int) (data []product.ProductCore, err error)
+	GetEvents(id int) (data []event.EventCore, err error)
 	// GetTransactions(id int) (data []Transaction, err error)
 }
 
@@ -62,8 +62,8 @@ type RepositoryInterface interface {
 	Update(input Core, id int) error
 	Delete(id int) error
 	FindUser(email string) (data Core, err error)
-	// GetClubs(id int) (data []clubMember.Core, err error)
-	// GetProducts(id int) (data []product.ProductCore, err error)
-	// GetEvents(id int) (data []event.EventCore, err error)
+	GetClubs(id int) (data []clubMember.Core, err error)
+	GetProducts(id int) (data []product.ProductCore, err error)
+	GetEvents(id int) (data []event.EventCore, err error)
 	// GetTransactions(id int) (data []Transaction, err error)
 }
