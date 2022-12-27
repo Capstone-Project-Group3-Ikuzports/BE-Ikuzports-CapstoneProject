@@ -2,6 +2,9 @@ package repository
 
 import (
 	"errors"
+	"ikuzports/features/clubMember"
+	"ikuzports/features/event"
+	"ikuzports/features/product"
 	"ikuzports/features/user"
 
 	"gorm.io/gorm"
@@ -111,38 +114,41 @@ func (repo *userRepository) FindUser(email string) (result user.Core, err error)
 	return result, nil
 }
 
-// // GetClubs implements user.RepositoryInterface
-// func (repo *userRepository) GetClubs(id int) (data []user.Club, err error) {
-// 	var club []Club
-// 	tx := repo.db.Where("id = ?", id).Find(&club)
-// 	if tx.Error != nil {
-// 		return nil, tx.Error
-// 	}
-// 	var dataCore = toClubList(club)
-// 	return dataCore, nil
-// }
+// GetClubs implements user.RepositoryInterface
+func (repo *userRepository) GetClubs(id int) (data []clubMember.Core, err error) {
+	var club []ClubMember
+	// queryBuilder := fmt.Sprintf("SELECT B.id, A.user_id, A.club_id, B.name, C.name, B.city,  B.joined_member, B.member_total, B.logo, A.status FROM club_members A JOIN clubs B ON A.club_id = B.id JOIN categories C ON B.category_id = C.id where A.user_id = %d ", id)
+	// tx := repo.db.Raw(queryBuilder).Find(&club)
+	// tx := repo.db.Joins("Club").Joins("Category").Find(&club, "user_id = ?", id)
+	tx := repo.db.Preload("Club").Where("user_id = ?", id).Find(&club)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	var dataCore = toClubList(club)
+	return dataCore, nil
+}
 
-// // GetEvents implements user.RepositoryInterface
-// func (repo *userRepository) GetEvents(id int) (data []user.Event, err error) {
-// 	var event []Event
-// 	tx := repo.db.Where("user_id = ?", id).Find(&event)
-// 	if tx.Error != nil {
-// 		return nil, tx.Error
-// 	}
-// 	var dataCore = toEventList(event)
-// 	return dataCore, nil
-// }
+// GetEvents implements user.RepositoryInterface
+func (repo *userRepository) GetEvents(id int) (data []event.EventCore, err error) {
+	var event []Event
+	tx := repo.db.Preload("User").Preload("Category").Where("user_id = ?", id).Find(&event)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	var dataCore = toEventList(event)
+	return dataCore, nil
+}
 
-// // GetProducts implements user.RepositoryInterface
-// func (repo *userRepository) GetProducts(id int) (data []user.Product, err error) {
-// 	var products []Product
-// 	tx := repo.db.Where("user_id = ?", id).Find(&products)
-// 	if tx.Error != nil {
-// 		return nil, tx.Error
-// 	}
-// 	var dataCore = toProductList(products)
-// 	return dataCore, nil
-// }
+// GetProducts implements user.RepositoryInterface
+func (repo *userRepository) GetProducts(id int) (data []product.ProductCore, err error) {
+	var products []Product
+	tx := repo.db.Preload("User").Preload("ItemCategory").Preload("ProductImage").Where("user_id = ?", id).Find(&products)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	var dataCore = toProductList(products)
+	return dataCore, nil
+}
 
 // // GetTransactions implements user.RepositoryInterface
 // func (repo *userRepository) GetTransactions(id int) (data []user.Transaction, err error) {

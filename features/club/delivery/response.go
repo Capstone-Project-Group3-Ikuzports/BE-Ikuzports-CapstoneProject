@@ -21,8 +21,8 @@ type ClubResponse struct {
 	CategoryName string `json:"category_name" form:"category_name"`
 	Description  string `json:"description" form:"description"`
 	Logo         string `json:"logo" form:"logo"`
-	JoinedMember int    `json:"joined_member" form:"joined_member"`
-	MemberTotal  int    `json:"member_total" form:"member_total"`
+	JoinedMember uint   `json:"joined_member" form:"joined_member"`
+	MemberTotal  uint   `json:"member_total" form:"member_total"`
 	Rule         string `json:"rule" form:"rule"`
 	Requirement  string `json:"requirement" form:"requirement"`
 }

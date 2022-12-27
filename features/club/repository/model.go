@@ -22,8 +22,8 @@ type Club struct {
 	CategoryID   uint
 	Description  string
 	Logo         string
-	JoinedMember int
-	MemberTotal  int
+	JoinedMember uint
+	MemberTotal  uint
 	Rule         string
 	Requirement  string
 	ClubMember   []_member.ClubMember

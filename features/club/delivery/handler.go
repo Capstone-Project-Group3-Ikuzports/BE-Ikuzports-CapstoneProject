@@ -110,7 +110,7 @@ func (delivery *ClubDelivery) GetById(c echo.Context) error {
 
 	dataResponse := fromCore(results)
 
-	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read clubs.", dataResponse))
 }
 
 func (delivery *ClubDelivery) Update(c echo.Context) error {

@@ -9,7 +9,7 @@ type InsertRequest struct {
 	CategoryID  uint   `json:"category_id" form:"category_id"`
 	Description string `json:"description" form:"description"`
 	Logo        string `json:"logo" form:"logo"`
-	MemberTotal int    `json:"member_total" form:"member_total"`
+	MemberTotal uint   `json:"member_total" form:"member_total"`
 	Rule        string `json:"rule" form:"rule"`
 	Requirement string `json:"requirement" form:"requirement"`
 }

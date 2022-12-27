@@ -9,6 +9,7 @@ import (
 	_event "ikuzports/features/event/repository"
 	"ikuzports/features/product"
 	_product "ikuzports/features/product/repository"
+	_image "ikuzports/features/productImage/repository"
 	_transaction "ikuzports/features/transaction/repository"
 	"ikuzports/features/user"
 
@@ -27,7 +28,7 @@ type User struct {
 	UserImage        string
 	Gender           string
 	Biodata          string
-	Club             []_member.ClubMember
+	ClubMember       []_member.ClubMember
 	EventParticipant []_event.EventParticipant
 	Event            []_event.Event
 	Transaction      []_transaction.Transaction
@@ -42,7 +43,8 @@ type ClubMember struct {
 
 type Club struct {
 	_club.Club
-	Member []_member.ClubMember
+	Member   []_member.ClubMember
+	Category Category
 }
 
 type Event struct {
@@ -55,6 +57,17 @@ type Transaction struct {
 
 type Product struct {
 	_product.Product
+	image []ProductImage
+}
+
+type Category struct {
+	gorm.Model
+	Name string
+	Club []Club
+}
+
+type ProductImage struct {
+	_image.ProductImage
 }
 
 // mapping
@@ -108,13 +121,12 @@ func (dataModel *ClubMember) toCoreClub() clubMember.Core {
 		UserID: dataModel.UserID,
 		ClubID: dataModel.ClubID,
 		Club: clubMember.Club{
-			ID:           dataModel.Club.ID,
 			Name:         dataModel.Club.Name,
 			Category:     dataModel.Club.Category.Name,
 			City:         dataModel.Club.City,
-			JoinedMember: uint(dataModel.Club.JoinedMember),
-			MemberTotal:  uint(dataModel.Club.MemberTotal),
 			Logo:         dataModel.Club.Logo,
+			JoinedMember: dataModel.Club.JoinedMember,
+			MemberTotal:  dataModel.Club.MemberTotal,
 		},
 		Status: dataModel.Status,
 	}
@@ -127,6 +139,38 @@ func toClubList(dataModel []ClubMember) []clubMember.Core {
 	}
 	return dataCore
 }
+
+// func (dataModel *ClubMember) toCoreClub() club.Core {
+// 	var arrMember []club.ClubMember
+// 	for _, val := range dataModel.Member {
+// 		arrMember = append(arrMember, club.ClubMember{
+// 			ID:     val.ID,
+// 			UserID: val.UserID,
+// 			ClubID: val.ClubID,
+// 			Status: val.Status,
+// 		})
+// 	}
+// 	return club.Core{
+// 		ID:   dataModel.Club.ID,
+// 		Name: dataModel.Club.Name,
+// 		Category: club.Category{
+// 			Name: dataModel.Category.Name,
+// 		},
+// 		City:         dataModel.Club.City,
+// 		JoinedMember: dataModel.Club.JoinedMember,
+// 		MemberTotal:  dataModel.Club.MemberTotal,
+// 		Logo:         dataModel.Club.Logo,
+// 		Member:       arrMember,
+// 	}
+// }
+
+// func toClubList(dataModel []Club) []club.Core {
+// 	var dataCore []club.Core
+// 	for _, v := range dataModel {
+// 		dataCore = append(dataCore, v.toCoreClub())
+// 	}
+// 	return dataCore
+// }
 
 func (dataModel *Event) toCoreEvent() event.EventCore {
 	return event.EventCore{
@@ -141,6 +185,11 @@ func (dataModel *Event) toCoreEvent() event.EventCore {
 		User: event.User{
 			Name: dataModel.User.Name,
 		},
+		Category: event.Category{
+			Name: dataModel.Category.Name,
+		},
+		ImageEvent: dataModel.ImageEvent,
+		Status:     dataModel.Status,
 	}
 }
 
@@ -153,16 +202,28 @@ func toEventList(dataModel []Event) []event.EventCore {
 }
 
 func (dataModel *Product) toCoreProduct() product.ProductCore {
+	var arrImages []product.ProductImage
+	for _, val := range dataModel.image {
+		arrImages = append(arrImages, product.ProductImage{
+			ID:  val.ID,
+			URL: val.Url,
+		})
+	}
 	return product.ProductCore{
-		ID:             dataModel.ID,
-		Name:           dataModel.Name,
-		Price:          uint(dataModel.Price),
-		Description:    dataModel.Description,
-		UserID:         dataModel.UserID,
+		ID:          dataModel.ID,
+		Name:        dataModel.Name,
+		Price:       uint(dataModel.Price),
+		Description: dataModel.Description,
+		UserID:      dataModel.UserID,
+		User: product.User{
+			Name: dataModel.User.Name,
+		},
 		ItemCategoryID: dataModel.ItemCategoryID,
 		ItemCategory: product.ItemCategory{
 			Name: dataModel.ItemCategory.Name,
 		},
+		ProductImage: arrImages,
+		City:         dataModel.City,
 	}
 }
 
