@@ -26,6 +26,7 @@ type User struct {
 type Club struct {
 	ID           uint
 	Name         string
+	CategoryID   uint
 	Category     string
 	City         string
 	JoinedMember uint

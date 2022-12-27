@@ -25,7 +25,7 @@ type UserResponse struct {
 type ClubResponse struct {
 	ID           uint   `json:"id"`
 	Name         string `json:"name"`
-	Category     string `json:"category"`
+	CategoryID   uint   `json:"category_id"`
 	City         string `json:"city"`
 	JoinedMember uint   `json:"joined_member"`
 	Logo         string `json:"logo"`
@@ -72,7 +72,7 @@ func fromClub(dataCore clubMember.Core) ClubResponse {
 	return ClubResponse{
 		ID:           dataCore.ID,
 		Name:         dataCore.Club.Name,
-		Category:     dataCore.Club.Category,
+		CategoryID:   dataCore.Club.CategoryID,
 		City:         dataCore.Club.City,
 		JoinedMember: dataCore.Club.JoinedMember,
 		MemberTotal:  int(dataCore.Club.MemberTotal),
@@ -135,15 +135,15 @@ func fromEventList(dataCore []event.EventCore) []_event.EventResponse {
 	return dataResponse
 }
 
-func fromProduct(dataCore product.ProductCore) _product.ProductResponseImage {
-	var arrMember []_product.ProductImage
-	for _, val := range dataCore.ProductImage {
-		arrMember = append(arrMember, _product.ProductImage{
-			ID:  val.ID,
-			Url: val.URL,
-		})
-	}
-	return _product.ProductResponseImage{
+func fromProduct(dataCore product.ProductCore) _product.ProductResponse {
+	// var arrMember []_product.ProductImage
+	// for _, val := range dataCore.ProductImage {
+	// 	arrMember = append(arrMember, _product.ProductImage{
+	// 		ID:  val.ID,
+	// 		Url: val.URL,
+	// 	})
+	// }
+	return _product.ProductResponse{
 		ID:               dataCore.ID,
 		Name:             dataCore.Name,
 		Price:            dataCore.Price,
@@ -151,12 +151,12 @@ func fromProduct(dataCore product.ProductCore) _product.ProductResponseImage {
 		UserName:         dataCore.User.Name,
 		ItemCategoryName: dataCore.ItemCategory.Name,
 		City:             dataCore.City,
-		ProductImage:     arrMember,
+		// ProductImage:     arrMember,
 	}
 }
 
-func fromProductList(dataCore []product.ProductCore) []_product.ProductResponseImage {
-	var dataResponse []_product.ProductResponseImage
+func fromProductList(dataCore []product.ProductCore) []_product.ProductResponse {
+	var dataResponse []_product.ProductResponse
 	for _, v := range dataCore {
 		dataResponse = append(dataResponse, fromProduct(v))
 	}

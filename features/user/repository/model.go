@@ -122,7 +122,7 @@ func (dataModel *ClubMember) toCoreClub() clubMember.Core {
 		ClubID: dataModel.ClubID,
 		Club: clubMember.Club{
 			Name:         dataModel.Club.Name,
-			Category:     dataModel.Club.Category.Name,
+			CategoryID:   dataModel.Club.CategoryID,
 			City:         dataModel.Club.City,
 			Logo:         dataModel.Club.Logo,
 			JoinedMember: dataModel.Club.JoinedMember,
@@ -202,13 +202,13 @@ func toEventList(dataModel []Event) []event.EventCore {
 }
 
 func (dataModel *Product) toCoreProduct() product.ProductCore {
-	var arrImages []product.ProductImage
-	for _, val := range dataModel.image {
-		arrImages = append(arrImages, product.ProductImage{
-			ID:  val.ID,
-			URL: val.Url,
-		})
-	}
+	// var arrImages []product.ProductImage
+	// for _, val := range dataModel.image {
+	// 	arrImages = append(arrImages, product.ProductImage{
+	// 		ID:  val.ID,
+	// 		URL: val.Url,
+	// 	})
+	// }
 	return product.ProductCore{
 		ID:          dataModel.ID,
 		Name:        dataModel.Name,
@@ -222,8 +222,8 @@ func (dataModel *Product) toCoreProduct() product.ProductCore {
 		ItemCategory: product.ItemCategory{
 			Name: dataModel.ItemCategory.Name,
 		},
-		ProductImage: arrImages,
-		City:         dataModel.City,
+		// ProductImage: arrImages,
+		City: dataModel.City,
 	}
 }
 
