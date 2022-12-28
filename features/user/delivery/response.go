@@ -6,6 +6,8 @@ import (
 	_event "ikuzports/features/event/delivery"
 	"ikuzports/features/product"
 	_product "ikuzports/features/product/delivery"
+	"ikuzports/features/transaction"
+	_transaction "ikuzports/features/transaction/delivery"
 	"ikuzports/features/user"
 
 	"time"
@@ -26,6 +28,7 @@ type ClubResponse struct {
 	ID           uint   `json:"id"`
 	Name         string `json:"name"`
 	CategoryID   uint   `json:"category_id"`
+	Category     string `json:"category"`
 	City         string `json:"city"`
 	JoinedMember uint   `json:"joined_member"`
 	Logo         string `json:"logo"`
@@ -73,6 +76,7 @@ func fromClub(dataCore clubMember.Core) ClubResponse {
 		ID:           dataCore.ID,
 		Name:         dataCore.Club.Name,
 		CategoryID:   dataCore.Club.CategoryID,
+		Category:     dataCore.Club.Category,
 		City:         dataCore.Club.City,
 		JoinedMember: dataCore.Club.JoinedMember,
 		MemberTotal:  int(dataCore.Club.MemberTotal),
@@ -163,25 +167,25 @@ func fromProductList(dataCore []product.ProductCore) []_product.ProductResponse 
 	return dataResponse
 }
 
-// func fromTransaction(dataCore user.Transaction) TransactionResponse {
-// 	return TransactionResponse{
-// 		ID:              dataCore.ID,
-// 		UserID:          dataCore.UserID,
-// 		TotalQuantity:   dataCore.TotalQuantity,
-// 		TotalPrice:      dataCore.TotalPrice,
-// 		ProductID:       dataCore.ProductID,
-// 		PaymentMethod:   dataCore.PaymentMethod,
-// 		TransactionID:   dataCore.TransactionID,
-// 		StatusPayment:   dataCore.StatusPayment,
-// 		VirtualAccount:  dataCore.VirtualAccount,
-// 		TransactionTime: dataCore.TransactionTime,
-// 	}
-// }
+func fromTransaction(dataCore transaction.TransactionCore) _transaction.TransactionResp {
+	return _transaction.TransactionResp{
+		ID:              dataCore.ID,
+		UserID:          dataCore.UserID,
+		TotalPrice:      dataCore.TotalPrice,
+		TotalQuantity:   dataCore.TotalQuantity,
+		ProductID:       dataCore.ProductID,
+		TransactionID:   dataCore.TransactionID,
+		StatusPayment:   dataCore.StatusPayment,
+		VirtualAccount:  dataCore.VirtualAccount,
+		TransactionTime: dataCore.TransactionTime,
+		OrderID:         dataCore.OrderID,
+	}
+}
 
-// func fromTransactionList(dataCore []user.Transaction) []TransactionResponse {
-// 	var dataResponse []TransactionResponse
-// 	for _, v := range dataCore {
-// 		dataResponse = append(dataResponse, fromTransaction(v))
-// 	}
-// 	return dataResponse
-// }
+func fromTransactionList(dataCore []transaction.TransactionCore) []_transaction.TransactionResp {
+	var dataResponse []_transaction.TransactionResp
+	for _, v := range dataCore {
+		dataResponse = append(dataResponse, fromTransaction(v))
+	}
+	return dataResponse
+}
