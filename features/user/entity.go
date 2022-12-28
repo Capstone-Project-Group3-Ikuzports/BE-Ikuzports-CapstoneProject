@@ -5,6 +5,7 @@ import (
 	"ikuzports/features/clubMember"
 	"ikuzports/features/event"
 	"ikuzports/features/product"
+	"ikuzports/features/transaction"
 	"time"
 )
 
@@ -35,9 +36,9 @@ type Event struct {
 	event.EventCore
 }
 
-// type Transaction struct {
-// 	Transaction.Core
-// }
+type Transaction struct {
+	transaction.TransactionCore
+}
 
 type Product struct {
 	product.ProductCore
@@ -52,7 +53,7 @@ type ServiceInterface interface {
 	GetClubs(id int) (data []clubMember.Core, err error)
 	GetProducts(id int) (data []product.ProductCore, err error)
 	GetEvents(id int) (data []event.EventCore, err error)
-	// GetTransactions(id int) (data []Transaction, err error)
+	GetTransactions(id int) (data []transaction.TransactionCore, err error)
 }
 
 type RepositoryInterface interface {
@@ -65,5 +66,5 @@ type RepositoryInterface interface {
 	GetClubs(id int) (data []clubMember.Core, err error)
 	GetProducts(id int) (data []product.ProductCore, err error)
 	GetEvents(id int) (data []event.EventCore, err error)
-	// GetTransactions(id int) (data []Transaction, err error)
+	GetTransactions(id int) (data []transaction.TransactionCore, err error)
 }

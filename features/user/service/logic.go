@@ -5,6 +5,7 @@ import (
 	"ikuzports/features/clubMember"
 	"ikuzports/features/event"
 	"ikuzports/features/product"
+	"ikuzports/features/transaction"
 	"ikuzports/features/user"
 	"ikuzports/utils/helper"
 	"strings"
@@ -180,18 +181,18 @@ func (service *userService) GetProducts(id int) (data []product.ProductCore, err
 	return data, err
 }
 
-// // GetTransactions implements user.ServiceInterface
-// func (service *userService) GetTransactions(id int) (data []user.Transaction, err error) {
-// 	data, err = service.userRepository.GetTransactions(id)
-// 	if err != nil {
-// 		log.Error(err.Error())
-// 		return data, helper.ServiceErrorMsg(err)
-// 	}
+// GetTransactions implements user.ServiceInterface
+func (service *userService) GetTransactions(id int) (data []transaction.TransactionCore, err error) {
+	data, err = service.userRepository.GetTransactions(id)
+	if err != nil {
+		log.Error(err.Error())
+		return data, helper.ServiceErrorMsg(err)
+	}
 
-// 	if len(data) == 0 {
-// 		helper.LogDebug("Get data success. No data.")
-// 		return nil, errors.New("Get data success. No data.")
-// 	}
+	if len(data) == 0 {
+		helper.LogDebug("Get data success. No data.")
+		return nil, errors.New("Get data success. No data.")
+	}
 
-// 	return data, err
-// }
+	return data, err
+}

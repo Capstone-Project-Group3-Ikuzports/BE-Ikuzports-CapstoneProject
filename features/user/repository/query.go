@@ -5,6 +5,7 @@ import (
 	"ikuzports/features/clubMember"
 	"ikuzports/features/event"
 	"ikuzports/features/product"
+	"ikuzports/features/transaction"
 	"ikuzports/features/user"
 
 	"gorm.io/gorm"
@@ -117,10 +118,7 @@ func (repo *userRepository) FindUser(email string) (result user.Core, err error)
 // GetClubs implements user.RepositoryInterface
 func (repo *userRepository) GetClubs(id int) (data []clubMember.Core, err error) {
 	var club []ClubMember
-	// queryBuilder := fmt.Sprintf("SELECT B.id, A.user_id, A.club_id, B.name, C.name, B.city,  B.joined_member, B.member_total, B.logo, A.status FROM club_members A JOIN clubs B ON A.club_id = B.id JOIN categories C ON B.category_id = C.id where A.user_id = %d ", id)
-	// tx := repo.db.Raw(queryBuilder).Find(&club)
-	// tx := repo.db.Joins("Club").Joins("Category").Find(&club, "user_id = ?", id)
-	tx := repo.db.Preload("Club").Where("user_id = ?", id).Find(&club)
+	tx := repo.db.Preload("Club").Preload("Club.Category").Where("user_id = ?", id).Find(&club)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
@@ -150,13 +148,13 @@ func (repo *userRepository) GetProducts(id int) (data []product.ProductCore, err
 	return dataCore, nil
 }
 
-// // GetTransactions implements user.RepositoryInterface
-// func (repo *userRepository) GetTransactions(id int) (data []user.Transaction, err error) {
-// 	var transaction []Transaction
-// 	tx := repo.db.Where("user_id = ?", id).Find(&transaction)
-// 	if tx.Error != nil {
-// 		return nil, tx.Error
-// 	}
-// 	var dataCore = toTransactionList(transaction)
-// 	return dataCore, nil
-// }
+// GetTransactions implements user.RepositoryInterface
+func (repo *userRepository) GetTransactions(id int) (data []transaction.TransactionCore, err error) {
+	var transaction []Transaction
+	tx := repo.db.Where("user_id = ?", id).Find(&transaction)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	var dataCore = toTransactionList(transaction)
+	return dataCore, nil
+}
