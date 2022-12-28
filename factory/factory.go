@@ -49,6 +49,14 @@ import (
 	productImageRepo "ikuzports/features/productImage/repository"
 	productImageService "ikuzports/features/productImage/service"
 
+	itemCategoryDelivery "ikuzports/features/itemCategory/delivery"
+	itemCategoryRepo "ikuzports/features/itemCategory/repository"
+	itemCategoryService "ikuzports/features/itemCategory/service"
+
+	transactionDelivery "ikuzports/features/transaction/delivery"
+	transactionRepo "ikuzports/features/transaction/repository"
+	transactionService "ikuzports/features/transaction/service"
+
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
@@ -102,4 +110,12 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	productImageRepoFactory := productImageRepo.New(db)
 	productImageServiceFactory := productImageService.New(productImageRepoFactory)
 	productImageDelivery.New(productImageServiceFactory, e)
+
+	itemCategoryRepoFactory := itemCategoryRepo.New(db)
+	itemCategoryServiceFactory := itemCategoryService.New(itemCategoryRepoFactory)
+	itemCategoryDelivery.New(itemCategoryServiceFactory, e)
+
+	transactionRepoFactory := transactionRepo.New(db)
+	transactionServiceFactory := transactionService.New(transactionRepoFactory, productRepoFactory, userRepoFactory)
+	transactionDelivery.New(transactionServiceFactory, e)
 }

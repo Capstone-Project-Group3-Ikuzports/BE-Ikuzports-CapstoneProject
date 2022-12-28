@@ -68,6 +68,7 @@ type Transaction struct {
 	StatusPayment   string
 	VirtualAccount  string
 	TransactionTime time.Time
+	OrderID         string
 }
 
 type Product struct {

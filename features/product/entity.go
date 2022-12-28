@@ -9,7 +9,7 @@ type ProductCore struct {
 	User           User
 	ItemCategoryID uint `validate:"required"`
 	ItemCategory   ItemCategory
-	City           string
+	City           string `validate:"required"`
 	ProductImage   []ProductImage
 }
 
