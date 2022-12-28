@@ -18,6 +18,7 @@ type EventCore struct {
 	ImageEvent       string
 	Status           string
 	Category         Category
+	MaximumPeople    int
 }
 
 type User struct {

@@ -499,13 +499,13 @@ paths:
                 end_date:
                   type: string
                   example: "2023-1-2"
-                organizer_name:
-                  type: string
-                  example: "Ronaldo"
                 image_event:
                   type: string
                   format: binary
                   example: "link"
+                maximum_people:
+                  type: integer
+                  example: 20
                   
             encoding:
               image_event:
@@ -562,6 +562,7 @@ paths:
                     total_participant: 11
                     organizer_name: "Ronaldo"
                     image_event: "link"
+                    maximum_people: 20
                   - id: 2
                     name: "Pertandingan Basket Bandung Raya"
                     address: "Lapangan Arcamanik"
@@ -572,6 +573,7 @@ paths:
                     total_participant: 2
                     organizer_name: "Yao Ming"
                     image_event: "link"
+                    maximum_people: 25
         '400':
           $ref: '#/components/responses/400'
         '500':
@@ -601,72 +603,32 @@ paths:
                 type: object
                 example: 
                   id: 1
-                  name: "Pertandingan Sepak Bola Bandung Raya"
-                  address: "Lapangan Gasibu"
-                  city: "Bandung"
-                  category_id: 1
-                  start_date: "2023-1-1"
-                  end_date: "2023-1-2"
-                  total_participant: 11
-                  organizer_name: "Ronaldo"
-                  image_event: "link"
+                  type: string
+                  format: binary
+                  example: "link"
+
         '400':
           $ref: '#/components/responses/400'
         '404':
           $ref: '#/components/responses/404' 
         '500':
           $ref: '#/components/responses/500'
-    
-    put:
+
+  /participants:
+    post:
       tags: 
-       - events
-      summary: Update events data
+       - participants
+      summary: Insert participants data
       security: 
         - JWTAuth: []
-      parameters:
-        - name: events_id
-          description: "id events"
-          required: true
-          in: path
-          schema: 
-            type: integer
-            example: 1
       requestBody:
         required: true
         content: 
-          multipart/form-data:
+          application/json:
             schema:
               type: object
-              properties:
-                name:
-                  type: string
-                  example: "Pertandingan Sepak Bola Bandung Raya"
-                address:
-                  type: string
-                  example: "Lapangan Gasibu"
-                city:
-                  type: string
-                  example: "Bandung"
-                category_id:
-                  type: integer
-                  example: 1
-                start_date:
-                  type: string
-                  example: "2023-1-1"
-                end_date:
-                  type: string
-                  example: "2023-1-2"
-                organizer_name:
-                  type: string
-                  example: "Ronaldo"
-                image_event:
-                  type: string
-                  format: binary
-                  example: "link"
-                  
-            encoding:
-              image_event:
-                contentType: images/png, images/jpeg
+              example: 
+                event_id: 1
       responses: 
         '200':
           description: Insert success
@@ -676,45 +638,12 @@ paths:
               type: object
               example:
                 status: "success"
-                message: "success update event data"
+                message: "success insert participant data"
         '400':
-          $ref: '#/components/responses/400'
-        '404':
-          $ref: '#/components/responses/404' 
+          $ref: '#/components/responses/400'          
         '500':
           $ref: '#/components/responses/500'
     
-    delete:
-      tags: 
-       - events
-      summary: Delete event data by ID
-      security: 
-        - JWTAuth: []
-      parameters:
-        - name: events_id
-          description: "id events"
-          required: true
-          in: path
-          schema: 
-            type: integer
-            example: 1
-      responses: 
-        '200':
-          description: Delete success
-          content: 
-            application/json:
-             schema:
-              type: object
-              example:
-                status: "success"
-                message: "success delete event data by event id"
-        '400':
-          $ref: '#/components/responses/400'
-        '404':
-          $ref: '#/components/responses/404' 
-        '500':
-          $ref: '#/components/responses/500'
-  
   /clubs:
     post:
       tags: 
@@ -1555,7 +1484,7 @@ paths:
       security: 
         - JWTAuth: []
       parameters:
-        - name: members
+        - name: members_id
           description: "id clubs"
           required: true
           in: path
@@ -1576,6 +1505,28 @@ paths:
           $ref: '#/components/responses/400'
         '404':
           $ref: '#/components/responses/404' 
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /itemcategories:
+    get:
+      tags: 
+       - itemcategories
+      summary: Get all item category data
+      responses:
+        '200':
+          description: List all item category data success
+          content:
+            application/json:
+              schema:
+                type: object
+                example: 
+                  - id: 1
+                    name: "Sepatu"
+                  - id: 2
+                    name: "Jersey"
+        '400':
+          $ref: '#/components/responses/400'
         '500':
           $ref: '#/components/responses/500'
   
@@ -1966,6 +1917,13 @@ paths:
              schema:
               type: object
               example:
+                data:
+                  order_id: "Order-JBAD83"
+                  gross_amount: 25000
+                  status_message: "Success, Bank Transfer transaction is created"
+                  va_numbers:
+                    bank: "bca"
+                    va_number: "61218146381"
                 status: "success"
                 message: "success insert transaction data"
         '400':
@@ -2225,10 +2183,10 @@ components:
           example: 1
         start_date:
           type: string
-          example: "2023-1-1"
+          example: "2023-01-01"
         end_date:
           type: string
-          example: "2023-1-2"
+          example: "2023-01-02"
         total_participant:
           type: integer
           format: int64
@@ -2240,6 +2198,10 @@ components:
           type: string
           format: binary
           example: "link"
+        maximum_people:
+          type: integer
+          format: int64
+          example: 20
         
     ClubsSchema:
       type: object
