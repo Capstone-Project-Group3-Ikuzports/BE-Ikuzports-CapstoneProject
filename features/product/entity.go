@@ -36,6 +36,7 @@ type RepositoryInterface interface {
 	GetByID(id int) (dataCore ProductCore, err error)
 	Update(id int, input ProductCore) (row int, err error)
 	Delete(id int) (row int, err error)
+	GetImages(id int) (data []ProductImage, err error)
 }
 
 type ServiceInterface interface {
@@ -44,4 +45,5 @@ type ServiceInterface interface {
 	GetByID(id int) (dataCore ProductCore, err error)
 	Update(id int, input ProductCore) (err error)
 	Delete(id int) (err error)
+	GetImages(id int) (data []ProductImage, err error)
 }

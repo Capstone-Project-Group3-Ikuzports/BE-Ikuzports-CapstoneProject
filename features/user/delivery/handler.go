@@ -30,7 +30,7 @@ func New(service user.ServiceInterface, e *echo.Echo) {
 	e.GET("/users/:id/clubs", handler.GetClubs, middlewares.JWTMiddleware())
 	e.GET("/users/:id/products", handler.GetProducts, middlewares.JWTMiddleware())
 	e.GET("/users/:id/events", handler.GetEvents, middlewares.JWTMiddleware())
-	e.GET("/users/:id/transactions", handler.GetTransactions, middlewares.JWTMiddleware())
+	// e.GET("/users/:id/transactions", handler.GetTransactions, middlewares.JWTMiddleware())
 
 	//middlewares.IsAdmin = untuk membatasi akses endpoint hanya admin
 	//middlewares.UserOnlySameId = untuk membatasi akses user mengelola data diri sendiri saja
@@ -166,12 +166,12 @@ func (delivery *UserDelivery) GetClubs(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
 	}
 
-	if userId != id {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
-	}
+	// if userId != id {
+	// 	return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
+	// }
 
 	// process
-	results, err := delivery.userService.GetClubs(userId)
+	results, err := delivery.userService.GetClubs(id)
 	if err != nil {
 		if strings.Contains(err.Error(), "Get data success. No data.") {
 			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
@@ -181,7 +181,7 @@ func (delivery *UserDelivery) GetClubs(c echo.Context) error {
 
 	dataResponse := fromClubList(results)
 
-	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user clubs", dataResponse))
 }
 
 func (delivery *UserDelivery) GetProducts(c echo.Context) error {
@@ -197,9 +197,9 @@ func (delivery *UserDelivery) GetProducts(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
 	}
 
-	if userId != id {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
-	}
+	// if userId != id {
+	// 	return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
+	// }
 
 	// process
 	results, err := delivery.userService.GetProducts(id)
@@ -212,7 +212,7 @@ func (delivery *UserDelivery) GetProducts(c echo.Context) error {
 
 	dataResponse := fromProductList(results)
 
-	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read users products", dataResponse))
 }
 
 func (delivery *UserDelivery) GetEvents(c echo.Context) error {
@@ -228,9 +228,9 @@ func (delivery *UserDelivery) GetEvents(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
 	}
 
-	if userId != id {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
-	}
+	// if userId != id {
+	// 	return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
+	// }
 
 	// process
 	results, err := delivery.userService.GetEvents(id)
@@ -243,36 +243,36 @@ func (delivery *UserDelivery) GetEvents(c echo.Context) error {
 
 	dataResponse := fromEventList(results)
 
-	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user events", dataResponse))
 }
 
-func (delivery *UserDelivery) GetTransactions(c echo.Context) error {
-	idParam := c.Param("id")
-	id, errConv := strconv.Atoi(idParam)
-	if errConv != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
-	}
+// func (delivery *UserDelivery) GetTransactions(c echo.Context) error {
+// 	idParam := c.Param("id")
+// 	id, errConv := strconv.Atoi(idParam)
+// 	if errConv != nil {
+// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
+// 	}
 
-	// validasi data di proses oleh user ybs
-	userId := middlewares.ExtractTokenUserId(c)
-	if userId < 1 {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
-	}
+// 	// validasi data di proses oleh user ybs
+// 	userId := middlewares.ExtractTokenUserId(c)
+// 	if userId < 1 {
+// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
+// 	}
 
-	if userId != id {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
-	}
+// 	if userId != id {
+// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
+// 	}
 
-	// process
-	results, err := delivery.userService.GetTransactions(id)
-	if err != nil {
-		if strings.Contains(err.Error(), "Get data success. No data.") {
-			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
-		}
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
-	}
+// 	// process
+// 	results, err := delivery.userService.GetTransactions(id)
+// 	if err != nil {
+// 		if strings.Contains(err.Error(), "Get data success. No data.") {
+// 			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
+// 		}
+// 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
+// 	}
 
-	dataResponse := fromTransactionList(results)
+// 	dataResponse := fromTransactionList(results)
 
-	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
-}
+// 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
+// }

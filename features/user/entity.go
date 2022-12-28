@@ -1,6 +1,10 @@
 package user
 
 import (
+	"ikuzports/features/club"
+	"ikuzports/features/clubMember"
+	"ikuzports/features/event"
+	"ikuzports/features/product"
 	"time"
 )
 
@@ -19,51 +23,24 @@ type Core struct {
 	UpdatedAt   time.Time
 }
 
+type ClubMember struct {
+	clubMember.Core
+	Club Club
+}
+
 type Club struct {
-	ID          uint
-	Name        string
-	Address     string
-	City        string
-	CategoryID  uint
-	Description string
-	Logo        string
-	MemberTotal int
+	club.Core
 }
-
 type Event struct {
-	ID               uint
-	Name             string
-	UserID           uint
-	Address          string
-	City             string
-	CategoryID       uint
-	StartDate        time.Time
-	EndDate          time.Time
-	TotalParticipant int
-	OrganizerName    string
+	event.EventCore
 }
 
-type Transaction struct {
-	ID              uint
-	UserID          uint
-	TotalQuantity   int
-	TotalPrice      int
-	ProductID       uint
-	PaymentMethod   string
-	TransactionID   uint
-	StatusPayment   string
-	VirtualAccount  string
-	TransactionTime time.Time
-}
+// type Transaction struct {
+// 	Transaction.Core
+// }
 
 type Product struct {
-	ID             uint
-	Name           string
-	Price          int
-	Quantity       int
-	Description    string
-	UserID         uint
-	ItemCategoryID uint
+	product.ProductCore
 }
 
 type ServiceInterface interface {
@@ -72,10 +49,10 @@ type ServiceInterface interface {
 	GetById(id int) (data Core, err error)
 	Update(input Core, id int) error
 	Delete(id int) error
-	GetClubs(id int) (data []Club, err error)
-	GetProducts(id int) (data []Product, err error)
-	GetEvents(id int) (data []Event, err error)
-	GetTransactions(id int) (data []Transaction, err error)
+	GetClubs(id int) (data []clubMember.Core, err error)
+	GetProducts(id int) (data []product.ProductCore, err error)
+	GetEvents(id int) (data []event.EventCore, err error)
+	// GetTransactions(id int) (data []Transaction, err error)
 }
 
 type RepositoryInterface interface {
@@ -85,8 +62,8 @@ type RepositoryInterface interface {
 	Update(input Core, id int) error
 	Delete(id int) error
 	FindUser(email string) (data Core, err error)
-	GetClubs(id int) (data []Club, err error)
-	GetProducts(id int) (data []Product, err error)
-	GetEvents(id int) (data []Event, err error)
-	GetTransactions(id int) (data []Transaction, err error)
+	GetClubs(id int) (data []clubMember.Core, err error)
+	GetProducts(id int) (data []product.ProductCore, err error)
+	GetEvents(id int) (data []event.EventCore, err error)
+	// GetTransactions(id int) (data []Transaction, err error)
 }

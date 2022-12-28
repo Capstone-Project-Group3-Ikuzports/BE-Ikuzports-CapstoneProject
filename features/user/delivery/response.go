@@ -1,7 +1,13 @@
 package delivery
 
 import (
+	"ikuzports/features/clubMember"
+	"ikuzports/features/event"
+	_event "ikuzports/features/event/delivery"
+	"ikuzports/features/product"
+	_product "ikuzports/features/product/delivery"
 	"ikuzports/features/user"
+
 	"time"
 )
 
@@ -17,26 +23,14 @@ type UserResponse struct {
 	Biodata     string `json:"biodata"`
 }
 type ClubResponse struct {
-	ID          uint   `json:"id"`
-	Name        string `json:"name"`
-	Address     string `json:"address"`
-	City        string `json:"city"`
-	Category    uint   `json:"category"`
-	Description string `json:"description"`
-	Logo        string `json:"logo"`
-	MemberTotal int    `json:"member_total"`
-}
-type EventResponse struct {
-	ID               uint      `json:"id"`
-	Name             string    `json:"name"`
-	UserID           uint      `json:"user_id"`
-	Address          string    `json:"address"`
-	City             string    `json:"city"`
-	CategoryID       uint      `json:"category_id"`
-	StartDate        time.Time `json:"start_date"`
-	EndDate          time.Time `json:"end_date"`
-	TotalParticipant int       `json:"total_participants"`
-	OrganizerName    string    `json:"organizer_name"`
+	ID           uint   `json:"id"`
+	Name         string `json:"name"`
+	CategoryID   uint   `json:"category_id"`
+	City         string `json:"city"`
+	JoinedMember uint   `json:"joined_member"`
+	Logo         string `json:"logo"`
+	MemberTotal  int    `json:"member_total"`
+	Status       string `json:"status"`
 }
 
 type TransactionResponse struct {
@@ -50,16 +44,6 @@ type TransactionResponse struct {
 	StatusPayment   string    `json:"status_payment"`
 	VirtualAccount  string    `json:"virtual_account"`
 	TransactionTime time.Time `json:"transaction_time"`
-}
-
-type ProductResponse struct {
-	ID             uint   `json:"id"`
-	Name           string `json:"name"`
-	Price          int    `json:"price"`
-	Quantity       int    `json:"quantity"`
-	Description    string `json:"description"`
-	UserID         uint   `json:"user_id"`
-	ItemCategoryID uint   `json:"item_category"`
 }
 
 func fromCore(dataCore user.Core) UserResponse {
@@ -84,20 +68,42 @@ func fromCoreList(dataCore []user.Core) []UserResponse {
 	return dataResponse
 }
 
-func fromClub(dataCore user.Club) ClubResponse {
+func fromClub(dataCore clubMember.Core) ClubResponse {
 	return ClubResponse{
-		ID:          dataCore.ID,
-		Name:        dataCore.Name,
-		Address:     dataCore.Address,
-		City:        dataCore.City,
-		Category:    dataCore.CategoryID,
-		Description: dataCore.Description,
-		Logo:        dataCore.Logo,
-		MemberTotal: dataCore.MemberTotal,
+		ID:           dataCore.ID,
+		Name:         dataCore.Club.Name,
+		CategoryID:   dataCore.Club.CategoryID,
+		City:         dataCore.Club.City,
+		JoinedMember: dataCore.Club.JoinedMember,
+		MemberTotal:  int(dataCore.Club.MemberTotal),
+		Logo:         dataCore.Club.Logo,
+		Status:       dataCore.Status,
 	}
 }
 
-func fromClubList(dataCore []user.Club) []ClubResponse {
+// func fromClub(dataCore club.Core) ClubResponse {
+// 	var arrMember []_member.MemberResponse
+// 	for _, val := range dataCore.Member {
+// 		arrMember = append(arrMember, _member.MemberResponse{
+// 			ID:     val.ID,
+// 			UserID: val.UserID,
+// 			ClubID: val.ClubID,
+// 			Status: val.Status,
+// 		})
+// 	}
+// 	return ClubResponse{
+// 		ID:           dataCore.ID,
+// 		Name:         dataCore.Name,
+// 		Category:     dataCore.Category.Name,
+// 		City:         dataCore.City,
+// 		JoinedMember: uint(dataCore.JoinedMember),
+// 		MemberTotal:  int(dataCore.MemberTotal),
+// 		Logo:         dataCore.Logo,
+// 		Member:       arrMember,
+// 	}
+// }
+
+func fromClubList(dataCore []clubMember.Core) []ClubResponse {
 	var dataResponse []ClubResponse
 	for _, v := range dataCore {
 		dataResponse = append(dataResponse, fromClub(v))
@@ -105,68 +111,77 @@ func fromClubList(dataCore []user.Club) []ClubResponse {
 	return dataResponse
 }
 
-func fromEvent(dataCore user.Event) EventResponse {
-	return EventResponse{
+func fromEvent(dataCore event.EventCore) _event.EventResponse {
+	return _event.EventResponse{
 		ID:               dataCore.ID,
-		UserID:           dataCore.UserID,
 		Name:             dataCore.Name,
 		Address:          dataCore.Address,
 		City:             dataCore.City,
-		CategoryID:       dataCore.CategoryID,
+		OrganizerName:    dataCore.User.Name,
+		CategoryName:     dataCore.Category.Name,
 		StartDate:        dataCore.StartDate,
 		EndDate:          dataCore.EndDate,
-		TotalParticipant: dataCore.TotalParticipant,
-		OrganizerName:    dataCore.OrganizerName,
+		TotalParticipant: uint(dataCore.TotalParticipant),
+		ImageEvent:       dataCore.ImageEvent,
+		Status:           dataCore.Status,
 	}
 }
 
-func fromEventList(dataCore []user.Event) []EventResponse {
-	var dataResponse []EventResponse
+func fromEventList(dataCore []event.EventCore) []_event.EventResponse {
+	var dataResponse []_event.EventResponse
 	for _, v := range dataCore {
 		dataResponse = append(dataResponse, fromEvent(v))
 	}
 	return dataResponse
 }
 
-func fromProduct(dataCore user.Product) ProductResponse {
-	return ProductResponse{
-		ID:             dataCore.ID,
-		Name:           dataCore.Name,
-		Price:          dataCore.Price,
-		Quantity:       dataCore.Quantity,
-		Description:    dataCore.Description,
-		UserID:         dataCore.UserID,
-		ItemCategoryID: dataCore.ItemCategoryID,
+func fromProduct(dataCore product.ProductCore) _product.ProductResponse {
+	// var arrMember []_product.ProductImage
+	// for _, val := range dataCore.ProductImage {
+	// 	arrMember = append(arrMember, _product.ProductImage{
+	// 		ID:  val.ID,
+	// 		Url: val.URL,
+	// 	})
+	// }
+	return _product.ProductResponse{
+		ID:               dataCore.ID,
+		Name:             dataCore.Name,
+		Price:            dataCore.Price,
+		Description:      dataCore.Description,
+		UserName:         dataCore.User.Name,
+		ItemCategoryName: dataCore.ItemCategory.Name,
+		City:             dataCore.City,
+		// ProductImage:     arrMember,
 	}
 }
 
-func fromProductList(dataCore []user.Product) []ProductResponse {
-	var dataResponse []ProductResponse
+func fromProductList(dataCore []product.ProductCore) []_product.ProductResponse {
+	var dataResponse []_product.ProductResponse
 	for _, v := range dataCore {
 		dataResponse = append(dataResponse, fromProduct(v))
 	}
 	return dataResponse
 }
 
-func fromTransaction(dataCore user.Transaction) TransactionResponse {
-	return TransactionResponse{
-		ID:              dataCore.ID,
-		UserID:          dataCore.UserID,
-		TotalQuantity:   dataCore.TotalQuantity,
-		TotalPrice:      dataCore.TotalPrice,
-		ProductID:       dataCore.ProductID,
-		PaymentMethod:   dataCore.PaymentMethod,
-		TransactionID:   dataCore.TransactionID,
-		StatusPayment:   dataCore.StatusPayment,
-		VirtualAccount:  dataCore.VirtualAccount,
-		TransactionTime: dataCore.TransactionTime,
-	}
-}
+// func fromTransaction(dataCore user.Transaction) TransactionResponse {
+// 	return TransactionResponse{
+// 		ID:              dataCore.ID,
+// 		UserID:          dataCore.UserID,
+// 		TotalQuantity:   dataCore.TotalQuantity,
+// 		TotalPrice:      dataCore.TotalPrice,
+// 		ProductID:       dataCore.ProductID,
+// 		PaymentMethod:   dataCore.PaymentMethod,
+// 		TransactionID:   dataCore.TransactionID,
+// 		StatusPayment:   dataCore.StatusPayment,
+// 		VirtualAccount:  dataCore.VirtualAccount,
+// 		TransactionTime: dataCore.TransactionTime,
+// 	}
+// }
 
-func fromTransactionList(dataCore []user.Transaction) []TransactionResponse {
-	var dataResponse []TransactionResponse
-	for _, v := range dataCore {
-		dataResponse = append(dataResponse, fromTransaction(v))
-	}
-	return dataResponse
-}
+// func fromTransactionList(dataCore []user.Transaction) []TransactionResponse {
+// 	var dataResponse []TransactionResponse
+// 	for _, v := range dataCore {
+// 		dataResponse = append(dataResponse, fromTransaction(v))
+// 	}
+// 	return dataResponse
+// }

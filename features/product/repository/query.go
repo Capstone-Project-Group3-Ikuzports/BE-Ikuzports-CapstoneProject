@@ -96,3 +96,14 @@ func (repo *productRepository) Delete(id int) (rows int, err error) {
 	}
 	return int(tx.RowsAffected), nil
 }
+
+// GetImages implements product.RepositoryInterface
+func (repo *productRepository) GetImages(id int) (data []product.ProductImage, err error) {
+	var images []ProductImage
+	tx := repo.db.Where("product_id = ?", id).Find(&images)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	var dataCore = toCoreListImage(images)
+	return dataCore, nil
+}
