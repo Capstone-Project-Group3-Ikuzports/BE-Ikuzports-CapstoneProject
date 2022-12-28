@@ -10,6 +10,7 @@ type ParticipantCore struct {
 type RepositoryInterface interface {
 	Create(data ParticipantCore) (row int, err error)
 	UpdateParticipant(data ParticipantCore) (row int, err error)
+	UpdateStatus(data ParticipantCore) (row int, err error)
 }
 
 type ServiceInterface interface {
