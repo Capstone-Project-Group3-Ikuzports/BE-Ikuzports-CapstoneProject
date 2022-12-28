@@ -25,5 +25,7 @@ func (delivery *CategoryDelivery) GetAll(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error read data"))
 	}
-	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("success get all category data", res))
+
+	dataResp := fromCoreList(res)
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("success get all category data", dataResp))
 }

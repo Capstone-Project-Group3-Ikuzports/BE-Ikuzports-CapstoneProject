@@ -47,4 +47,5 @@ type ServiceInterface interface {
 	Create(input EventCore) (err error)
 	GetByID(id int) (data EventCore, err error)
 	Delete(id int) (err error)
+	// UpdateStatus() (err error)
 }

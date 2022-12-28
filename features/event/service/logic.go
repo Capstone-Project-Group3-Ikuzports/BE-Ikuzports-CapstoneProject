@@ -107,3 +107,20 @@ func (service *eventService) Delete(id int) (err error) {
 
 	return nil
 }
+
+// func (service *eventService) UpdateStatus() (err error) {
+
+// 	dates, errDates := service.eventRepository.GetDate()
+// 	if errDates != nil {
+// 		helper.LogDebug(errDates)
+// 		return errDates
+// 	}
+
+// 	for _, v := range dates {
+// 		if v.StartDate.Unix() < time.Now().Unix() || v.EndDate.Unix() < time.Now().Unix() {
+// 			service.eventRepository.UpdateStatus(int(v.ID), "Not Available")
+// 		}
+// 	}
+
+// 	return nil
+// }

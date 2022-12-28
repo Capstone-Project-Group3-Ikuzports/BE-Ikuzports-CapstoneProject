@@ -12,6 +12,7 @@ import (
 	_image "ikuzports/features/productImage/repository"
 	_transaction "ikuzports/features/transaction/repository"
 	"ikuzports/features/user"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -52,6 +53,17 @@ type Event struct {
 }
 
 type Transaction struct {
+	gorm.Model
+	UserID          uint
+	TotalQuantity   int
+	TotalPrice      int
+	ProductID       uint
+	PaymentMethod   string
+	TransactionID   uint
+	StatusPayment   string
+	VirtualAccount  string
+	TransactionTime time.Time
+	OrderID         string
 	_transaction.Transaction
 }
 
