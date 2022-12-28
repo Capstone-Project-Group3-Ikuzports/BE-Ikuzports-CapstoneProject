@@ -10,9 +10,9 @@ import (
 	"ikuzports/features/product"
 	_product "ikuzports/features/product/repository"
 	_image "ikuzports/features/productImage/repository"
+	"ikuzports/features/transaction"
 	_transaction "ikuzports/features/transaction/repository"
 	"ikuzports/features/user"
-	"time"
 
 	"gorm.io/gorm"
 )
@@ -53,17 +53,6 @@ type Event struct {
 }
 
 type Transaction struct {
-	gorm.Model
-	UserID          uint
-	TotalQuantity   int
-	TotalPrice      int
-	ProductID       uint
-	PaymentMethod   string
-	TransactionID   uint
-	StatusPayment   string
-	VirtualAccount  string
-	TransactionTime time.Time
-	OrderID         string
 	_transaction.Transaction
 }
 
@@ -135,6 +124,7 @@ func (dataModel *ClubMember) toCoreClub() clubMember.Core {
 		Club: clubMember.Club{
 			Name:         dataModel.Club.Name,
 			CategoryID:   dataModel.Club.CategoryID,
+			Category:     dataModel.Club.Category.Name,
 			City:         dataModel.Club.City,
 			Logo:         dataModel.Club.Logo,
 			JoinedMember: dataModel.Club.JoinedMember,
@@ -247,24 +237,25 @@ func toProductList(dataModel []Product) []product.ProductCore {
 	return dataCore
 }
 
-// func (dataModel *Transaction) toCoreTransaction() user.Transaction {
-// 	return user.Transaction{
-// 		ID:             dataModel.ID,
-// 		UserID:         dataModel.UserID,
-// 		TotalQuantity:  dataModel.TotalQuantity,
-// 		TotalPrice:     dataModel.TotalPrice,
-// 		ProductID:      dataModel.ProductID,
-// 		PaymentMethod:  dataModel.PaymentMethod,
-// 		TransactionID:  dataModel.TransactionID,
-// 		StatusPayment:  dataModel.StatusPayment,
-// 		VirtualAccount: dataModel.VirtualAccount,
-// 	}
-// }
+func (dataModel *Transaction) toCoreTransaction() transaction.TransactionCore {
+	return transaction.TransactionCore{
+		ID:              dataModel.ID,
+		UserID:          dataModel.UserID,
+		TotalQuantity:   dataModel.TotalQuantity,
+		TotalPrice:      dataModel.TotalPrice,
+		ProductID:       dataModel.ProductID,
+		TransactionID:   dataModel.TransactionID,
+		StatusPayment:   dataModel.StatusPayment,
+		VirtualAccount:  dataModel.VirtualAccount,
+		TransactionTime: dataModel.TransactionTime.String(),
+		OrderID:         dataModel.OrderID,
+	}
+}
 
-// func toTransactionList(dataModel []Transaction) []user.Transaction {
-// 	var dataCore []user.Transaction
-// 	for _, v := range dataModel {
-// 		dataCore = append(dataCore, v.toCoreTransaction())
-// 	}
-// 	return dataCore
-// }
+func toTransactionList(dataModel []Transaction) []transaction.TransactionCore {
+	var dataCore []transaction.TransactionCore
+	for _, v := range dataModel {
+		dataCore = append(dataCore, v.toCoreTransaction())
+	}
+	return dataCore
+}
