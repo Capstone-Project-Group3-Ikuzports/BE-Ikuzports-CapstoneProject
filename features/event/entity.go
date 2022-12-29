@@ -19,6 +19,7 @@ type EventCore struct {
 	Status           string
 	Category         Category
 	MaximumPeople    int
+	Description      string
 }
 
 type User struct {
