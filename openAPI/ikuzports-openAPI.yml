@@ -71,9 +71,6 @@ paths:
                 address:
                   type: string
                   example: "Jl. Sepak Bola"
-                city:
-                  type: string
-                  example: "Bandung"
                 user_image:
                   type: string
                   format: binary
@@ -81,11 +78,8 @@ paths:
                 gender:
                   type: string
                   enum:
-                    - M
-                    - F
-                biodata:
-                  type: string
-                  example: "saya suka sepak bola"
+                    - Male
+                    - Female
                   
             encoding:
               user_image:
@@ -1582,7 +1576,7 @@ paths:
     put: 
       tags: 
        - members
-      summary: Update member from club
+      summary: Update status member from club
       security: 
         - JWTAuth: []
       requestBody:
@@ -1605,14 +1599,14 @@ paths:
             example: 1
       responses: 
         '200':
-          description: Delete success
+          description: Update success
           content: 
             application/json:
              schema:
               type: object
               example:
                 status: "success"
-                message: "success delete member from club"
+                message: "success update member from club"
         '400':
           $ref: '#/components/responses/400'
         '404':
