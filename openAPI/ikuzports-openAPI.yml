@@ -54,7 +54,7 @@ paths:
         content: 
           multipart/form-data:
             schema:
-              type: object
+              $ref: '#/components/schemas/UsersRequest'
               properties:
                 name:
                   type: string
@@ -90,7 +90,7 @@ paths:
           content: 
             application/json:
              schema:
-              type: object
+              $ref: '#/components/schemas/ResponseUsers'
               example:
                 status: "success"
                 message: "success insert user data"
@@ -120,7 +120,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/UsersSchema'
                 example: 
                   id: 1
                   name: "Lionel Messi"
@@ -157,7 +157,7 @@ paths:
         content: 
           multipart/form-data:
             schema:
-              type: object
+              $ref: '#/components/schemas/UsersRequest'
               properties:
                 name:
                   type: string
@@ -260,8 +260,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
+                $ref: '#/components/schemas/ResponseClubs'
+              example: 
                   id: 1
                   name: "Lionel Messi"
                   clubs:
@@ -310,8 +310,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
+                $ref: "#/components/schemas/ResponseProducts" 
+              example: 
                   id: 1
                   name: "Lionel Messi"
                   products:
@@ -356,11 +356,11 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
+                $ref: "#/components/schemas/ResponseEvents" 
+              example: 
                   id: 1
                   name: "Lionel Messi"
-                  events:
+                  data:
                     - id: 1
                       name: "Pertandingan Sepak Bola Bandung Raya"
                       address: "Lapangan Gasibu"
@@ -410,8 +410,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
+                $ref: "#/components/schemas/ResponseTransaction" 
+              example: 
                   id: 1
                   name: "Lionel Messi"
                   transactions:
@@ -544,8 +544,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
+                $ref: "#/components/schemas/ResponseEvents" 
+              example: 
                   - id: 1
                     name: "Pertandingan Sepak Bola Bandung Raya"
                     address: "Lapangan Gasibu"
@@ -594,12 +594,19 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
-                  id: 1
-                  type: string
-                  format: binary
-                  example: "link"
+                $ref: "#/components/schemas/EventsResponse" 
+              example: 
+                  - id: 2
+                    name: "Pertandingan Basket Bandung Raya"
+                    address: "Lapangan Arcamanik"
+                    city: "Bandung"
+                    category_id: 2
+                    start_date: "2023-1-5"
+                    end_date: "2023-1-5"
+                    total_participant: 2
+                    organizer_name: "Yao Ming"
+                    image_event: "link"
+                    maximum_people: 25
 
         '400':
           $ref: '#/components/responses/400'
@@ -706,6 +713,13 @@ paths:
       security: 
         - JWTAuth: []
       parameters:
+        - name: nama
+          description: "nama club"
+          required: false
+          in: query
+          schema: 
+            type: string
+            example: "barcelona"
         - name: club_category
           description: "category club"
           required: false
@@ -726,8 +740,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
+                $ref: "#/components/schemas/ResponseClubs" 
+              example: 
                   - id: 1
                     name: "Barcelona"
                     address: "Jl. Pahlawan"
@@ -777,8 +791,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
+                $ref: "#/components/schemas/ClubsResponse" 
+              example: 
                   id: 1
                   name: "Barcelona"
                   address: "Jl. Pahlawan"
@@ -925,8 +939,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
+                $ref: "#/components/schemas/ResponseMembers" 
+              example: 
                   - id: 1
                     user_id : 1
                     user_name : "Budi"
@@ -969,8 +983,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
+                $ref: "#/components/schemas/ResponseChat" 
+              example: 
                   - id: 1
                     user_id: 1
                     message: "Besok jadi ga?"
@@ -1005,8 +1019,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
+                $ref: "#/components/schemas/ResponseGaleries" 
+              example: 
                   - id: 1
                     url: "link"
                     caption: "Lari bareng"
@@ -1041,8 +1055,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
+                $ref: "#/components/schemas/ResponseActivities" 
+              example: 
                   - id: 1
                     name: "friendly match"
                     start_date: "2023-1-1"
@@ -1075,8 +1089,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
+                $ref: "#/components/schemas/ResponseActivities" 
+              example: 
                   - id: 1
                     club_id: 1
                     name: "friendly match"
@@ -1109,8 +1123,8 @@ paths:
         content: 
           application/json:
             schema:
-              type: object
-              example: 
+              $ref: "#/components/schemas/ActivitiesRequest" 
+            example: 
                 club_id: 1
                 name: "lari bareng"
                 start_date: "2023-1-5"
@@ -1122,8 +1136,8 @@ paths:
           description: Insert success
           content: 
             application/json:
-             schema:
-              type: object
+              schema:
+                type: object
               example:
                 status: "success"
                 message: "success insert activities data"
@@ -1152,8 +1166,8 @@ paths:
         content: 
           application/json:
             schema:
-              type: object
-              example: 
+              $ref: "#/components/schemas/ActivitiesSchema" 
+            example: 
                 club_id: 1
                 name: "lari bareng"
                 start_date: "2023-1-5"
@@ -1190,8 +1204,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
+                $ref: "#/components/schemas/ResponseGaleries" 
+              example: 
                   - id: 1
                     url: "link"
                     club_id: 1
@@ -1268,8 +1282,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
+                $ref: "#/components/schemas/GaleriesSchema" 
+              example: 
                   id: 1
                   url: "link"
                   club_id: 1
@@ -1383,8 +1397,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
+                $ref: "#/components/schemas/ResponseMembers" 
+              example: 
                   - id: 1
                     user_id: 1
                     name : Budi 
@@ -1415,8 +1429,8 @@ paths:
         content: 
           application/json:
             schema:
-              type: object
-              example: 
+              $ref: "#/components/schemas/MembersRequest" 
+            example: 
                 user_id: 2
                 club_id: 1
                 status: "Member"
@@ -1456,8 +1470,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
+                $ref: "#/components/schemas/MembersResponse" 
+              example: 
                   id: 1
                   user_id: 2
                   name : Budi 
@@ -1552,8 +1566,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
+                $ref: "#/components/schemas/ResponseProducts" 
+              example: 
                   - id: 1
                     name: "Sepatu Bola"
                     price: 250000
@@ -1586,8 +1600,8 @@ paths:
         content: 
           application/json:
             schema:
-              type: object
-              example: 
+              $ref: "#/components/schemas/ProductsRequest" 
+            example: 
                 name: "Jersey"
                 price: 75000
                 quantity: 10
@@ -1630,8 +1644,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
+                $ref: "#/components/schemas/ProductsResponse" 
+              example: 
                   id: 2
                   name: "Jersey"
                   price: 75000
@@ -1666,8 +1680,8 @@ paths:
         content: 
           application/json:
             schema:
-              type: object
-              example: 
+              $ref: "#/components/schemas/ProductsRequest" 
+            example: 
                 name: "Jersey"
                 price: 75000
                 quantity: 10
@@ -1742,7 +1756,7 @@ paths:
             application/json:
               schema:
                 type: object
-                example: 
+              example: 
                   - id: 1
                     url: "link"
                   - id: 2
@@ -1840,8 +1854,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
+                $ref: "#/components/schemas/ResponseProductsImages" 
+              example: 
                   id: 1
                   url: "link"
                   product_id: 1
@@ -1863,8 +1877,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
+                 $ref: "#/components/schemas/ResponseTransaction"
+              example: 
                   - id: 1
                     total_quantity: 1
                     total_price: 25000
@@ -1897,8 +1911,8 @@ paths:
         content: 
           application/json:
             schema:
-              type: object
-              example: 
+               $ref: "#/components/schemas/TransactionRequest"
+            example: 
                 total_price: 25000
                 product_id: 3
                 product_quantity: 1
@@ -1946,8 +1960,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
+                 $ref: "#/components/schemas/TransactionSchema"
+              example: 
                   id: 1
                   total_quantity: 1
                   total_price: 25000
@@ -1980,8 +1994,8 @@ paths:
         content: 
           application/json:
             schema:
-              type: object
-              example: 
+               $ref: "#/components/schemas/TransactionRequest"
+            example: 
                 total_quantity: 1
                 total_price: 25000
                 product_id: 3
@@ -2018,8 +2032,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example: 
+                 $ref: "#/components/schemas/ResponseChat"
+              example: 
                   - id: 1
                     user_id: 1
                     user_name: Budi
@@ -2046,8 +2060,8 @@ paths:
         content: 
           application/json:
             schema:
-              type: object
-              example: 
+               $ref: "#/components/schemas/ChatRequest"
+            example: 
                 user_id: 1
                 club_id: 1
                 message: "Besok jadi ga?"
@@ -2086,8 +2100,8 @@ paths:
           description: Delete success
           content: 
             application/json:
-             schema:
-              type: object
+              schema:
+                 $ref: "#/components/schemas/ChatSchema"
               example:
                 status: "success"
                 message: "success delete chat data by chat id"
@@ -2114,6 +2128,22 @@ components:
           type: string
         message:
           type: string
+    ResponseObject:
+      type: object
+      properties:
+        message:
+          type: string
+        data: 
+          type: object
+    ResponseArray:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          type: array
+          items: 
+            type: object
           
     UsersSchema:
       type: object
@@ -2137,19 +2167,42 @@ components:
         address:
           type: string
           example: "Jl. Sepak Bola"
-        city:
-          type: string
-          example: "Bandung"
         user_image:
           type: string
           format: binary
           example: "link"
         gender:
           type: string
-          example: "Laki-laki"
-        biodata:
+          enum: 
+            - Male
+            - Female  
+    UsersRequest:
+      type: object
+      properties:
+        name:
           type: string
-          example: "saya suka sepak bola"
+          example: "Lionel Messi"
+        email:
+          type: string
+          example: "messi@gmail.com"
+        password:
+          type: string
+          example: "qwerty"
+        phone_number:
+          type: string
+          example: "0812345678"
+        address:
+          type: string
+          example: "Jl. Sepak Bola"
+        user_image:
+          type: string
+          format: binary
+          example: "link"
+        gender:
+          type: string
+          enum: 
+            - Male
+            - Female  
     
     EventsSchema:
       type: object
@@ -2196,6 +2249,84 @@ components:
           type: integer
           format: int64
           example: 20
+        description:
+          type: string
+          example: "berkumpul di lapangan jangan lupa membawa minum"
+        
+    EventsRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Pertandingan Sepak Bola Bandung Raya"
+        address:
+          type: string
+          example: "Lapangan Gasibu"
+        city:
+          type: string
+          example: "Bandung"
+        category_id:
+          type: integer
+          format: int64
+          example: 1
+        start_date:
+          type: string
+          example: "2023-01-01"
+        end_date:
+          type: string
+          example: "2023-01-02"
+        image_event:
+          type: string
+          format: binary
+          example: "link"
+        maximum_people:
+          type: integer
+          format: int64
+          example: 20
+        
+    EventsResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Pertandingan Sepak Bola Bandung Raya"
+        address:
+          type: string
+          example: "Lapangan Gasibu"
+        city:
+          type: string
+          example: "Bandung"
+        organizer_name:
+          type: string
+          example: "Ronaldo"
+        category_name:
+          type: string
+          example: "Sepak Bola"
+        start_date:
+          type: string
+          example: "2023-01-01"
+        end_date:
+          type: string
+          example: "2023-01-02"
+        total_participant:
+          type: integer
+          format: int64
+          example: 11
+        image_event:
+          type: string
+          format: binary
+          example: "link"
+        maximum_people:
+          type: integer
+          format: int64
+          example: 20
+        description:
+          type: string
+          example: "berkumpul di lapangan jangan lupa membawa minum"
         
     ClubsSchema:
       type: object
@@ -2238,7 +2369,86 @@ components:
         requirement:
           type: string
           example: "Usia minimal 15 tahun, tidak merokok ..."
-        
+
+    ClubsRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Barcelona"
+        address:
+          type: string
+          example: "Jl. Pahlawan"
+        city:
+          type: string
+          example: "Bandung"
+        category_id:
+          type: integer
+          format: int64
+          example: 1
+        description:
+          type: string
+          example: "Klub fans sepakbola se Bandung Raya"
+        logo:
+          type: string
+          format: binary
+          example: "link"
+        member_total:
+          type: integer
+          format: int64
+          example: 20
+        rule:
+          type: string
+          example: "Tidak boleh merokok"
+        requirement:
+          type: string
+          example: "Usia minimal 15 tahun, tidak merokok ..."
+
+    ClubsResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Barcelona"
+        address:
+          type: string
+          example: "Jl. Pahlawan"
+        city:
+          type: string
+          example: "Bandung"
+        category_id:
+          type: integer
+          format: int64
+          example: 1
+        category_name:
+          type: string
+          example: "Sepak Bola"
+        description:
+          type: string
+          example: "Klub fans sepakbola se Bandung Raya"
+        logo:
+          type: string
+          format: binary
+          example: "link"
+        joined_member:
+          type: integer
+          format: int64
+          example: 5
+        member_total:
+          type: integer
+          format: int64
+          example: 20
+        rule:
+          type: string
+          example: "Tidak boleh merokok"
+        requirement:
+          type: string
+          example: "Usia minimal 15 tahun, tidak merokok ..."
+
     ActivitiesSchema:
       type: object
       properties:
@@ -2253,19 +2463,48 @@ components:
         name:
           type: string
           example: "lari bareng"
-        start_date:
+        start_time:
           type: string
-          example: "2023-1-1"
-        end_date:
+          example: "15:00:00"
+        end_time:
           type: string
-          example: "2023-1-2"
+          example: "15:00:00"
+        day:
+          type: string
+          example: "Kamis"
         location:
           type: string
           example: "Taman lansia"
         activity_detail:
           type: string
           example: "lari pagi bareng"
-    
+
+    ActivitiesRequest:
+      type: object
+      properties:
+        club_id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "lari bareng"
+        start_time:
+          type: string
+          example: "15:00:00"
+        end_time:
+          type: string
+          example: "17:00:00"
+        day:
+          type: string
+          example: "Kamis"
+        location:
+          type: string
+          example: "Taman lansia"
+        activity_detail:
+          type: string
+          example: "lari pagi bareng"
+
     GaleriesSchema:
       type: object
       properties:
@@ -2273,6 +2512,21 @@ components:
           type: integer
           format: int64
           example: 1
+        url:
+          type: string
+          format: binary
+          example: "link"
+        club_id:
+          type: integer
+          format: int64
+          example: 1
+        caption:
+          type: string
+          example: "foto main bola"
+
+    GaleriesRequest:
+      type: object
+      properties:
         url:
           type: string
           format: binary
@@ -2303,10 +2557,53 @@ components:
         status:
           type: string
           enum: 
-            - owner
-            - member
-            - pending
-            - rejected
+            - Owner
+            - Member
+            - Requested
+
+    MembersRequest:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          format: int64
+          example: 1
+        club_id:
+          type: integer
+          format: int64
+          example: 1
+        status:
+          type: string
+          enum: 
+            - Owner
+            - Member
+            - Requested
+
+    MembersResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        user_id:
+          type: integer
+          format: int64
+          example: 1
+        user_name:
+          type: string
+        phone_number: 
+          type: string
+        club_id:
+          type: integer
+          format: int64
+          example: 1
+        status:
+          type: string
+          enum: 
+            - Owner
+            - Member
+            - Requested
     
     ProductsSchema:
       type: object
@@ -2321,10 +2618,6 @@ components:
         price:
           type: number
           example: 75000
-        quantity:
-          type: integer
-          format: int64
-          example: 10
         description:
           type: string
           example: "Jersey Langka"
@@ -2336,7 +2629,262 @@ components:
           type: integer
           format: int64
           example: 1
+        city:
+          type: string
+          example: "Jakarta"
+
+    ProductsRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Jersey"
+        price:
+          type: number
+          example: 75000
+        description:
+          type: string
+          example: "Jersey Langka"
+        category_id:
+          type: integer
+          format: int64
+          example: 1
+        city:
+          type: string
+          example: "Jakarta"
+
+    ProductsResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Jersey"
+        price:
+          type: number
+          example: 75000
+        user_name:
+          type: string
+          example: "Jersey"
+        description:
+          type: string
+          example: "Jersey Langka"
+        itemcategory_name:
+          type: integer
+          format: int64
+          example: 1
+        city:
+          type: string
+          example: "Jakarta"
+
+    ProductsImageSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        url:
+          type: string
+          format: binary
+          example: "link"
+        product_id:
+          type: integer
+          example: 1
+
+    ProductsImageRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          format: binary
+          example: "link"
+        product_id:
+          type: integer
+          example: 1
     
+    ChatSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        user_id:
+          type: string
+          format: binary
+          example: "link"
+        club_id:
+          type: integer
+          example: 1
+        message:
+          type: string
+          example: "hello hello"
+
+    ChatRequest:
+      type: object
+      properties:
+        user_id:
+          type: string
+          format: binary
+          example: "link"
+        club_id:
+          type: integer
+          example: 1
+        message:
+          type: string
+          example: "hello hello"
+    
+    TransactionSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        user_id:
+          type: string
+          format: binary
+          example: "link"
+        total_price:
+          type: number
+          example: 100000
+        product_id:
+          type: integer
+          example: 1
+        total_quantity:
+          type: integer
+          example: 1
+        payment_method:
+          type: string
+        transaction_id:
+          type: string
+        status_payment:
+          type: string
+        virtual_account:
+          type: string
+        transaction_time: 
+          type: string
+          format: date-time
+
+    TransactionRequest:
+      type: object
+      properties:
+        total_price:
+          type: number
+          example: 100000
+        product_id:
+          type: integer
+          example: 1
+        total_quantity:
+          type: integer
+          example: 1
+        transaction_time:
+          type: string
+          example: "2022-12-10"
+    
+    ResponseUsers:
+      type: object
+      properties:
+        res:
+          type: object
+          $ref: '#/components/schemas/ResponseArray'
+        data:
+          type: object
+          $ref: '#/components/schemas/UsersSchema'
+
+    ResponseClubs:
+      type: object
+      properties:
+        res:
+          type: object
+          $ref: '#/components/schemas/ResponseArray'
+        data:
+          type: object
+          $ref: '#/components/schemas/ClubsResponse'
+    
+    ResponseEvents:
+      type: object
+      properties:
+        res:
+          type: object
+          $ref: '#/components/schemas/ResponseArray'
+        data:
+          type: object
+          $ref: '#/components/schemas/EventsResponse'
+    
+    ResponseActivities:
+      type: object
+      properties:
+        res:
+          type: object
+          $ref: '#/components/schemas/ResponseArray'
+        data:
+          type: object
+          $ref: '#/components/schemas/ActivitiesSchema'
+    
+    ResponseGaleries:
+      type: object
+      properties:
+        res:
+          type: object
+          $ref: '#/components/schemas/ResponseArray'
+        data:
+          type: object
+          $ref: '#/components/schemas/GaleriesSchema'
+
+    ResponseMembers:
+      type: object
+      properties:
+        res:
+          type: object
+          $ref: '#/components/schemas/ResponseArray'
+        data:
+          type: object
+          $ref: '#/components/schemas/MembersResponse'
+    
+    ResponseProducts:
+      type: object
+      properties:
+        res:
+          type: object
+          $ref: '#/components/schemas/ResponseArray'
+        data:
+          type: object
+          $ref: '#/components/schemas/ProductsResponse'
+    ResponseProductsImages:
+      type: object
+      properties:
+        res:
+          type: object
+          $ref: '#/components/schemas/ResponseArray'
+        data:
+          type: object
+          $ref: '#/components/schemas/ProductsImageSchema'
+
+    ResponseTransaction:
+      type: object
+      properties:
+        res:
+          type: object
+          $ref: '#/components/schemas/ResponseArray'
+        data:
+          type: object
+          $ref: '#/components/schemas/TransactionSchema'
+
+    ResponseChat:
+      type: object
+      properties:
+        res:
+          type: object
+          $ref: '#/components/schemas/ResponseArray'
+        data:
+          type: object
+          $ref: '#/components/schemas/ChatSchema'
+
   responses:
       '404':
         description: Not Found
