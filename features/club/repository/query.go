@@ -71,30 +71,41 @@ func (repo *clubRepository) UpdateMember(id int) (rows int, err error) {
 }
 
 // GetAll implements club.RepositoryInterface
-func (repo *clubRepository) GetAll() (data []club.Core, err error) {
+func (repo *clubRepository) GetAll(offset, limit int) (data []club.Core, page int, err error) {
 	var club []Club
+	var jumlahData int64
 
-	// tx := repo.db.Find(&club)
-	tx := repo.db.Preload("Category").Order("created_at desc").Find(&club)
-	if tx.Error != nil {
-		return nil, tx.Error
+	ty := repo.db.Preload("Category").Model(&Club{}).Order("created_at desc").Count(&jumlahData)
+	if ty.Error != nil {
+		return nil, 0, ty.Error
 	}
+	tx := repo.db.Preload("Category").Offset(offset).Limit(limit).Order("created_at desc").Find(&club)
+	if tx.Error != nil {
+		return nil, 0, tx.Error
+	}
+
 	var dataCore = toCoreList(club)
 
-	return dataCore, nil
+	return dataCore, int(jumlahData), nil
 }
 
 // GetAllWithSearch implements club.RepositoryInterface
-func (repo *clubRepository) GetAllWithSearch(queryName string, queryCity string, queryCategoryID int) (data []club.Core, err error) {
+func (repo *clubRepository) GetAllWithSearch(queryName, queryCity string, queryCategoryID, offset, limit int) (data []club.Core, page int, err error) {
 	var club []Club
+
+	var jumlahData int64
+	ty := repo.db.Preload("Category").Model(&Club{}).Order("created_at desc").Count(&jumlahData)
+	if ty.Error != nil {
+		return nil, 0, ty.Error
+	}
 
 	tx := repo.db.Preload("Category").Where("name LIKE ?", "%"+queryName+"%").Where(&Club{CategoryID: uint(queryCategoryID), City: queryCity}).Order("created_at desc").Find(&club)
 	if tx.Error != nil {
-		return nil, tx.Error
+		return nil, 0, tx.Error
 	}
 	var dataCore = toCoreList(club)
 
-	return dataCore, nil
+	return dataCore, int(jumlahData), nil
 }
 
 // GetById implements club.RepositoryInterface

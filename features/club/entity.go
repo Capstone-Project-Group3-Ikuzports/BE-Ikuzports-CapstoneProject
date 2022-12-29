@@ -57,7 +57,7 @@ type ClubMember struct {
 	Status string
 }
 type ServiceInterface interface {
-	GetAll(queryName string, queryCity string, queryCategoryID int) (data []Core, err error)
+	GetAll(queryName, queryCity string, queryCategoryID, queryPage int) (data []Core, page int, err error)
 	Create(input Core, id int) error
 	GetById(id int) (data Core, err error)
 	Update(input Core, id int, userId int) error
@@ -69,8 +69,8 @@ type ServiceInterface interface {
 }
 
 type RepositoryInterface interface {
-	GetAll() (data []Core, err error)
-	GetAllWithSearch(queryName string, queryCity string, queryCategoryID int) (data []Core, err error)
+	GetAll(offset, limit int) (data []Core, page int, err error)
+	GetAllWithSearch(queryName, queryCity string, queryCategoryID, offset, limit int) (data []Core, page int, err error)
 	Create(input Core, id int) error
 	GetById(id int) (data Core, err error)
 	Update(input Core, id int) error

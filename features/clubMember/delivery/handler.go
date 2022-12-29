@@ -91,7 +91,7 @@ func (delivery *ClubMemberDelivery) Update(c echo.Context) error {
 	if userId < 1 {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
 	}
-	memberInput.UserID = uint(userId)
+	// memberInput.UserID = uint(userId)
 	dataCore := toCore(memberInput)
 	err := delivery.clubMemberService.Update(dataCore, id, userId)
 	if err != nil {

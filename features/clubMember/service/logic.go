@@ -94,23 +94,37 @@ func (service *clubMemberService) Delete(id int, userId int) error {
 
 // Update implements clubMember.ServiceInterface
 func (service *clubMemberService) Update(input clubMember.Core, id int, userId int) error {
-	input.Status = "Member"
-	data, err := service.clubMemberRepository.GetById(id)
-	if err != nil {
-		return helper.ServiceErrorMsg(err)
+	dataClub, errEvent := service.clubRepository.GetById(int(input.ClubID))
+	if errEvent != nil {
+		return helper.ServiceErrorMsg(errEvent)
 	}
-	dataMember, errCr := service.clubRepository.GetStatus(int(input.ClubID), userId)
-	if errCr != nil {
-		return errors.New("error delete member. no data or you are not joined in this club")
-	}
-	if data.UserID != uint(userId) {
-		if dataMember.Status != "Owner" {
-			return errors.New("failed update member, you are not the owner of the club")
+
+	if dataClub.JoinedMember >= dataClub.MemberTotal {
+		return errors.New(" cannot add new member. the club is full")
+	} else {
+		input.Status = "Member"
+		data, err := service.clubMemberRepository.GetById(id)
+		if err != nil {
+			return helper.ServiceErrorMsg(err)
 		}
-	}
-	errCreate := service.clubMemberRepository.Update(input, id)
-	if errCreate != nil {
-		return errors.New("failed to delete data, error query")
+		dataMember, errCr := service.clubRepository.GetStatus(int(input.ClubID), userId)
+		if errCr != nil {
+			return errors.New("error delete member. no data or you are not joined in this club")
+		}
+		if data.UserID != uint(userId) {
+			if dataMember.Status != "Owner" {
+				return errors.New("failed update member, you are not the owner of the club")
+			}
+		}
+		errCreate := service.clubMemberRepository.Update(input, id)
+		if errCreate != nil {
+			return errors.New("failed to delete data, error query")
+		}
+
+		errPut := service.clubMemberRepository.UpdateMember(int(data.ClubID))
+		if errPut != nil {
+			return errors.New("failed to update joined member, error query")
+		}
 	}
 	return nil
 }
