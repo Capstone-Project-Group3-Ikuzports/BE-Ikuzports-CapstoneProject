@@ -17,6 +17,7 @@ type EventResponse struct {
 	TotalParticipant uint      `json:"total_participant"`
 	ImageEvent       string    `json:"image_event"`
 	Status           string    `json:"status"`
+	MaximumPeople    int       `json:"maximum_people"`
 }
 
 func fromCore(dataCore event.EventCore) EventResponse {
@@ -32,6 +33,7 @@ func fromCore(dataCore event.EventCore) EventResponse {
 		TotalParticipant: uint(dataCore.TotalParticipant),
 		ImageEvent:       dataCore.ImageEvent,
 		Status:           dataCore.Status,
+		MaximumPeople:    dataCore.MaximumPeople,
 	}
 }
 
