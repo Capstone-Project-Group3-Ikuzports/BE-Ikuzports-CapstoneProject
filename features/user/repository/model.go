@@ -25,10 +25,8 @@ type User struct {
 	Password         string `validate:"required"`
 	PhoneNumber      string `validate:"required"`
 	Address          string
-	City             string
 	UserImage        string
 	Gender           string
-	Biodata          string
 	ClubMember       []_member.ClubMember
 	EventParticipant []_event.EventParticipant
 	Event            []_event.Event
@@ -81,10 +79,8 @@ func fromCore(dataCore user.Core) User {
 		Password:    dataCore.Password,
 		PhoneNumber: dataCore.PhoneNumber,
 		Address:     dataCore.Address,
-		City:        dataCore.City,
 		UserImage:   dataCore.UserImage,
 		Gender:      dataCore.Gender,
-		Biodata:     dataCore.Biodata,
 	}
 	return userGorm
 }
@@ -98,10 +94,8 @@ func (dataModel *User) toCore() user.Core {
 		Password:    dataModel.Password,
 		PhoneNumber: dataModel.PhoneNumber,
 		Address:     dataModel.Address,
-		City:        dataModel.City,
 		UserImage:   dataModel.UserImage,
 		Gender:      dataModel.Gender,
-		Biodata:     dataModel.Biodata,
 		CreatedAt:   dataModel.CreatedAt,
 		UpdatedAt:   dataModel.UpdatedAt,
 	}

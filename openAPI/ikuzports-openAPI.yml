@@ -71,9 +71,6 @@ paths:
                 address:
                   type: string
                   example: "Jl. Sepak Bola"
-                city:
-                  type: string
-                  example: "Bandung"
                 user_image:
                   type: string
                   format: binary
@@ -81,11 +78,8 @@ paths:
                 gender:
                   type: string
                   enum:
-                    - M
-                    - F
-                biodata:
-                  type: string
-                  example: "saya suka sepak bola"
+                    - Male
+                    - Female
                   
             encoding:
               user_image:

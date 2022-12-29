@@ -30,7 +30,7 @@ func (service *clubActivityService) Create(input clubActivity.Core, idUser int) 
 	}
 	dataMember, errCr := service.clubRepository.GetStatus(int(input.ClubID), idUser)
 	if errCr != nil {
-		return errors.New(" error update club. no data or you have not joined this club")
+		return errors.New(" error create activity. no data or you have not joined this club")
 	}
 	if dataMember.Status != "Owner" {
 		return errors.New(" failed create activity, you are not the owner of the club")
@@ -63,9 +63,9 @@ func (service *clubActivityService) GetAll(queryClubId int) (data []clubActivity
 // Update implements clubActivity.ServiceInterface
 func (service *clubActivityService) Update(input clubActivity.Core, id int, userId int) error {
 
-	dataMember, errCr := service.clubRepository.GetStatus(id, userId)
+	dataMember, errCr := service.clubRepository.GetStatus(int(input.ClubID), userId)
 	if errCr != nil {
-		return errors.New("error update club. no data")
+		return errors.New("error update activity. no data")
 	}
 	if dataMember.Status != "Owner" {
 		return errors.New("failed update data, you are not the owner of the club")

@@ -84,7 +84,7 @@ func (delivery *ProductDelivery) GetByIDImages(c echo.Context) error {
 	}
 	dataResp := fromCoreListImage(res)
 
-	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("success get product data by id", dataResp))
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("success get product images by by id product", dataResp))
 }
 
 func (delivery *ProductDelivery) Update(c echo.Context) error {

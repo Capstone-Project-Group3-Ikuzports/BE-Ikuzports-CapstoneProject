@@ -83,7 +83,7 @@ func (delivery *EventDelivery) GetByID(c echo.Context) error {
 
 	dataResp := fromCore(result)
 
-	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user", dataResp))
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read event", dataResp))
 }
 
 func (delivery *EventDelivery) Delete(c echo.Context) error {
