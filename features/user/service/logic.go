@@ -34,6 +34,11 @@ func (service *userService) Create(input user.Core) (err error) {
 		return errValidate
 	}
 
+	errEmailFormat := emailFormatValidation(input.Email)
+	if errEmailFormat != nil {
+		return errors.New(errEmailFormat.Error())
+	}
+
 	// validasi email harus unik
 	data, errFindEmail := service.userRepository.FindUser(input.Email)
 
@@ -71,11 +76,6 @@ func (service *userService) GetAll() (data []user.Core, err error) {
 		return nil, helper.ServiceErrorMsg(err)
 	}
 
-	if len(data) == 0 {
-		helper.LogDebug("Get data success. No data.")
-		return nil, errors.New("Get data success. No data.")
-	}
-
 	return data, err
 }
 
@@ -84,11 +84,6 @@ func (service *userService) GetById(id int) (data user.Core, err error) {
 	if err != nil {
 		log.Error(err.Error())
 		return user.Core{}, helper.ServiceErrorMsg(err)
-	}
-
-	if (user.Core{}) == data {
-		helper.LogDebug("Get data success. No data.")
-		return user.Core{}, errors.New("Get data success. No data.")
 	}
 
 	return data, err
@@ -139,11 +134,6 @@ func (service *userService) GetClubs(id int) (data []clubMember.Core, err error)
 		return data, helper.ServiceErrorMsg(err)
 	}
 
-	if len(data) == 0 {
-		helper.LogDebug("Get data success. No data.")
-		return nil, errors.New("Get data success. No data.")
-	}
-
 	return data, err
 }
 
@@ -153,11 +143,6 @@ func (service *userService) GetEvents(id int) (data []event.EventCore, err error
 	if err != nil {
 		log.Error(err.Error())
 		return data, helper.ServiceErrorMsg(err)
-	}
-
-	if len(data) == 0 {
-		helper.LogDebug("Get data success. No data.")
-		return nil, errors.New("Get data success. No data.")
 	}
 
 	return data, err
@@ -170,14 +155,6 @@ func (service *userService) GetProducts(id int) (data []product.ProductCore, err
 		log.Error(err.Error())
 		return data, helper.ServiceErrorMsg(err)
 	}
-
-	helper.LogDebug("image: ", data)
-
-	if len(data) == 0 {
-		helper.LogDebug("Get data success. No data.")
-		return nil, errors.New("Get data success. No data.")
-	}
-
 	return data, err
 }
 
@@ -187,11 +164,6 @@ func (service *userService) GetTransactions(id int) (data []transaction.Transact
 	if err != nil {
 		log.Error(err.Error())
 		return data, helper.ServiceErrorMsg(err)
-	}
-
-	if len(data) == 0 {
-		helper.LogDebug("Get data success. No data.")
-		return nil, errors.New("Get data success. No data.")
 	}
 
 	return data, err
