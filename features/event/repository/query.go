@@ -126,7 +126,7 @@ func (repo *eventRepository) GetAll() (data []event.EventCore, err error) {
 func (repo *eventRepository) GetByID(id int) (data event.EventCore, err error) {
 	var event Event
 
-	tx := repo.db.Preload("Category").First(&event, id)
+	tx := repo.db.Preload("User").Preload("Category").First(&event, id)
 	if tx.Error != nil {
 		return data, tx.Error
 	}

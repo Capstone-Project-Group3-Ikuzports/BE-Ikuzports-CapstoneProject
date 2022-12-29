@@ -79,11 +79,12 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	clubMemberServiceFactory := clubMemberService.New(clubMemberRepoFactory, clubRepoFactory)
 	clubMemberDelivery.New(clubMemberServiceFactory, e)
 
+	eventRepoFactory := eventRepo.New(db)
+
 	participantRepoFactory := participantRepo.New(db)
-	participantServiceFactory := participantService.New(participantRepoFactory)
+	participantServiceFactory := participantService.New(participantRepoFactory, eventRepoFactory)
 	participantDelivery.New(participantServiceFactory, e)
 
-	eventRepoFactory := eventRepo.New(db)
 	eventServiceFactory := eventService.New(eventRepoFactory, participantRepoFactory)
 	eventDelivery.New(eventServiceFactory, e)
 

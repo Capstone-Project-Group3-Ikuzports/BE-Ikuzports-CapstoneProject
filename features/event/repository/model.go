@@ -23,6 +23,7 @@ type Event struct {
 	Status           string
 	EventMember      []EventParticipant
 	Category         Category
+	MaximumPeople    int
 }
 
 type User struct {
@@ -58,20 +59,22 @@ func (dataModel *Event) toCore() _eventCore.EventCore {
 		ImageEvent:       dataModel.ImageEvent,
 		Status:           dataModel.Status,
 		Category:         dataModel.Category.toCoreCategory(),
+		MaximumPeople:    dataModel.MaximumPeople,
 	}
 }
 
 func fromCore(dataModel _eventCore.EventCore) Event {
 	eventGorm := Event{
-		Name:       dataModel.Name,
-		UserID:     uint(dataModel.UserID),
-		Address:    dataModel.Address,
-		City:       dataModel.City,
-		CategoryID: dataModel.CategoryID,
-		StartDate:  dataModel.StartDate,
-		EndDate:    dataModel.EndDate,
-		Status:     dataModel.Status,
-		ImageEvent: dataModel.ImageEvent,
+		Name:          dataModel.Name,
+		UserID:        uint(dataModel.UserID),
+		Address:       dataModel.Address,
+		City:          dataModel.City,
+		CategoryID:    dataModel.CategoryID,
+		StartDate:     dataModel.StartDate,
+		EndDate:       dataModel.EndDate,
+		Status:        dataModel.Status,
+		ImageEvent:    dataModel.ImageEvent,
+		MaximumPeople: dataModel.MaximumPeople,
 	}
 	return eventGorm
 }

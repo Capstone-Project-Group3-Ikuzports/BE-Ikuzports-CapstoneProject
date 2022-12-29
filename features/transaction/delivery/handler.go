@@ -19,7 +19,7 @@ func New(service transaction.ServiceInterface, e *echo.Echo) {
 		transactionService: service,
 	}
 	e.POST("/transactions", handler.Create, middlewares.JWTMiddleware())
-	e.POST("/transactions/notif", handler.Update, middlewares.JWTMiddleware())
+	e.POST("/transactions/notif", handler.Update)
 	e.GET("/transactions", handler.GetAll, middlewares.JWTMiddleware())
 	e.GET("/transactions/:id", handler.GetByID, middlewares.JWTMiddleware())
 }
