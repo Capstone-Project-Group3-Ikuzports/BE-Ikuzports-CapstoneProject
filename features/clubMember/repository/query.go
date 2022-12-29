@@ -49,7 +49,7 @@ func (repo *clubMemberRepository) FindMember(id int, idUser int) (data clubMembe
 
 // UpdateMember implements clubMember.RepositoryInterface
 func (repo *clubMemberRepository) UpdateMember(id int) error {
-	tx := repo.db.Exec("UPDATE clubs SET joined_member = (SELECT COUNT(user_id) FROM club_members WHERE club_id = ? and deleted_at is null) WHERE id = ?", id, id)
+	tx := repo.db.Exec("UPDATE clubs SET joined_member = (SELECT COUNT(user_id) FROM club_members WHERE club_id = ? and status != ? and deleted_at is null) WHERE id = ?", id, "Requested", id)
 	if tx.Error != nil {
 		return tx.Error
 	}

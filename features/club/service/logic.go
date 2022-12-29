@@ -60,20 +60,29 @@ func (service *clubService) Create(input club.Core, id int) error {
 }
 
 // GetAll implements club.ServiceInterface
-func (service *clubService) GetAll(queryName string, queryCity string, queryCategoryID int) (data []club.Core, err error) {
+func (service *clubService) GetAll(queryName string, queryCity string, queryCategoryID int, queryPage int) (data []club.Core, page int, err error) {
+	limit := 10
+	offset := (queryPage - 1) * limit
+	var jumlahData int
 
 	if queryName == "" && queryCity == "" && queryCategoryID == 0 {
-		data, err = service.clubRepository.GetAll()
+		data, jumlahData, err = service.clubRepository.GetAll(offset, limit)
 	} else {
-		data, err = service.clubRepository.GetAllWithSearch(queryName, queryCity, queryCategoryID)
+		data, jumlahData, err = service.clubRepository.GetAllWithSearch(queryName, queryCity, queryCategoryID, offset, limit)
+	}
+
+	if jumlahData%limit == 0 {
+		page = jumlahData / limit
+	} else {
+		page = (jumlahData / limit) + 1
 	}
 
 	if err != nil {
 		helper.LogDebug(err)
-		return nil, helper.ServiceErrorMsg(err)
+		return nil, 0, helper.ServiceErrorMsg(err)
 	}
 
-	return data, nil
+	return data, page, nil
 }
 
 // GetById implements club.ServiceInterface
