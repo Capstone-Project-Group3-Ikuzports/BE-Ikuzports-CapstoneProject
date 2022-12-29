@@ -14,6 +14,7 @@ type EventRequest struct {
 	EndDate       string `json:"end_date" form:"end_date"`
 	ImageEvent    string `json:"image_event" form:"image_event"`
 	MaximumPeople int    `json:"maximum_people" form:"maximum_people"`
+	Description   string `json:"description" form:"description"`
 }
 
 func toCore(eventInput EventRequest) event.EventCore {
@@ -26,6 +27,7 @@ func toCore(eventInput EventRequest) event.EventCore {
 		EndDate:       timeParsing(eventInput.EndDate),
 		ImageEvent:    eventInput.ImageEvent,
 		MaximumPeople: eventInput.MaximumPeople,
+		Description:   eventInput.Description,
 	}
 	return eventCoreData
 }

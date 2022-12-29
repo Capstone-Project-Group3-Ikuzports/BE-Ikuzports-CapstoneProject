@@ -83,7 +83,7 @@ func (delivery *UserDelivery) Create(c echo.Context) error {
 	if file != nil {
 		res, err := thirdparty.UploadProfile(c, "user_image")
 		if err != nil {
-			return errors.New("Failed. Cannot Upload Data.")
+			return errors.New("failed. cannot upload data")
 		}
 		dataCore.UserImage = res
 	} else {
@@ -114,16 +114,16 @@ func (delivery *UserDelivery) Update(c echo.Context) error {
 	if errBind != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error binding data. "+errBind.Error()))
 	}
-
 	dataCore := toCore(userInput)
 	// upload foto
 	file, _ := c.FormFile("user_image")
 	if file != nil {
 		res, err := thirdparty.UploadProfile(c, "user_image")
 		if err != nil {
-			return errors.New("Failed. Cannot Upload Data.")
+			return errors.New("failed. cannot upload data")
 		}
-		userInput.UserImage = res
+		dataCore.UserImage = res
+		helper.LogDebug("foto:", userInput.UserImage)
 	} else {
 		userInput.UserImage = "https://www.hostpapa.com/knowledgebase/wp-content/uploads/2018/04/1-13.png"
 	}

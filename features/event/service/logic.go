@@ -25,6 +25,7 @@ func New(repo event.RepositoryInterface, parRepo participant.RepositoryInterface
 }
 
 func (service *eventService) Create(input event.EventCore) (err error) {
+	helper.LogDebug(input)
 	if errValidate := service.validate.Struct(input); errValidate != nil {
 		return errValidate
 	}
