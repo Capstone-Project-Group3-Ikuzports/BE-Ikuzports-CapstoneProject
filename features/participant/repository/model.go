@@ -22,14 +22,14 @@ func fromCore(dataModel participant.ParticipantCore) EventParticipant {
 	return eventGorm
 }
 
-// func (dataModel *EventParticipant) toCore() participant.ParticipantCore {
-// 	return participant.ParticipantCore{
-// 		ID:      dataModel.ID,
-// 		UserID:  dataModel.UserID,
-// 		EventID: dataModel.EventID,
-// 		Status:  dataModel.Status,
-// 	}
-// }
+func (dataModel *EventParticipant) toCore() participant.ParticipantCore {
+	return participant.ParticipantCore{
+		ID:      dataModel.ID,
+		UserID:  dataModel.UserID,
+		EventID: dataModel.EventID,
+		Status:  dataModel.Status,
+	}
+}
 
 // func toCoreList(dataModel []EventParticipant) []participant.ParticipantCore {
 // 	var dataCore []participant.ParticipantCore

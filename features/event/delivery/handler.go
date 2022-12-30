@@ -59,12 +59,13 @@ func (delivery *EventDelivery) GetAll(c echo.Context) error {
 	queryCategoryID, _ := strconv.Atoi(c.QueryParam("category_id"))
 	queryCity := c.QueryParam("city")
 	queryStatus := c.QueryParam("status")
+	queryPage, _ := strconv.Atoi(c.QueryParam("page"))
 
 	helper.LogDebug("\n isi queryCategoryID = ", queryCategoryID)
 	helper.LogDebug("\n isi queryCity = ", queryCity)
 	helper.LogDebug("\n isi queryStatus= ", queryStatus)
 
-	result, err := delivery.eventService.GetAll(queryCategoryID, queryCity, queryStatus)
+	result, err := delivery.eventService.GetAll(queryCategoryID, queryPage, queryCity, queryStatus)
 
 	dataResp := fromCoreList(result)
 	if err != nil {

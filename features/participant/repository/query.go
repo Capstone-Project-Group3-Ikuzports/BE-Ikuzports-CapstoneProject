@@ -17,6 +17,18 @@ func New(db *gorm.DB) participant.RepositoryInterface {
 	}
 }
 
+func (repo *participantRepository) FindMember(eventID int, userID int) (data participant.ParticipantCore, err error) {
+	var participant EventParticipant
+
+	tx := repo.db.Where("event_id = ?", eventID).Where("user_id = ?", userID).First(&participant)
+	if tx.Error != nil {
+		return data, tx.Error
+	}
+	var dataCore = participant.toCore()
+
+	return dataCore, nil
+}
+
 func (repo *participantRepository) Create(data participant.ParticipantCore) (row int, err error) {
 	gormData := fromCore(data)
 

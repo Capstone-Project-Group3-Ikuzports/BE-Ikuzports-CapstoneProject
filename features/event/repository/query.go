@@ -97,9 +97,9 @@ func (repo *eventRepository) UpdateStatus(id int, status string) (rows int, err 
 	return int(tx.RowsAffected), nil
 }
 
-func (repo *eventRepository) GetAllFilter(queryCategoryID int, queryCity, queryStatus string) (data []event.EventCore, err error) {
+func (repo *eventRepository) GetAllFilter(limit, offset, queryCategoryID int, queryCity, queryStatus string) (data []event.EventCore, err error) {
 	var event []Event
-	tx := repo.db.Preload("User").Preload("Category").Where(&Event{CategoryID: uint(queryCategoryID), City: queryCity, Status: queryStatus}).Order("updated_at desc").Find(&event)
+	tx := repo.db.Preload("User").Preload("Category").Where(&Event{CategoryID: uint(queryCategoryID), City: queryCity, Status: queryStatus}).Order("updated_at desc").Limit(limit).Offset(offset).Find(&event)
 
 	if tx.Error != nil {
 		return nil, tx.Error
@@ -111,10 +111,10 @@ func (repo *eventRepository) GetAllFilter(queryCategoryID int, queryCity, queryS
 
 }
 
-func (repo *eventRepository) GetAll() (data []event.EventCore, err error) {
+func (repo *eventRepository) GetAll(limit, offset int) (data []event.EventCore, err error) {
 	var event []Event
 
-	tx := repo.db.Preload("User").Preload("Category").Find(&event)
+	tx := repo.db.Preload("User").Preload("Category").Order("updated_at desc").Limit(limit).Offset(offset).Find(&event)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
