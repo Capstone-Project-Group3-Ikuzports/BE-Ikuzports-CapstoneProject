@@ -22,6 +22,12 @@ func New(repo participant.RepositoryInterface, eventRepo event.RepositoryInterfa
 }
 
 func (service *participantService) Create(data participant.ParticipantCore) (err error) {
+	dataParticipant, _ := service.participantRepository.FindMember(data.EventID, data.UserID)
+
+	if dataParticipant.EventID == data.EventID && dataParticipant.UserID == data.UserID {
+		return errors.New(" failed to join, you are already in this event")
+	}
+
 	dataEvent, errEvent := service.eventRepository.GetByID(data.EventID)
 	if errEvent != nil {
 		log.Error(err.Error())

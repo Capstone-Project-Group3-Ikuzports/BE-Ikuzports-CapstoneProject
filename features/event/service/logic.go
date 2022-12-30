@@ -29,6 +29,9 @@ func (service *eventService) Create(input event.EventCore) (err error) {
 	if errValidate := service.validate.Struct(input); errValidate != nil {
 		return errValidate
 	}
+	if input.EndDate.Unix() < input.StartDate.Unix() {
+		return errors.New("error input date")
+	}
 
 	input.Status = "Available"
 
@@ -60,7 +63,10 @@ func (service *eventService) Create(input event.EventCore) (err error) {
 	return nil
 }
 
-func (service *eventService) GetAll(queryCategoryID int, queryCity, queryStatus string) (data []event.EventCore, err error) {
+func (service *eventService) GetAll(queryCategoryID, queryPage int, queryCity, queryStatus string) (data []event.EventCore, err error) {
+	limit := 15
+	offset := (queryPage - 1) * limit
+
 	dataDate, errDate := service.eventRepository.GetDate()
 	if errDate != nil {
 		return nil, errDate
@@ -72,10 +78,10 @@ func (service *eventService) GetAll(queryCategoryID int, queryCity, queryStatus 
 		}
 	}
 
-	if queryCategoryID == -1 && queryCity == "" && queryStatus == "" {
-		data, err = service.eventRepository.GetAll()
+	if queryCategoryID == 0 && queryCity == "" && queryStatus == "" {
+		data, err = service.eventRepository.GetAll(limit, offset)
 	} else {
-		data, err = service.eventRepository.GetAllFilter(queryCategoryID, queryCity, queryStatus)
+		data, err = service.eventRepository.GetAllFilter(limit, offset, queryCategoryID, queryCity, queryStatus)
 	}
 
 	if err != nil {

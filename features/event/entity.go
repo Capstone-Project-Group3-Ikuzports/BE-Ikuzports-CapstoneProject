@@ -33,8 +33,8 @@ type Category struct {
 }
 
 type RepositoryInterface interface {
-	GetAll() (data []EventCore, err error)
-	GetAllFilter(queryCategoryID int, queryCity, queryStatus string) (data []EventCore, err error)
+	GetAll(limit, offset int) (data []EventCore, err error)
+	GetAllFilter(offset, limit, queryCategoryID int, queryCity, queryStatus string) (data []EventCore, err error)
 	Create(input EventCore) (row int, err error)
 	GetByID(id int) (data EventCore, err error)
 	Delete(id int) (row int, err error)
@@ -45,7 +45,7 @@ type RepositoryInterface interface {
 }
 
 type ServiceInterface interface {
-	GetAll(queryCategoryID int, queryCity, queryStatus string) (data []EventCore, err error)
+	GetAll(queryCategoryID, queryPage int, queryCity, queryStatus string) (data []EventCore, err error)
 	Create(input EventCore) (err error)
 	GetByID(id int) (data EventCore, err error)
 	Delete(id int) (err error)
