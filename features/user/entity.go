@@ -19,7 +19,6 @@ type Core struct {
 	City        string
 	UserImage   string
 	Gender      string
-	Biodata     string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }

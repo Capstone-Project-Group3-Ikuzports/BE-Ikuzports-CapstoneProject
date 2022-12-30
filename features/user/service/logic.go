@@ -8,7 +8,6 @@ import (
 	"ikuzports/features/transaction"
 	"ikuzports/features/user"
 	"ikuzports/utils/helper"
-	"strings"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/gommon/log"
@@ -34,7 +33,12 @@ func (service *userService) Create(input user.Core) (err error) {
 		return errValidate
 	}
 
-	errEmailFormat := emailFormatValidation(input.Email)
+	str := helper.ValidatePassword(input.Password)
+	if str != "Valid" {
+		return errors.New(str)
+	}
+
+	errEmailFormat := helper.EmailFormatValidation(input.Email)
 	if errEmailFormat != nil {
 		return errors.New(errEmailFormat.Error())
 	}
@@ -46,23 +50,20 @@ func (service *userService) Create(input user.Core) (err error) {
 		return errors.New("Email " + input.Email + " already exist. Please pick another email.")
 	}
 
-	if errFindEmail != nil && !strings.Contains(errFindEmail.Error(), "found") {
-		return helper.ServiceErrorMsg(errFindEmail)
-	}
+	if errFindEmail != nil { // ketika error = email belum terpakai, proses berjalan
+		bytePass, errEncrypt := bcrypt.GenerateFromPassword([]byte(input.Password), 10)
+		if errEncrypt != nil {
+			log.Error(errEncrypt.Error())
+			return helper.ServiceErrorMsg(err)
+		}
 
-	bytePass, errEncrypt := bcrypt.GenerateFromPassword([]byte(input.Password), 10)
-	if errEncrypt != nil {
-		log.Error(errEncrypt.Error())
-		return helper.ServiceErrorMsg(err)
+		input.Password = string(bytePass)
+		errCreate := service.userRepository.Create(input)
+		if errCreate != nil {
+			log.Error(errCreate.Error())
+			return helper.ServiceErrorMsg(err)
+		}
 	}
-
-	input.Password = string(bytePass)
-	errCreate := service.userRepository.Create(input)
-	if errCreate != nil {
-		log.Error(errCreate.Error())
-		return helper.ServiceErrorMsg(err)
-	}
-
 	return nil
 }
 
@@ -102,15 +103,13 @@ func (service *userService) Update(input user.Core, id int) error {
 		return errors.New("Failed. Email " + input.Email + " already exist at other user. Please pick another email.")
 	}
 
-	if errFindEmail != nil && !strings.Contains(errFindEmail.Error(), "found") {
-		return helper.ServiceErrorMsg(errFindEmail)
-	}
+	if errFindEmail != nil { //ketika error = email belum ada, proses berjalan
+		err := service.userRepository.Update(input, id)
+		if err != nil {
+			log.Error(err.Error())
+			return helper.ServiceErrorMsg(err)
+		}
 
-	// proses
-	err := service.userRepository.Update(input, id)
-	if err != nil {
-		log.Error(err.Error())
-		return helper.ServiceErrorMsg(err)
 	}
 
 	return nil
