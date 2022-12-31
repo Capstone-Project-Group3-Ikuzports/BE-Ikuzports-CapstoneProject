@@ -40,7 +40,7 @@ func (service *userService) Create(input user.Core) (err error) {
 
 	errEmailFormat := helper.EmailFormatValidation(input.Email)
 	if errEmailFormat != nil {
-		return errors.New(errEmailFormat.Error())
+		return errors.New("failed syntax email address. email must contain `@` and domain name")
 	}
 
 	// validasi email harus unik
@@ -105,7 +105,7 @@ func (service *userService) Update(input user.Core, id int) error {
 	if input.Email != "" {
 		errEmailFormat := helper.EmailFormatValidation(input.Email)
 		if errEmailFormat != nil {
-			return errors.New(errEmailFormat.Error())
+			return errors.New("failed syntax email address. email must contain `@` and domain name")
 		}
 	}
 	// validasi email harus unik pas update, kalau email nya sama dgn punya dia gpp

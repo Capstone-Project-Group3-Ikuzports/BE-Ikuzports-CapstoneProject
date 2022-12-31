@@ -136,13 +136,6 @@ func fromEventList(dataCore []event.EventCore) []_event.EventResponse {
 }
 
 func fromProduct(dataCore product.ProductCore) _product.ProductResponse {
-	// var arrMember []_product.ProductImage
-	// for _, val := range dataCore.ProductImage {
-	// 	arrMember = append(arrMember, _product.ProductImage{
-	// 		ID:  val.ID,
-	// 		Url: val.URL,
-	// 	})
-	// }
 	return _product.ProductResponse{
 		ID:               dataCore.ID,
 		Name:             dataCore.Name,
@@ -151,7 +144,7 @@ func fromProduct(dataCore product.ProductCore) _product.ProductResponse {
 		UserName:         dataCore.User.Name,
 		ItemCategoryName: dataCore.ItemCategory.Name,
 		City:             dataCore.City,
-		// ProductImage:     arrMember,
+		ProductImage:     fromCoreListImage(dataCore.ProductImage),
 	}
 }
 
@@ -159,6 +152,21 @@ func fromProductList(dataCore []product.ProductCore) []_product.ProductResponse 
 	var dataResponse []_product.ProductResponse
 	for _, v := range dataCore {
 		dataResponse = append(dataResponse, fromProduct(v))
+	}
+	return dataResponse
+}
+
+func fromCoreImage(data product.ProductImage) _product.ProductImage {
+	return _product.ProductImage{
+		ID:  data.ID,
+		Url: data.URL,
+	}
+}
+
+func fromCoreListImage(dataCore []product.ProductImage) []_product.ProductImage {
+	var dataResponse []_product.ProductImage
+	for _, v := range dataCore {
+		dataResponse = append(dataResponse, fromCoreImage(v))
 	}
 	return dataResponse
 }

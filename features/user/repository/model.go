@@ -9,7 +9,6 @@ import (
 	_event "ikuzports/features/event/repository"
 	"ikuzports/features/product"
 	_product "ikuzports/features/product/repository"
-	_image "ikuzports/features/productImage/repository"
 	"ikuzports/features/transaction"
 	_transaction "ikuzports/features/transaction/repository"
 	"ikuzports/features/user"
@@ -66,7 +65,8 @@ type Category struct {
 }
 
 type ProductImage struct {
-	_image.ProductImage
+	gorm.Model
+	_product.ProductImage
 }
 
 // mapping
@@ -198,13 +198,6 @@ func toEventList(dataModel []Event) []event.EventCore {
 }
 
 func (dataModel *Product) toCoreProduct() product.ProductCore {
-	// var arrImages []product.ProductImage
-	// for _, val := range dataModel.image {
-	// 	arrImages = append(arrImages, product.ProductImage{
-	// 		ID:  val.ID,
-	// 		URL: val.Url,
-	// 	})
-	// }
 	return product.ProductCore{
 		ID:          dataModel.ID,
 		Name:        dataModel.Name,
@@ -218,8 +211,8 @@ func (dataModel *Product) toCoreProduct() product.ProductCore {
 		ItemCategory: product.ItemCategory{
 			Name: dataModel.ItemCategory.Name,
 		},
-		// ProductImage: arrImages,
-		City: dataModel.City,
+		City:         dataModel.City,
+		ProductImage: toProductCoreListImage(dataModel.image),
 	}
 }
 
@@ -229,6 +222,20 @@ func toProductList(dataModel []Product) []product.ProductCore {
 		dataCore = append(dataCore, v.toCoreProduct())
 	}
 	return dataCore
+}
+func (dataModel *ProductImage) toCoreProductImage() product.ProductImage {
+	return product.ProductImage{
+		ID:  dataModel.ID,
+		URL: dataModel.URL,
+	}
+}
+
+func toProductCoreListImage(dataModel []ProductImage) []product.ProductImage {
+	var dataCoreImage []product.ProductImage
+	for _, v := range dataModel {
+		dataCoreImage = append(dataCoreImage, v.toCoreProductImage())
+	}
+	return dataCoreImage
 }
 
 func (dataModel *Transaction) toCoreTransaction() transaction.TransactionCore {

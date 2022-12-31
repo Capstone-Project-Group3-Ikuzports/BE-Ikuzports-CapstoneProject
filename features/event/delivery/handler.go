@@ -22,7 +22,7 @@ func New(service event.ServiceInterface, e *echo.Echo) {
 		eventService: service,
 	}
 	e.POST("/events", handler.Create, middlewares.JWTMiddleware())
-	e.GET("/events", handler.GetAll, middlewares.JWTMiddleware())
+	e.GET("/events", handler.GetAll)
 	e.GET("/events/:id", handler.GetByID, middlewares.JWTMiddleware())
 }
 
