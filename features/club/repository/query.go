@@ -99,7 +99,7 @@ func (repo *clubRepository) GetAllWithSearch(queryName, queryCity string, queryC
 		return nil, 0, ty.Error
 	}
 
-	tx := repo.db.Preload("Category").Where("name LIKE ?", "%"+queryName+"%").Where(&Club{CategoryID: uint(queryCategoryID), City: queryCity}).Order("created_at desc").Find(&club)
+	tx := repo.db.Preload("Category").Where("name LIKE ?", "%"+queryName+"%").Where(&Club{CategoryID: uint(queryCategoryID), City: queryCity}).Offset(offset).Limit(limit).Order("created_at desc").Find(&club)
 	if tx.Error != nil {
 		return nil, 0, tx.Error
 	}

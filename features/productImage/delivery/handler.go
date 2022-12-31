@@ -22,8 +22,8 @@ func New(service productImage.ServiceInterface, e *echo.Echo) {
 		productImageService: service,
 	}
 	e.POST("/products_images", handler.Create, middlewares.JWTMiddleware())
-	e.GET("/products_images", handler.GetAll, middlewares.JWTMiddleware())
-	e.GET("/products_images/:id", handler.GetByID, middlewares.JWTMiddleware())
+	e.GET("/products_images", handler.GetAll)
+	e.GET("/products_images/:id", handler.GetByID)
 }
 
 func (delivery *ProductImageDelivery) Create(c echo.Context) error {

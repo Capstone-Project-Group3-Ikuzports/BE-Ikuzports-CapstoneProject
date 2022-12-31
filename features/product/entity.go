@@ -30,8 +30,8 @@ type ProductImage struct {
 }
 
 type RepositoryInterface interface {
-	GetAll() (data []ProductCore, err error)
-	GetAllFilter(queryItemCategoryID int, queryCity, queryName string) (data []ProductCore, err error)
+	GetAll(limit, offset int) (data []ProductCore, page int, err error)
+	GetAllFilter(queryItemCategoryID int, queryCity, queryName string, offet, limit int) (data []ProductCore, page int, err error)
 	Create(input ProductCore) (row int, err error)
 	GetByID(id int) (dataCore ProductCore, err error)
 	Update(id int, input ProductCore) (row int, err error)
@@ -40,7 +40,7 @@ type RepositoryInterface interface {
 }
 
 type ServiceInterface interface {
-	GetAll(queryItemCategoryID int, queryCity, queryName string) (data []ProductCore, err error)
+	GetAll(queryItemCategoryID int, queryCity, queryName string, queryPage int) (data []ProductCore, page int, err error)
 	Create(input ProductCore) (err error)
 	GetByID(id int) (dataCore ProductCore, err error)
 	Update(id int, input ProductCore) (err error)

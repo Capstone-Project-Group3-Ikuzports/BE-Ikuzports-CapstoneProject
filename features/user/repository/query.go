@@ -7,6 +7,7 @@ import (
 	"ikuzports/features/product"
 	"ikuzports/features/transaction"
 	"ikuzports/features/user"
+	"ikuzports/utils/helper"
 
 	"gorm.io/gorm"
 )
@@ -140,10 +141,12 @@ func (repo *userRepository) GetEvents(id int) (data []event.EventCore, err error
 // GetProducts implements user.RepositoryInterface
 func (repo *userRepository) GetProducts(id int) (data []product.ProductCore, err error) {
 	var products []Product
-	tx := repo.db.Preload("ProductImage").Preload("User").Preload("ItemCategory").Where("user_id = ?", id).Find(&products)
+	tx := repo.db.Preload("User").Preload("ProductImage").Preload("ItemCategory").Where("user_id = ?", id).Find(&products)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
+	helper.LogDebug(products[1].ProductImage)
+	helper.LogDebug("==========")
 	var dataCore = toProductList(products)
 	return dataCore, nil
 }

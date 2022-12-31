@@ -23,7 +23,7 @@ func New(service club.ServiceInterface, e *echo.Echo) {
 		clubService: service,
 	}
 
-	e.GET("/clubs", handler.GetAll, middlewares.JWTMiddleware())
+	e.GET("/clubs", handler.GetAll)
 	e.GET("/clubs/:id", handler.GetById, middlewares.JWTMiddleware())
 	e.POST("/clubs", handler.Create, middlewares.JWTMiddleware())
 	e.PUT("/clubs/:id", handler.Update, middlewares.JWTMiddleware())

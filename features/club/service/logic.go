@@ -61,7 +61,7 @@ func (service *clubService) Create(input club.Core, id int) error {
 
 // GetAll implements club.ServiceInterface
 func (service *clubService) GetAll(queryName string, queryCity string, queryCategoryID int, queryPage int) (data []club.Core, page int, err error) {
-	limit := 10
+	limit := 9
 	offset := (queryPage - 1) * limit
 	var jumlahData int
 
