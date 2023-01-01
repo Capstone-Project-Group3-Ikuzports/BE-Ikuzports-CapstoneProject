@@ -4,7 +4,6 @@ import (
 	"errors"
 	"ikuzports/features/clubMember"
 	"ikuzports/features/event"
-	"ikuzports/features/product"
 	"ikuzports/features/transaction"
 	"ikuzports/features/user"
 	"ikuzports/utils/helper"
@@ -139,7 +138,7 @@ func (repo *userRepository) GetEvents(id int) (data []event.EventCore, err error
 }
 
 // GetProducts implements user.RepositoryInterface
-func (repo *userRepository) GetProducts(id int) (data []product.ProductCore, err error) {
+func (repo *userRepository) GetProducts(id int) (data []user.ProductCore, err error) {
 	var products []Product
 	tx := repo.db.Preload("User").Preload("ProductImage").Preload("ItemCategory").Where("user_id = ?", id).Find(&products)
 	if tx.Error != nil {
