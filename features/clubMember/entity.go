@@ -52,4 +52,5 @@ type RepositoryInterface interface {
 	Delete(id int) error
 	FindMember(id, idUser int) (data Core, err error)
 	UpdateMember(id int) error
+	DeleteMember(idClub int) error
 }

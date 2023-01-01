@@ -128,3 +128,16 @@ func (repo *clubMemberRepository) Delete(id int) error {
 	}
 	return nil
 }
+
+// DeleteMember implements clubMember.RepositoryInterface
+func (repo *clubMemberRepository) DeleteMember(idClub int) error {
+	var member ClubMember
+	tx := repo.db.Where("club_id = ?", idClub).Delete(&member) // proses delete
+	if tx.Error != nil {
+		return tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return errors.New("delete failed")
+	}
+	return nil
+}

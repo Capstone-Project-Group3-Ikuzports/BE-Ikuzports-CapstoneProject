@@ -120,7 +120,7 @@ func (service *clubService) Delete(id int, userId int) error {
 	dataMember, errCr := service.clubRepository.GetStatus(id, userId)
 	if errCr != nil {
 		helper.LogDebug("\n isi datamember = ", dataMember)
-		return errors.New("error delete club. error query")
+		return errors.New("error delete club. no data")
 	}
 	if dataMember.Status != "Owner" {
 		return errors.New("failed delete data, you are not the owner of the club")
@@ -130,6 +130,11 @@ func (service *clubService) Delete(id int, userId int) error {
 	if err != nil {
 		log.Error(err.Error())
 		return helper.ServiceErrorMsg(err)
+	}
+
+	errr := service.clubMemberRepository.DeleteMember(id)
+	if errr != nil {
+		return errors.New("error delete member by id club, error query")
 	}
 	return nil
 }
