@@ -103,6 +103,9 @@ func (dataCore *ClubMember) toCoreMember() club.Status {
 	return club.Status{
 		ID:     dataCore.ID,
 		UserID: dataCore.UserID,
+		User: club.User{
+			Name: dataCore.User.Name,
+		},
 		ClubID: dataCore.ClubID,
 		Status: dataCore.Status,
 	}

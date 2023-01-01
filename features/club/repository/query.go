@@ -143,7 +143,7 @@ func (repo *clubRepository) Update(input club.Core, id int) error {
 func (repo *clubRepository) GetStatus(id int, userId int) (data club.Status, err error) {
 	var member ClubMember
 
-	tx := repo.db.Where("club_id = ?", id).Where("user_id = ?", userId).First(&member)
+	tx := repo.db.Preload("User").Where("club_id = ?", id).Where("user_id = ?", userId).First(&member)
 	if tx.Error != nil {
 		return data, tx.Error
 	}

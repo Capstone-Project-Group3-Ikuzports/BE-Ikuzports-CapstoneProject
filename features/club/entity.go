@@ -32,12 +32,14 @@ type Category struct {
 }
 
 type User struct {
-	ID   uint
-	Name string
+	ID    uint
+	Name  string
+	Email string
 }
 type Status struct {
 	ID     uint
 	UserID uint
+	User   User
 	ClubID uint
 	Status string
 }
