@@ -1,7 +1,6 @@
 package service
 
 import (
-	"errors"
 	"ikuzports/features/product"
 	"ikuzports/utils/helper"
 
@@ -21,24 +20,29 @@ func New(repo product.RepositoryInterface) product.ServiceInterface {
 	}
 }
 
-func (service *productService) GetAll(queryItemCategoryID int, queryCity, queryName string) (data []product.ProductCore, err error) {
+func (service *productService) GetAll(queryItemCategoryID int, queryCity, queryName string, queryPage int) (data []product.ProductCore, page int, err error) {
+	limit := 9
+	offset := (queryPage - 1) * limit
+	var jumlahData int
+
 	if queryName == "" && queryCity == "" && queryItemCategoryID == 0 {
-		data, err = service.productRepository.GetAll()
+		data, jumlahData, err = service.productRepository.GetAll(limit, offset)
 	} else {
-		data, err = service.productRepository.GetAllFilter(queryItemCategoryID, queryCity, queryName)
+		data, jumlahData, err = service.productRepository.GetAllFilter(queryItemCategoryID, queryCity, queryName, limit, offset)
 	}
 
 	if err != nil {
 		helper.LogDebug(err)
-		return nil, helper.ServiceErrorMsg(err)
+		return nil, 0, helper.ServiceErrorMsg(err)
 	}
 
-	if len(data) == 0 {
-		helper.LogDebug("Get data success. No data.")
-		return nil, errors.New("Get data success. No data.")
+	if jumlahData%limit == 0 {
+		page = jumlahData / limit
+	} else {
+		page = (jumlahData / limit) + 1
 	}
 
-	return data, nil
+	return data, page, nil
 }
 
 func (service *productService) Create(input product.ProductCore) (err error) {

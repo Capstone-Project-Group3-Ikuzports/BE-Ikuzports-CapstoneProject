@@ -17,30 +17,42 @@ func New(db *gorm.DB) product.RepositoryInterface {
 	}
 }
 
-func (repo *productRepository) GetAll() (data []product.ProductCore, err error) {
+func (repo *productRepository) GetAll(limit, offset int) (data []product.ProductCore, page int, err error) {
 	var product []Product
-	tx := repo.db.Preload("User").Preload("ItemCategory").Order("updated_at desc").Find(&product)
+	var jumlahData int64
+
+	ty := repo.db.Preload("Category").Model(&Product{}).Order("created_at desc").Count(&jumlahData)
+	if ty.Error != nil {
+		return nil, 0, ty.Error
+	}
+	tx := repo.db.Preload("User").Preload("ProductImage").Preload("ItemCategory").Offset(offset).Limit(limit).Order("updated_at desc").Find(&product)
 	if tx.Error != nil {
-		return nil, tx.Error
+		return nil, 0, tx.Error
 	}
 
 	dataCore := toCoreList(product)
 
-	return dataCore, nil
+	return dataCore, int(jumlahData), nil
 
 }
 
-func (repo *productRepository) GetAllFilter(queryItemCategoryID int, queryCity, queryName string) (data []product.ProductCore, err error) {
+func (repo *productRepository) GetAllFilter(queryItemCategoryID int, queryCity, queryName string, limit, offset int) (data []product.ProductCore, page int, err error) {
 	var product []Product
-	tx := repo.db.Where("name LIKE ?", "%"+queryName+"%").Where(&Product{ItemCategoryID: uint(queryItemCategoryID), City: queryCity}).Preload("User").Preload("ItemCategory").Order("updated_at desc").Find(&product)
+	var jumlahData int64
+
+	ty := repo.db.Preload("Category").Model(&Product{}).Order("created_at desc").Count(&jumlahData)
+	if ty.Error != nil {
+		return nil, 0, ty.Error
+	}
+	tx := repo.db.Where("name LIKE ?", "%"+queryName+"%").Where(&Product{ItemCategoryID: uint(queryItemCategoryID), City: queryCity}).Preload("User").Preload("ProductImage").Preload("ItemCategory").Offset(offset).Limit(limit).Order("updated_at desc").Find(&product)
 
 	if tx.Error != nil {
-		return nil, tx.Error
+		return nil, 0, tx.Error
 	}
 
 	dataCore := toCoreList(product)
 
-	return dataCore, nil
+	return dataCore, int(jumlahData), nil
 
 }
 

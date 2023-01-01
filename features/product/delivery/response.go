@@ -3,13 +3,14 @@ package delivery
 import "ikuzports/features/product"
 
 type ProductResponse struct {
-	ID               uint   `json:"id"`
-	Name             string `json:"name"`
-	Price            uint   `json:"price"`
-	UserName         string `json:"user_name"`
-	Description      string `json:"description"`
-	ItemCategoryName string `json:"itemcategory_name"`
-	City             string `json:"city"`
+	ID               uint           `json:"id"`
+	Name             string         `json:"name"`
+	Price            uint           `json:"price"`
+	UserName         string         `json:"user_name"`
+	Description      string         `json:"description"`
+	ItemCategoryName string         `json:"itemcategory_name"`
+	City             string         `json:"city"`
+	ProductImage     []ProductImage `json:"product_image"`
 }
 
 type ProductResponseImage struct {
@@ -37,6 +38,7 @@ func fromCore(dataCore product.ProductCore) ProductResponse {
 		Description:      dataCore.Description,
 		ItemCategoryName: dataCore.ItemCategory.Name,
 		City:             dataCore.City,
+		ProductImage:     fromCoreListImage(dataCore.ProductImage),
 	}
 }
 
@@ -46,13 +48,6 @@ func fromCoreList(dataCore []product.ProductCore) []ProductResponse {
 		dataResponse = append(dataResponse, fromCore(v))
 	}
 	return dataResponse
-}
-
-func fromCoreImage(data product.ProductImage) ProductImage {
-	return ProductImage{
-		ID:  data.ID,
-		Url: data.URL,
-	}
 }
 
 func fromImageCore(dataCore product.ProductCore) ProductResponseImage {
@@ -65,6 +60,13 @@ func fromImageCore(dataCore product.ProductCore) ProductResponseImage {
 		ItemCategoryName: dataCore.ItemCategory.Name,
 		City:             dataCore.City,
 		ProductImage:     fromCoreListImage(dataCore.ProductImage),
+	}
+}
+
+func fromCoreImage(data product.ProductImage) ProductImage {
+	return ProductImage{
+		ID:  data.ID,
+		Url: data.URL,
 	}
 }
 

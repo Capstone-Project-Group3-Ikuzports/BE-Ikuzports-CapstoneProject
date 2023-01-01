@@ -18,10 +18,10 @@ func New(service product.ServiceInterface, e *echo.Echo) {
 	handler := &ProductDelivery{
 		productService: service,
 	}
-	e.GET("/products", handler.GetAll, middlewares.JWTMiddleware())
+	e.GET("/products", handler.GetAll)
 	e.POST("/products", handler.Create, middlewares.JWTMiddleware())
 	e.GET("/products/:id", handler.GetByID, middlewares.JWTMiddleware())
-	e.GET("/products/:id/products_images", handler.GetByIDImages, middlewares.JWTMiddleware())
+	e.GET("/products/:id/products_images", handler.GetByIDImages)
 	e.PUT("/products/:id", handler.Update, middlewares.JWTMiddleware())
 	e.DELETE("/products/:id", handler.Delete, middlewares.JWTMiddleware())
 }
@@ -30,18 +30,19 @@ func (delivery *ProductDelivery) GetAll(c echo.Context) error {
 	queryItemCategoryID, _ := strconv.Atoi(c.QueryParam("itemcategory_id"))
 	queryCity := c.QueryParam("city")
 	queryName := c.QueryParam("name")
+	queryPage, _ := strconv.Atoi(c.QueryParam("page"))
 
 	helper.LogDebug("\n isi queryItemCategoryID = ", queryItemCategoryID)
 	helper.LogDebug("\n isi queryCity = ", queryCity)
 	helper.LogDebug("\n isi queryName= ", queryName)
 
-	res, err := delivery.productService.GetAll(queryItemCategoryID, queryCity, queryName)
+	res, page, err := delivery.productService.GetAll(queryItemCategoryID, queryCity, queryName, queryPage)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error get all product data"))
 	}
 	dataResp := fromCoreList(res)
 
-	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("success get all product data", dataResp))
+	return c.JSON(http.StatusOK, helper.SuccessWithPageDataResponse("success get all product data", dataResp, page))
 }
 
 func (delivery *ProductDelivery) Create(c echo.Context) error {
