@@ -6,6 +6,7 @@ import (
 	"ikuzports/factory"
 	"ikuzports/middlewares"
 	"ikuzports/utils/database/mysql"
+	"ikuzports/utils/thirdparty"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -15,10 +16,11 @@ func main() {
 	cfg := config.GetConfig()
 	db := mysql.InitDB(cfg)
 	// db := posgresql.InitDB(cfg)
+	googleOauthConfig := thirdparty.InitOauth()
 
 	e := echo.New()
 
-	factory.InitFactory(e, db)
+	factory.InitFactory(e, db, googleOauthConfig)
 
 	// middleware
 	middlewares.LogMiddlewares(e)

@@ -1,6 +1,9 @@
 package auth
 
-import "time"
+import (
+	"ikuzports/features/user"
+	"time"
+)
 
 type Core struct {
 	ID          uint
@@ -17,8 +20,15 @@ type Core struct {
 	UpdatedAt   time.Time
 }
 
+type GoogleCore struct {
+	Email   string
+	Name    string
+	Picture string
+}
+
 type ServiceInterface interface {
 	Login(input Core) (data Core, token string, err error)
+	LoginGoogle(input user.GoogleCore) (data Core, token string, err error)
 }
 
 type RepositoryInterface interface {

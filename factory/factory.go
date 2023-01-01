@@ -58,17 +58,18 @@ import (
 	transactionService "ikuzports/features/transaction/service"
 
 	"github.com/labstack/echo/v4"
+	"golang.org/x/oauth2"
 	"gorm.io/gorm"
 )
 
-func InitFactory(e *echo.Echo, db *gorm.DB) {
+func InitFactory(e *echo.Echo, db *gorm.DB, googleOauthConfig *oauth2.Config) {
 	userRepoFactory := userRepo.New(db)
 	userServiceFactory := userService.New(userRepoFactory)
 	userDelivery.New(userServiceFactory, e)
 
 	authRepoFactory := authRepo.New(db)
-	authServiceFactory := authService.New(authRepoFactory)
-	authDelivery.New(authServiceFactory, e)
+	authServiceFactory := authService.New(authRepoFactory, userRepoFactory)
+	authDelivery.New(authServiceFactory, e, googleOauthConfig, userServiceFactory)
 
 	clubMemberRepoFactory := clubMemberRepo.New(db)
 
