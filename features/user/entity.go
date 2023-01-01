@@ -4,7 +4,6 @@ import (
 	"ikuzports/features/club"
 	"ikuzports/features/clubMember"
 	"ikuzports/features/event"
-	"ikuzports/features/product"
 	"ikuzports/features/transaction"
 	"time"
 )
@@ -45,8 +44,27 @@ type Transaction struct {
 	transaction.TransactionCore
 }
 
-type Product struct {
-	product.ProductCore
+type ProductCore struct {
+	ID             uint
+	Name           string
+	Price          uint
+	Description    string
+	UserID         int
+	User           Core
+	ItemCategoryID uint
+	ItemCategory   ItemCategory
+	City           string
+	ProductImage   []ProductImage
+}
+
+type ItemCategory struct {
+	ID   uint
+	Name string
+}
+
+type ProductImage struct {
+	ID  uint
+	URL string
 }
 
 type ServiceInterface interface {
@@ -56,7 +74,7 @@ type ServiceInterface interface {
 	Update(input Core, id int) error
 	Delete(id int) error
 	GetClubs(id int) (data []clubMember.Core, err error)
-	GetProducts(id int) (data []product.ProductCore, err error)
+	GetProducts(id int) (data []ProductCore, err error)
 	GetEvents(id int) (data []event.EventCore, err error)
 	GetTransactions(id int) (data []transaction.TransactionCore, err error)
 }
@@ -69,7 +87,7 @@ type RepositoryInterface interface {
 	Delete(id int) error
 	FindUser(email string) (data Core, err error)
 	GetClubs(id int) (data []clubMember.Core, err error)
-	GetProducts(id int) (data []product.ProductCore, err error)
+	GetProducts(id int) (data []ProductCore, err error)
 	GetEvents(id int) (data []event.EventCore, err error)
 	GetTransactions(id int) (data []transaction.TransactionCore, err error)
 }

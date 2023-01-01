@@ -4,7 +4,6 @@ import (
 	"errors"
 	"ikuzports/features/clubMember"
 	"ikuzports/features/event"
-	"ikuzports/features/product"
 	"ikuzports/features/transaction"
 	"ikuzports/features/user"
 	"ikuzports/utils/helper"
@@ -157,7 +156,7 @@ func (service *userService) GetEvents(id int) (data []event.EventCore, err error
 }
 
 // GetProducts implements user.ServiceInterface
-func (service *userService) GetProducts(id int) (data []product.ProductCore, err error) {
+func (service *userService) GetProducts(id int) (data []user.ProductCore, err error) {
 	data, err = service.userRepository.GetProducts(id)
 	if err != nil {
 		log.Error(err.Error())

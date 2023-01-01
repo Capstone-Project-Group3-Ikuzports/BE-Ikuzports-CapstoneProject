@@ -4,7 +4,6 @@ import (
 	"ikuzports/features/clubMember"
 	"ikuzports/features/event"
 	_event "ikuzports/features/event/delivery"
-	"ikuzports/features/product"
 	_product "ikuzports/features/product/delivery"
 	"ikuzports/features/transaction"
 	_transaction "ikuzports/features/transaction/delivery"
@@ -135,7 +134,7 @@ func fromEventList(dataCore []event.EventCore) []_event.EventResponse {
 	return dataResponse
 }
 
-func fromProduct(dataCore product.ProductCore) _product.ProductResponse {
+func fromProduct(dataCore user.ProductCore) _product.ProductResponse {
 	return _product.ProductResponse{
 		ID:               dataCore.ID,
 		Name:             dataCore.Name,
@@ -148,7 +147,7 @@ func fromProduct(dataCore product.ProductCore) _product.ProductResponse {
 	}
 }
 
-func fromProductList(dataCore []product.ProductCore) []_product.ProductResponse {
+func fromProductList(dataCore []user.ProductCore) []_product.ProductResponse {
 	var dataResponse []_product.ProductResponse
 	for _, v := range dataCore {
 		dataResponse = append(dataResponse, fromProduct(v))
@@ -156,14 +155,14 @@ func fromProductList(dataCore []product.ProductCore) []_product.ProductResponse 
 	return dataResponse
 }
 
-func fromCoreImage(data product.ProductImage) _product.ProductImage {
+func fromCoreImage(data user.ProductImage) _product.ProductImage {
 	return _product.ProductImage{
 		ID:  data.ID,
 		Url: data.URL,
 	}
 }
 
-func fromCoreListImage(dataCore []product.ProductImage) []_product.ProductImage {
+func fromCoreListImage(dataCore []user.ProductImage) []_product.ProductImage {
 	var dataResponse []_product.ProductImage
 	for _, v := range dataCore {
 		dataResponse = append(dataResponse, fromCoreImage(v))

@@ -7,7 +7,6 @@ import (
 	_member "ikuzports/features/clubMember/repository"
 	"ikuzports/features/event"
 	_event "ikuzports/features/event/repository"
-	"ikuzports/features/product"
 	_product "ikuzports/features/product/repository"
 	"ikuzports/features/transaction"
 	_transaction "ikuzports/features/transaction/repository"
@@ -54,8 +53,22 @@ type Transaction struct {
 }
 
 type Product struct {
-	_product.Product
-	image []ProductImage
+	gorm.Model
+	Name           string
+	Price          int
+	Description    string
+	UserID         int
+	User           User
+	ItemCategoryID uint
+	City           string
+	ItemCategory   ItemCategory
+	Transaction    []_transaction.Transaction
+	ProductImage   []ProductImage
+}
+type ItemCategory struct {
+	gorm.Model
+	Name    string
+	Product []Product
 }
 
 type Category struct {
@@ -66,7 +79,8 @@ type Category struct {
 
 type ProductImage struct {
 	gorm.Model
-	_product.ProductImage
+	URL       string
+	ProductID uint
 }
 
 // mapping
@@ -197,41 +211,41 @@ func toEventList(dataModel []Event) []event.EventCore {
 	return dataCore
 }
 
-func (dataModel *Product) toCoreProduct() product.ProductCore {
-	return product.ProductCore{
+func (dataModel *Product) toCoreProduct() user.ProductCore {
+	return user.ProductCore{
 		ID:          dataModel.ID,
 		Name:        dataModel.Name,
 		Price:       uint(dataModel.Price),
 		Description: dataModel.Description,
 		UserID:      dataModel.UserID,
-		User: product.User{
+		User: user.Core{
 			Name: dataModel.User.Name,
 		},
 		ItemCategoryID: dataModel.ItemCategoryID,
-		ItemCategory: product.ItemCategory{
+		ItemCategory: user.ItemCategory{
 			Name: dataModel.ItemCategory.Name,
 		},
 		City:         dataModel.City,
-		ProductImage: toProductCoreListImage(dataModel.image),
+		ProductImage: toProductCoreListImage(dataModel.ProductImage),
 	}
 }
 
-func toProductList(dataModel []Product) []product.ProductCore {
-	var dataCore []product.ProductCore
+func toProductList(dataModel []Product) []user.ProductCore {
+	var dataCore []user.ProductCore
 	for _, v := range dataModel {
 		dataCore = append(dataCore, v.toCoreProduct())
 	}
 	return dataCore
 }
-func (dataModel *ProductImage) toCoreProductImage() product.ProductImage {
-	return product.ProductImage{
+func (dataModel *ProductImage) toCoreProductImage() user.ProductImage {
+	return user.ProductImage{
 		ID:  dataModel.ID,
 		URL: dataModel.URL,
 	}
 }
 
-func toProductCoreListImage(dataModel []ProductImage) []product.ProductImage {
-	var dataCoreImage []product.ProductImage
+func toProductCoreListImage(dataModel []ProductImage) []user.ProductImage {
+	var dataCoreImage []user.ProductImage
 	for _, v := range dataModel {
 		dataCoreImage = append(dataCoreImage, v.toCoreProductImage())
 	}
