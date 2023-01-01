@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"ikuzports/features/auth"
+	"ikuzports/features/user"
 	"ikuzports/middlewares"
 	"strings"
 
@@ -13,14 +14,16 @@ import (
 )
 
 type authService struct {
-	authData auth.RepositoryInterface
-	validate *validator.Validate
+	authData       auth.RepositoryInterface
+	userRepository user.RepositoryInterface
+	validate       *validator.Validate
 }
 
-func New(data auth.RepositoryInterface) auth.ServiceInterface {
+func New(data auth.RepositoryInterface, userData user.RepositoryInterface) auth.ServiceInterface {
 	return &authService{
-		authData: data,
-		validate: validator.New(),
+		authData:       data,
+		userRepository: userData,
+		validate:       validator.New(),
 	}
 }
 
@@ -58,4 +61,44 @@ func (service *authService) Login(dataCore auth.Core) (auth.Core, string, error)
 	}
 
 	return result, token, nil
+}
+
+func (service *authService) LoginGoogle(input user.GoogleCore) (data auth.Core, token string, err error) {
+	result, errLogin := service.authData.FindUser(input.Email)
+	if errLogin != nil {
+		log.Error(errLogin.Error())
+		if strings.Contains(errLogin.Error(), "table") {
+			return auth.Core{}, "", errors.New("failed to login, error on request, please contact your administrator")
+		} else if strings.Contains(errLogin.Error(), "found") {
+			userCore := user.Core{
+				Name:      input.Name,
+				Email:     input.Email,
+				UserImage: input.Picture,
+			}
+
+			errCr := service.userRepository.Create(userCore)
+			if errCr != nil {
+				log.Error(errCr.Error())
+			} else {
+				res, _ := service.authData.FindUser(userCore.Email)
+				token, errToken := middlewares.CreateToken(int(res.ID), res.Name)
+				if errToken != nil {
+					log.Error(errToken.Error())
+					return auth.Core{}, "", errors.New("failed to login, error on generate token, please check password again")
+				}
+
+				return res, token, nil
+			}
+		} else {
+			return auth.Core{}, "", errors.New("failed to login, other error, please contact your administrator")
+		}
+	}
+	token, errToken := middlewares.CreateToken(int(result.ID), result.Name)
+	if errToken != nil {
+		log.Error(errToken.Error())
+		return auth.Core{}, "", errors.New("failed to login, error on generate token, please check password again")
+	}
+
+	return result, token, nil
+
 }

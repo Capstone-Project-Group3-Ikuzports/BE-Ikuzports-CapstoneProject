@@ -23,6 +23,12 @@ type Core struct {
 	UpdatedAt   time.Time
 }
 
+type GoogleCore struct {
+	Email   string `json:"email" form:"email"`
+	Name    string `json:"name" form:"name"`
+	Picture string `json:"picture" form:"picture"`
+}
+
 type ClubMember struct {
 	clubMember.Core
 	Club Club
