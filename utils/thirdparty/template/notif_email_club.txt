@@ -1,0 +1,4 @@
+Hi {{.UserName}},
+Terimakasih telah bergabung bersama club {{.Club}}
+
+Kami mengharapkan anda untuk aktif dan berkontribusi dalam kegiatan Club {{.Club}}
