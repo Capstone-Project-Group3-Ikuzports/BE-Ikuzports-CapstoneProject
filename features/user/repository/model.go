@@ -130,6 +130,7 @@ func (dataModel *ClubMember) toCoreClub() clubMember.Core {
 		UserID: dataModel.UserID,
 		ClubID: dataModel.ClubID,
 		Club: clubMember.Club{
+			ID:           dataModel.Club.ID,
 			Name:         dataModel.Club.Name,
 			CategoryID:   dataModel.Club.CategoryID,
 			Category:     dataModel.Club.Category.Name,
