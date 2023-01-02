@@ -17,6 +17,7 @@ func main() {
 	db := mysql.InitDB(cfg)
 	// db := posgresql.InitDB(cfg)
 	googleOauthConfig := thirdparty.InitOauth()
+	// googleCal := thirdparty.InitCalendar()
 
 	e := echo.New()
 

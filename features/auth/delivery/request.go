@@ -2,7 +2,6 @@ package delivery
 
 import (
 	"ikuzports/features/auth"
-	"ikuzports/features/user"
 )
 
 type UserRequest struct {
@@ -24,8 +23,8 @@ func ToCore(userReq UserRequest) auth.Core {
 	return userCore
 }
 
-func ToCoreGoogle(googleReq GoogleRequest) user.GoogleCore {
-	googleCore := user.GoogleCore{
+func ToCoreGoogle(googleReq GoogleRequest) auth.GoogleCore {
+	googleCore := auth.GoogleCore{
 		Email:   googleReq.Email,
 		Name:    googleReq.Name,
 		Picture: googleReq.Picture,
