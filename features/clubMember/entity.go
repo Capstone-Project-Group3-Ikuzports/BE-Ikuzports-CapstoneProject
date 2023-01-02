@@ -18,6 +18,7 @@ type Core struct {
 type User struct {
 	ID           uint
 	Name         string
+	Email        string
 	Gender       string
 	Phone_number string
 	ClubMember   []Core
