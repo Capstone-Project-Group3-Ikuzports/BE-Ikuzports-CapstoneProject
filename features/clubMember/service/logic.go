@@ -34,7 +34,11 @@ func (service *clubMemberService) Create(input clubMember.Core) error {
 		}
 	}
 	if dataMember.ClubID == input.ClubID && dataMember.UserID == input.UserID && dataMember.DeletedAt == input.DeletedAt {
-		return errors.New(" failed to join, you are already register in this club. Please wait until the owner approve your request")
+		if dataMember.Status == "Requested" {
+			return errors.New(" failed to join, you are already register in this club. Please wait until the owner approve your request")
+		} else {
+			return errors.New(" failed to join, you are already join in this club")
+		}
 	}
 	// errPut := service.clubMemberRepository.UpdateMember(int(input.ClubID))
 	// if errPut != nil {
@@ -135,15 +139,20 @@ func (service *clubMemberService) Update(input clubMember.Core, id int, userId i
 		City         string
 		JoinedMember uint
 	}{
-		UserName:     dataMember.User.Name,
+		UserName:     data.User.Name,
 		Club:         dataClub.Name,
 		Status:       dataMember.Status,
 		City:         dataClub.City,
 		JoinedMember: dataClub.JoinedMember,
 	}
-	emailTo := dataMember.User.Email
+	// emailTo := dataMember.User.Email
+	emailTo := data.User.Email
 
-	errMail := thirdparty.SendEmailSMTPCheckup([]string{emailTo}, dataEmail, "email_checkup.txt") //send mail
+	// errMail := helper.SendGmailNotif(dataMember.User.Name, emailTo, dataClub.Name, dataMember.Status, dataClub.City, dataClub.JoinedMember)
+	// if errMail != nil {
+	// 	log.Println(errMail, "Pengiriman Email Gagal")
+	// }
+	errMail := thirdparty.SendEmailSMTPCheckup([]string{emailTo}, dataEmail, "notif_temp.html") //send mail
 	if errMail != nil {
 		log.Println(errMail, "Pengiriman Email Gagal")
 	}
