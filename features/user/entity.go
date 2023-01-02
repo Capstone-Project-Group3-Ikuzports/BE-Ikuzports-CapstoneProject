@@ -18,6 +18,7 @@ type Core struct {
 	City        string
 	UserImage   string
 	Gender      string
+	LoginMethod string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }

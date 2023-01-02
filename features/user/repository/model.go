@@ -25,6 +25,7 @@ type User struct {
 	Address          string
 	UserImage        string
 	Gender           string
+	LoginMethod      string
 	ClubMember       []_member.ClubMember
 	EventParticipant []_event.EventParticipant
 	Event            []_event.Event
@@ -95,6 +96,7 @@ func fromCore(dataCore user.Core) User {
 		Address:     dataCore.Address,
 		UserImage:   dataCore.UserImage,
 		Gender:      dataCore.Gender,
+		LoginMethod: dataCore.LoginMethod,
 	}
 	return userGorm
 }
@@ -110,6 +112,7 @@ func (dataModel *User) toCore() user.Core {
 		Address:     dataModel.Address,
 		UserImage:   dataModel.UserImage,
 		Gender:      dataModel.Gender,
+		LoginMethod: dataModel.LoginMethod,
 		CreatedAt:   dataModel.CreatedAt,
 		UpdatedAt:   dataModel.UpdatedAt,
 	}

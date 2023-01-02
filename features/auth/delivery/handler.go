@@ -4,7 +4,6 @@ import (
 	"ikuzports/features/auth"
 	"ikuzports/features/user"
 	"ikuzports/utils/helper"
-	"ikuzports/utils/thirdparty"
 	"net/http"
 	"strings"
 
@@ -25,8 +24,8 @@ func New(service auth.ServiceInterface, e *echo.Echo, googleOauthConfig *oauth2.
 		userService:       userService,
 	}
 	e.POST("/auth", handler.Login)
-	e.GET("/auth/google", handler.LoginGoogle)
-	e.GET("/auth/callback", handler.Callback)
+	e.POST("/auth/google", handler.LoginGoogle)
+	// e.GET("/auth/callback", handler.Callback)
 }
 
 var (
@@ -53,22 +52,27 @@ func (handler *AuthHandler) Login(c echo.Context) error {
 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Login Success.", FromCore(result, token)))
 }
 
+// func (handler *AuthHandler) LoginGoogle(c echo.Context) error {
+// 	url := handler.googleOauthConfig.AuthCodeURL(oauthStateString)
+// 	return c.Redirect(http.StatusTemporaryRedirect, url)
+// }
+
 func (handler *AuthHandler) LoginGoogle(c echo.Context) error {
-	url := handler.googleOauthConfig.AuthCodeURL(oauthStateString)
-	return c.Redirect(http.StatusTemporaryRedirect, url)
-}
+	// oauth := handler.googleOauthConfig
+	// state := c.FormValue("state")
+	// code := c.FormValue("code")
 
-func (handler *AuthHandler) Callback(c echo.Context) error {
-	oauth := handler.googleOauthConfig
-	state := c.FormValue("state")
-	code := c.FormValue("code")
-
-	content, err := thirdparty.GetUserInfo(oauth, state, code, oauthStateString)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error read google profile data"))
+	// content, err := thirdparty.GetUserInfo(oauth, state, code, oauthStateString)
+	// if err != nil {
+	// 	return c.JSON(http.StatusBadRequest, helper.FailedResponse("error read google profile data"))
+	// }
+	userInput := GoogleRequest{}
+	errBind := c.Bind(&userInput)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("failed to bind data"))
 	}
-
-	result, token, errLog := handler.authService.LoginGoogle(content)
+	dataCore := ToCoreGoogle(userInput)
+	result, token, errLog := handler.authService.LoginGoogle(dataCore)
 	if errLog != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error read data"))
 	}

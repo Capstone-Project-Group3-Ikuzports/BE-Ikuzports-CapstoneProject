@@ -57,6 +57,7 @@ func (service *userService) Create(input user.Core) (err error) {
 		}
 
 		input.Password = string(bytePass)
+		input.LoginMethod = "Regular"
 		errCreate := service.userRepository.Create(input)
 		if errCreate != nil {
 			log.Error(errCreate.Error())
