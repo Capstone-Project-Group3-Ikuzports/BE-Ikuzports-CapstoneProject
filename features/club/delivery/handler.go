@@ -141,8 +141,6 @@ func (delivery *ClubDelivery) Update(c echo.Context) error {
 		}
 		log.Print(res)
 		dataCore.Logo = res
-	} else {
-		dataCore.Logo = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfA4x4hFqzMJRG8mkELzikjEXLgNu-ImEzEA&usqp=CAU"
 	}
 
 	err := delivery.clubService.Update(dataCore, id, userId)

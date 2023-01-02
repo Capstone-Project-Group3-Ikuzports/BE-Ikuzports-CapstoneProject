@@ -18,6 +18,7 @@ type Core struct {
 type User struct {
 	ID           uint
 	Name         string
+	Email        string
 	Gender       string
 	Phone_number string
 	ClubMember   []Core
@@ -52,4 +53,5 @@ type RepositoryInterface interface {
 	Delete(id int) error
 	FindMember(id, idUser int) (data Core, err error)
 	UpdateMember(id int) error
+	DeleteMember(idClub int) error
 }
