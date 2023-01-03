@@ -87,7 +87,7 @@ func InitFactory(e *echo.Echo, db *gorm.DB, googleOauthConfig *oauth2.Config) {
 	participantDelivery.New(participantServiceFactory, e)
 
 	eventServiceFactory := eventService.New(eventRepoFactory, participantRepoFactory)
-	eventDelivery.New(eventServiceFactory, e)
+	eventDelivery.New(eventServiceFactory, userServiceFactory, e, googleOauthConfig)
 
 	categoryRepoFactory := categoryRepo.New(db)
 	categoryServiceFactory := categoryService.New(categoryRepoFactory)

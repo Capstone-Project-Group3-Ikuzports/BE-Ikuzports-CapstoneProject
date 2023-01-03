@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"ikuzports/features/user"
 	"time"
 )
 
@@ -27,7 +28,7 @@ type GoogleCore struct {
 
 type ServiceInterface interface {
 	Login(input Core) (data Core, token string, err error)
-	LoginGoogle(input GoogleCore) (data Core, token string, err error)
+	LoginGoogle(input user.GoogleCore) (data Core, token string, err error)
 }
 
 type RepositoryInterface interface {

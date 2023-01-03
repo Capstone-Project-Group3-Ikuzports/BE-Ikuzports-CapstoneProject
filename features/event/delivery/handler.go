@@ -2,7 +2,9 @@ package delivery
 
 import (
 	"errors"
+	"fmt"
 	"ikuzports/features/event"
+	"ikuzports/features/user"
 	"ikuzports/middlewares"
 	"ikuzports/utils/helper"
 	"ikuzports/utils/thirdparty"
@@ -11,15 +13,22 @@ import (
 	"strconv"
 
 	"github.com/labstack/echo/v4"
+	"golang.org/x/oauth2"
+	"google.golang.org/api/calendar/v3"
+	"google.golang.org/api/option"
 )
 
 type EventDelivery struct {
 	eventService event.ServiceInterface
+	userService  user.ServiceInterface
+	oauth        *oauth2.Config
 }
 
-func New(service event.ServiceInterface, e *echo.Echo) {
+func New(service event.ServiceInterface, userService user.ServiceInterface, e *echo.Echo, oauthConfig *oauth2.Config) {
 	handler := &EventDelivery{
 		eventService: service,
+		userService:  userService,
+		oauth:        oauthConfig,
 	}
 	e.POST("/events", handler.Create, middlewares.JWTMiddleware())
 	e.GET("/events", handler.GetAll)
@@ -52,6 +61,48 @@ func (delivery *EventDelivery) Create(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed insert data "+err.Error()))
 	}
+
+	if eventInput.Token != "" {
+		dataUser, errUsr := delivery.userService.GetById(dataCore.UserID)
+		log.Printf("This is your email: %v", dataUser.Email)
+		if errUsr != nil {
+			log.Printf("Unable to retrieve user: %v", err)
+		}
+		startdateTime := fmt.Sprintf("%sT00:00:00+07:00", eventInput.StartDate)
+		enddateTime := fmt.Sprintf("%sT00:00:00+07:00", eventInput.EndDate)
+		location := fmt.Sprintf("%s, %s", eventInput.Address, eventInput.City)
+		events := &calendar.Event{
+			Summary:     eventInput.Name,
+			Description: eventInput.Description,
+			Start: &calendar.EventDateTime{
+				DateTime: startdateTime,
+				TimeZone: "Asia/Jakarta",
+			},
+			End: &calendar.EventDateTime{
+				DateTime: enddateTime,
+				TimeZone: "Asia/Jakarta",
+			},
+			Attendees: []*calendar.EventAttendee{
+				{Email: dataUser.Email},
+				{Email: "ramadinaainirizki@gmail.com"},
+			},
+			Location: location,
+		}
+
+		tokenOauth := &oauth2.Token{AccessToken: eventInput.Token}
+		log.Printf("This is your tokenOauth: %v", tokenOauth)
+		client := delivery.oauth.Client(c.Request().Context(), tokenOauth)
+		srv, err := calendar.NewService(c.Request().Context(), option.WithHTTPClient(client))
+		if err != nil {
+			log.Printf("Unable to retrieve Calendar client: %v", err)
+		}
+
+		_, errCr := srv.Events.Insert("primary", events).SendUpdates("all").Do()
+		if errCr != nil {
+			log.Printf("Unable to create event. %v\n", err)
+		}
+	}
+
 	return c.JSON(http.StatusOK, helper.SuccessResponse("Succes create data"))
 }
 

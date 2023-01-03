@@ -15,6 +15,7 @@ type EventRequest struct {
 	ImageEvent    string `json:"image_event" form:"image_event"`
 	MaximumPeople int    `json:"maximum_people" form:"maximum_people"`
 	Description   string `json:"description" form:"description"`
+	Token         string `json:"token" form:"token"`
 }
 
 func toCore(eventInput EventRequest) event.EventCore {

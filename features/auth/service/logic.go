@@ -63,7 +63,7 @@ func (service *authService) Login(dataCore auth.Core) (auth.Core, string, error)
 	return result, token, nil
 }
 
-func (service *authService) LoginGoogle(input auth.GoogleCore) (data auth.Core, token string, err error) {
+func (service *authService) LoginGoogle(input user.GoogleCore) (data auth.Core, token string, err error) {
 	result, errLogin := service.authData.FindUser(input.Email)
 	if errLogin != nil {
 		log.Error(errLogin.Error())

@@ -1,7 +1,6 @@
 package thirdparty
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"ikuzports/features/user"
@@ -30,22 +29,22 @@ func InitOauth() *oauth2.Config {
 	return googleOauthConfig
 }
 
-func GetUserInfo(oauth *oauth2.Config, state string, code string, oauthStateString string) (user.GoogleCore, error) {
+func GetUserInfo(oauth *oauth2.Config, oauthToken *oauth2.Token) (user.GoogleCore, error) {
 
 	var userGoogleCore user.GoogleCore
 
-	if state != oauthStateString {
-		log.Println("invalid oauth state")
-		return user.GoogleCore{}, fmt.Errorf("invalid oauth state")
-	}
+	// if state != oauthStateString {
+	// 	log.Println("invalid oauth state")
+	// 	return user.GoogleCore{}, fmt.Errorf("invalid oauth state")
+	// }
 
-	token, err := oauth.Exchange(context.Background(), code)
-	if err != nil {
-		log.Println("code exchange failed")
-		return user.GoogleCore{}, fmt.Errorf("code exchange failed: %s", err.Error())
-	}
+	// token, err := oauth.Exchange(context.Background(), code)
+	// if err != nil {
+	// 	log.Println("code exchange failed")
+	// 	return user.GoogleCore{}, fmt.Errorf("code exchange failed: %s", err.Error())
+	// }
 
-	response, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
+	response, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + oauthToken.AccessToken)
 	if err != nil {
 		log.Println("failed getting user info")
 		return user.GoogleCore{}, fmt.Errorf("failed getting user info: %s", err.Error())
