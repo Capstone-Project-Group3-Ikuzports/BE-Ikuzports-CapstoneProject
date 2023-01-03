@@ -1,9 +1,11 @@
 package delivery
 
 import (
+	"fmt"
 	"ikuzports/features/auth"
 	"ikuzports/features/user"
 	"ikuzports/utils/helper"
+	"ikuzports/utils/thirdparty"
 	"net/http"
 	"strings"
 
@@ -58,21 +60,30 @@ func (handler *AuthHandler) Login(c echo.Context) error {
 // }
 
 func (handler *AuthHandler) LoginGoogle(c echo.Context) error {
-	// oauth := handler.googleOauthConfig
+	oauth := handler.googleOauthConfig
 	// state := c.FormValue("state")
 	// code := c.FormValue("code")
 
-	// content, err := thirdparty.GetUserInfo(oauth, state, code, oauthStateString)
-	// if err != nil {
-	// 	return c.JSON(http.StatusBadRequest, helper.FailedResponse("error read google profile data"))
-	// }
-	userInput := GoogleRequest{}
-	errBind := c.Bind(&userInput)
+	oauthToken := TokenRequest{}
+	errBind := c.Bind(&oauthToken)
 	if errBind != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("failed to bind data"))
 	}
-	dataCore := ToCoreGoogle(userInput)
-	result, token, errLog := handler.authService.LoginGoogle(dataCore)
+	fmt.Println(oauthToken)
+	tokenOauth := &oauth2.Token{
+		AccessToken: oauthToken.AccessToken,
+	}
+
+	content, err := thirdparty.GetUserInfo(oauth, tokenOauth)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error read google profile data"))
+	}
+
+	if content.Email == "" {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("error get user data from google"))
+	}
+
+	result, token, errLog := handler.authService.LoginGoogle(content)
 	if errLog != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error read data"))
 	}
