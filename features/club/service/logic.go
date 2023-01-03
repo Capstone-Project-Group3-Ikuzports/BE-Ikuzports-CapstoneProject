@@ -147,9 +147,6 @@ func (service *clubService) GetMembers(id int) (data []clubMember.Core, err erro
 		return data, helper.ServiceErrorMsg(err)
 	}
 
-	if len(data) == 0 {
-		return nil, errors.New("Get data success. No data")
-	}
 	return data, err
 }
 
@@ -159,10 +156,6 @@ func (service *clubService) GetChats(id int) (data []chat.Core, err error) {
 	if err != nil {
 		log.Error(err.Error())
 		return data, helper.ServiceErrorMsg(err)
-	}
-
-	if len(data) == 0 {
-		return nil, errors.New("Get data success. No data")
 	}
 	return data, err
 }
@@ -174,10 +167,6 @@ func (service *clubService) GetGaleries(id int) (data []galery.Core, err error) 
 		log.Error(err.Error())
 		return data, helper.ServiceErrorMsg(err)
 	}
-
-	if len(data) == 0 {
-		return nil, errors.New("Get data success. No data")
-	}
 	return data, err
 }
 
@@ -187,10 +176,6 @@ func (service *clubService) GetActivities(id int) (data []clubActivity.Core, err
 	if err != nil {
 		log.Error(err.Error())
 		return data, helper.ServiceErrorMsg(err)
-	}
-
-	if len(data) == 0 {
-		return nil, errors.New("Get data success. No data")
 	}
 	return data, err
 }
