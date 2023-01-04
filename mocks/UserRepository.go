@@ -8,8 +8,6 @@ import (
 
 	mock "github.com/stretchr/testify/mock"
 
-	product "ikuzports/features/product"
-
 	transaction "ikuzports/features/transaction"
 
 	user "ikuzports/features/user"
@@ -160,15 +158,15 @@ func (_m *UserRepo) GetEvents(id int) ([]event.EventCore, error) {
 }
 
 // GetProducts provides a mock function with given fields: id
-func (_m *UserRepo) GetProducts(id int) ([]product.ProductCore, error) {
+func (_m *UserRepo) GetProducts(id int) ([]user.ProductCore, error) {
 	ret := _m.Called(id)
 
-	var r0 []product.ProductCore
-	if rf, ok := ret.Get(0).(func(int) []product.ProductCore); ok {
+	var r0 []user.ProductCore
+	if rf, ok := ret.Get(0).(func(int) []user.ProductCore); ok {
 		r0 = rf(id)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]product.ProductCore)
+			r0 = ret.Get(0).([]user.ProductCore)
 		}
 	}
 

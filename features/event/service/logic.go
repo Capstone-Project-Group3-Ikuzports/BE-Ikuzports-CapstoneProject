@@ -89,11 +89,6 @@ func (service *eventService) GetAll(queryCategoryID, queryPage int, queryCity, q
 		return nil, err
 	}
 
-	if len(data) == 0 {
-		helper.LogDebug("Get data success. No data.")
-		return nil, errors.New("Get data success. No data.")
-	}
-
 	return data, nil
 }
 

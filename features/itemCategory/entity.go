@@ -1,4 +1,4 @@
-package itemcategory
+package itemCategory
 
 type ItemCategoryCore struct {
 	ID   uint

@@ -11,7 +11,7 @@ import (
 type Core struct {
 	ID          uint
 	Name        string `validate:"required"`
-	Email       string `validate:"required,email"`
+	Email       string `validate:"required"`
 	Password    string `validate:"required"`
 	PhoneNumber string `validate:"required"`
 	Address     string

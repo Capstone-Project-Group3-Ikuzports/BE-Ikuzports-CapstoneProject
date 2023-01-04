@@ -114,7 +114,7 @@ func (service *userService) Update(input user.Core, id int) error {
 		return errors.New("Failed. Email " + input.Email + " already exist at other user. Please pick another email.")
 	}
 
-	if errFindEmail != nil || data.Email == input.Email { //ketika error = email belum ada, atau ketika input email yg sama proses berjalan
+	if errFindEmail != nil { //ketika error = email belum ada, proses berjalan
 		err := service.userRepository.Update(input, id)
 		if err != nil {
 			log.Error(err.Error())
