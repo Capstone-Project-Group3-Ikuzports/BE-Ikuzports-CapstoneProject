@@ -113,7 +113,7 @@ func TestGetByID(t *testing.T) {
 // t.Run("Failed post transaction", func(t *testing.T) {
 // 	input := transaction.TransactionCore{UserID: 1, TotalPrice: 10000, TotalQuantity: 1, ProductID: 1, TransactionID: "", StatusPayment: "", VirtualAccount: "12321", TransactionTime: "2022-09-08", OrderID: "orderID"}
 
-// 	repo2.On("GetByID", 1).Return(product.ProductCore{}, errors.New("failed")).Once()
+// 	repo2.On("GetByID", 1).Return(transaction.MidtransCore{}, errors.New("failed")).Once()
 // 	srv := New(repo, repo2, repo3)
 // 	_, err := srv.Create(input)
 // 	assert.NotNil(t, err)
@@ -126,7 +126,7 @@ func TestGetByID(t *testing.T) {
 // 	dataProduct := product.ProductCore{Name: "product", Price: 123, Description: "uk 32", UserID: 1, ItemCategoryID: 1, City: "jkt"}
 
 // 	repo2.On("GetByID", 1).Return(dataProduct, nil).Once()
-// 	repo3.On("GetById", 1).Return(user.Core{}, errors.New("failed"))
+// 	repo3.On("GetById", 1).Return(transaction.MidtransCore{}, errors.New("failed"))
 // 	srv := New(repo, repo2, repo3)
 // 	_, err := srv.Create(input)
 // 	assert.NotNil(t, err)
