@@ -20,6 +20,7 @@ type User struct {
 	Name         string
 	Email        string
 	Gender       string
+	UserImage    string
 	Phone_number string
 	ClubMember   []Core
 }

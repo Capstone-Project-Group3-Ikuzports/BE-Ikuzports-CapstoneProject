@@ -18,6 +18,7 @@ type User struct {
 	gorm.Model
 	Name         string
 	Gender       string
+	UserImage    string
 	Phone_number string
 	ClubMember   []ClubMember
 }

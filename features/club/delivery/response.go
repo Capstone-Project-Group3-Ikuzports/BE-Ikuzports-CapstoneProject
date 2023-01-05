@@ -7,7 +7,6 @@ import (
 	"ikuzports/features/clubActivity"
 	_activity "ikuzports/features/clubActivity/delivery"
 	_members "ikuzports/features/clubMember"
-	_memberResponse "ikuzports/features/clubMember/delivery"
 	"ikuzports/features/galery"
 	_galery "ikuzports/features/galery/delivery"
 )
@@ -25,6 +24,14 @@ type ClubResponse struct {
 	MemberTotal  uint   `json:"member_total" form:"member_total"`
 	Rule         string `json:"rule" form:"rule"`
 	Requirement  string `json:"requirement" form:"requirement"`
+}
+
+type MemberResponse struct {
+	ID              uint   `json:"id" form:"id"`
+	UserName        string `json:"name" form:"name"`
+	UserPhoneNumber string `json:"phone_number" form:"phone_number"`
+	UserImage       string `json:"user_image" form:"user_image"`
+	Status          string `json:"status" form:"status"`
 }
 
 func fromCore(dataCore club.Core) ClubResponse {
@@ -52,19 +59,17 @@ func fromCoreList(dataCore []club.Core) []ClubResponse {
 	return dataResponse
 }
 
-func fromCoreMember(dataCore _members.Core) _memberResponse.MemberResponse {
-	return _memberResponse.MemberResponse{
+func fromCoreMember(dataCore _members.Core) MemberResponse {
+	return MemberResponse{
 		ID:              dataCore.ID,
-		UserID:          dataCore.UserID,
 		UserName:        dataCore.User.Name,
-		UserGender:      dataCore.User.Gender,
 		UserPhoneNumber: dataCore.User.Phone_number,
-		ClubID:          dataCore.ClubID,
+		UserImage:       dataCore.User.UserImage,
 		Status:          dataCore.Status,
 	}
 }
-func fromCoreMemberList(dataCore []_members.Core) []_memberResponse.MemberResponse {
-	var dataResponse []_memberResponse.MemberResponse
+func fromCoreMemberList(dataCore []_members.Core) []MemberResponse {
+	var dataResponse []MemberResponse
 	for _, v := range dataCore {
 		dataResponse = append(dataResponse, fromCoreMember(v))
 	}

@@ -10,6 +10,7 @@ type EventResponse struct {
 	Name             string    `json:"name"`
 	Address          string    `json:"address"`
 	City             string    `json:"city"`
+	UserID           uint      `json:"user_id"`
 	OrganizerName    string    `json:"organizer_name"`
 	CategoryName     string    `json:"category_name"`
 	StartDate        time.Time `json:"start_date"`
@@ -27,6 +28,7 @@ func fromCore(dataCore event.EventCore) EventResponse {
 		Name:             dataCore.Name,
 		Address:          dataCore.Address,
 		City:             dataCore.City,
+		UserID:           dataCore.User.ID,
 		OrganizerName:    dataCore.User.Name,
 		CategoryName:     dataCore.Category.Name,
 		StartDate:        dataCore.StartDate,
