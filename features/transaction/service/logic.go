@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"ikuzports/features/product"
 	"ikuzports/features/transaction"
 	"ikuzports/features/user"
@@ -39,6 +40,9 @@ func (service *transactionService) Create(input transaction.TransactionCore) (da
 
 	orderID := "Order-" + helper.CreateRandomCode(7)
 	dataMidtr := thirdparty.PaymentCoreApi(orderID, input, dataProduct, dataUser)
+	if dataMidtr.TransactionID == "" {
+		return data, errors.New("payment rejected by midtrans")
+	}
 
 	input.TransactionID = dataMidtr.TransactionID
 	input.StatusPayment = dataMidtr.TransactionStatus
@@ -63,6 +67,11 @@ func (service *transactionService) Create(input transaction.TransactionCore) (da
 	for _, v := range dataMidtr.VaNumbers {
 		MidtrResp.VANumbers.Bank = v.Bank
 		MidtrResp.VANumbers.VANumber = v.VANumber
+	}
+
+	_, errDel := service.productRepository.Delete(int(input.ProductID))
+	if errDel != nil {
+		return data, errDel
 	}
 
 	return MidtrResp, nil

@@ -39,7 +39,7 @@ func (delivery *TransactionDelivery) Create(c echo.Context) error {
 
 	dataResp := fromCoreMidtr(dataMidtr)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed insert data "+err.Error()))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed insert data. "+err.Error()))
 	}
 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("success create data", dataResp))
 }
