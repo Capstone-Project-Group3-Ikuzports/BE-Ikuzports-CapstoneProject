@@ -144,7 +144,7 @@ func (repo *userRepository) GetProducts(id int) (data []user.ProductCore, err er
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
-	helper.LogDebug(products[1].ProductImage)
+	// helper.LogDebug(products[1].ProductImage)
 	helper.LogDebug("==========")
 	var dataCore = toProductList(products)
 	return dataCore, nil

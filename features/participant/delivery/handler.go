@@ -80,7 +80,6 @@ func (delivery *ParticipantDelivery) Create(c echo.Context) error {
 			},
 			Attendees: []*calendar.EventAttendee{
 				{Email: dataUser.Email},
-				{Email: "ramadinaainirizki@gmail.com"},
 			},
 			Location: location,
 		}
