@@ -99,6 +99,7 @@ func (dataModel *Category) toCoreCategory() _eventCore.Category {
 
 func (dataModel *User) toCoreUser() _eventCore.User {
 	return _eventCore.User{
+		ID:   dataModel.ID,
 		Name: dataModel.Name,
 	}
 }
