@@ -28,9 +28,11 @@ type ClubResponse struct {
 
 type MemberResponse struct {
 	ID              uint   `json:"id" form:"id"`
+	UserID          uint   `json:"user_id" form:"user_id"`
 	UserName        string `json:"name" form:"name"`
 	UserPhoneNumber string `json:"phone_number" form:"phone_number"`
 	UserImage       string `json:"user_image" form:"user_image"`
+	ClubID          uint   `json:"club_id" form:"club_id"`
 	Status          string `json:"status" form:"status"`
 }
 
@@ -62,6 +64,8 @@ func fromCoreList(dataCore []club.Core) []ClubResponse {
 func fromCoreMember(dataCore _members.Core) MemberResponse {
 	return MemberResponse{
 		ID:              dataCore.ID,
+		UserID:          dataCore.User.ID,
+		ClubID:          dataCore.ClubID,
 		UserName:        dataCore.User.Name,
 		UserPhoneNumber: dataCore.User.Phone_number,
 		UserImage:       dataCore.User.UserImage,
