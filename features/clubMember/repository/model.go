@@ -17,6 +17,7 @@ type ClubMember struct {
 type User struct {
 	gorm.Model
 	Name         string
+	Email        string
 	Gender       string
 	UserImage    string
 	Phone_number string
@@ -37,6 +38,7 @@ func (dataCore *ClubMember) toCore() clubMember.Core {
 		User: clubMember.User{
 			ID:           dataCore.User.ID,
 			Name:         dataCore.User.Name,
+			Email:        dataCore.User.Email,
 			Gender:       dataCore.User.Gender,
 			Phone_number: dataCore.User.Phone_number,
 		},
