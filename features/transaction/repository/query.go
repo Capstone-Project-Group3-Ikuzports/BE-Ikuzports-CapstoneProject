@@ -53,6 +53,17 @@ func (repo *transactionRepository) GetByID(id int) (data transaction.Transaction
 	return dataCore, nil
 }
 
+func (repo *transactionRepository) GetByOrderID(orderID string) (data transaction.TransactionCore, err error) {
+	var transaction Transaction
+	tx := repo.db.Where("order_id = ?", orderID).First(&transaction)
+	if tx.Error != nil {
+		return data, tx.Error
+	}
+
+	var dataCore = transaction.toCore()
+	return dataCore, nil
+}
+
 func (repo *transactionRepository) Update(input transaction.TransactionCore) (rows int, err error) {
 	transactionGorm := fromCore(input)
 	var transaction Transaction

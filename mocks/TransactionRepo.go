@@ -78,6 +78,27 @@ func (_m *TransactionRepo) GetByID(id int) (transaction.TransactionCore, error) 
 	return r0, r1
 }
 
+// GetByOrderID provides a mock function with given fields: orderID
+func (_m *TransactionRepo) GetByOrderID(orderID string) (transaction.TransactionCore, error) {
+	ret := _m.Called(orderID)
+
+	var r0 transaction.TransactionCore
+	if rf, ok := ret.Get(0).(func(string) transaction.TransactionCore); ok {
+		r0 = rf(orderID)
+	} else {
+		r0 = ret.Get(0).(transaction.TransactionCore)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(orderID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // Update provides a mock function with given fields: input
 func (_m *TransactionRepo) Update(input transaction.TransactionCore) (int, error) {
 	ret := _m.Called(input)

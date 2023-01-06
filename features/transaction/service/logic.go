@@ -69,11 +69,6 @@ func (service *transactionService) Create(input transaction.TransactionCore) (da
 		MidtrResp.VANumbers.VANumber = v.VANumber
 	}
 
-	_, errDel := service.productRepository.Delete(int(input.ProductID))
-	if errDel != nil {
-		return data, errDel
-	}
-
 	return MidtrResp, nil
 }
 
@@ -102,6 +97,18 @@ func (service *transactionService) Update(input transaction.TransactionCore) (er
 	if err != nil {
 		log.Error(err.Error())
 		return helper.ServiceErrorMsg(err)
+	}
+
+	if input.StatusPayment == "settlement" && err == nil {
+		data, errGet := service.transactionRepository.GetByOrderID(input.OrderID)
+		if errGet != nil {
+			return errGet
+		}
+
+		_, errDel := service.productRepository.Delete(int(data.ProductID))
+		if errDel != nil {
+			return errDel
+		}
 	}
 	return nil
 }
