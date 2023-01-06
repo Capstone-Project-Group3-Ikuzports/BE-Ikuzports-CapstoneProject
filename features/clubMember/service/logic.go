@@ -147,6 +147,8 @@ func (service *clubMemberService) Update(input clubMember.Core, id int, userId i
 	}
 	// emailTo := dataMember.User.Email
 	emailTo := data.User.Email
+	log.Println("emailTo", emailTo)
+	log.Println("===============================")
 
 	// errMail := helper.SendGmailNotif(dataMember.User.Name, emailTo, dataClub.Name, dataMember.Status, dataClub.City, dataClub.JoinedMember)
 	// if errMail != nil {
