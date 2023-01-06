@@ -29,6 +29,7 @@ type RepositoryInterface interface {
 	Create(input TransactionCore) (row int, err error)
 	GetAll() (data []TransactionCore, err error)
 	GetByID(id int) (data TransactionCore, err error)
+	GetByOrderID(orderID string) (data TransactionCore, err error)
 	Update(input TransactionCore) (rows int, err error)
 }
 
