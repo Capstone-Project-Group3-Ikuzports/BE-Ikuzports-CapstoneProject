@@ -62,6 +62,7 @@ type Product struct {
 	User           User
 	ItemCategoryID uint
 	City           string
+	Thumbnail      string
 	ItemCategory   ItemCategory
 	Transaction    []_transaction.Transaction
 	ProductImage   []ProductImage
@@ -230,6 +231,7 @@ func (dataModel *Product) toCoreProduct() user.ProductCore {
 			Name: dataModel.ItemCategory.Name,
 		},
 		City:         dataModel.City,
+		Thumbnail:    dataModel.Thumbnail,
 		ProductImage: toProductCoreListImage(dataModel.ProductImage),
 	}
 }
