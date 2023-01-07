@@ -26,7 +26,7 @@ func SendEmailSMTPCheckup(emailto []string, data interface{}, template string) e
 	}
 
 	mime := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
-	subject := "Subject: " + "Join Club Ikuzports" + "!\n"
+	subject := "Subject: " + "Ikuzports" + "!\n"
 	msg := []byte(subject + mime + "\n" + emailBody)
 	addr := fmt.Sprintf("%s:%s", emailHost, emailPort)
 
