@@ -16,6 +16,7 @@ type Product struct {
 	User           User
 	ItemCategoryID uint
 	City           string
+	Thumbnail      string
 	ItemCategory   ItemCategory
 	Transaction    []_transaction.Transaction
 	ProductImage   []ProductImage
@@ -47,6 +48,7 @@ func fromCore(dataModel product.ProductCore) Product {
 		UserID:         dataModel.UserID,
 		ItemCategoryID: dataModel.ItemCategoryID,
 		City:           dataModel.City,
+		Thumbnail:      dataModel.Thumbnail,
 	}
 	return productGorm
 }
@@ -62,6 +64,7 @@ func (dataModel *Product) toCore() product.ProductCore {
 		ItemCategoryID: dataModel.ItemCategoryID,
 		ItemCategory:   dataModel.ItemCategory.toCoreItemCategory(),
 		City:           dataModel.City,
+		Thumbnail:      dataModel.Thumbnail,
 		ProductImage:   toCoreListImage(dataModel.ProductImage),
 	}
 }

@@ -1,9 +1,12 @@
 package delivery
 
 import (
+	"errors"
 	"ikuzports/features/product"
 	"ikuzports/middlewares"
 	"ikuzports/utils/helper"
+	"ikuzports/utils/thirdparty"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -53,6 +56,18 @@ func (delivery *ProductDelivery) Create(c echo.Context) error {
 	}
 
 	dataCore := toCore(productInput)
+
+	file, _ := c.FormFile("thumbnail")
+	if file != nil {
+		res, err := thirdparty.UploadProfile(c, "thumbnail")
+		if err != nil {
+			return errors.New("failed. cannot upload data")
+		}
+		log.Print(res)
+		dataCore.Thumbnail = res
+	} else {
+		dataCore.Thumbnail = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfA4x4hFqzMJRG8mkELzikjEXLgNu-ImEzEA&usqp=CAU"
+	}
 
 	dataCore.UserID = middlewares.ExtractTokenUserId(c)
 

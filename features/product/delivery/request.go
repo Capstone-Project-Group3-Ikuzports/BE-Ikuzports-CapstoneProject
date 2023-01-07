@@ -8,6 +8,7 @@ type ProductRequest struct {
 	Description    string `json:"description" form:"description"`
 	ItemCategoryID uint   `json:"itemcategory_id" form:"itemcategory_id"`
 	City           string `json:"city" form:"city"`
+	Thumbnail      string `json:"thumbnail" form:"thumbnail"`
 }
 
 func toCore(productInput ProductRequest) product.ProductCore {
@@ -17,6 +18,7 @@ func toCore(productInput ProductRequest) product.ProductCore {
 		Description:    productInput.Description,
 		ItemCategoryID: productInput.ItemCategoryID,
 		City:           productInput.City,
+		Thumbnail:      productInput.Thumbnail,
 	}
 	return productCoreData
 }

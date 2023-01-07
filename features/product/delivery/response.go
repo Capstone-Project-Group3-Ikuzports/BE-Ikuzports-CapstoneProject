@@ -10,6 +10,7 @@ type ProductResponse struct {
 	Description      string         `json:"description"`
 	ItemCategoryName string         `json:"itemcategory_name"`
 	City             string         `json:"city"`
+	Thumbnail        string         `json:"thumbnail"`
 	ProductImage     []ProductImage `json:"product_image"`
 }
 
@@ -38,6 +39,7 @@ func fromCore(dataCore product.ProductCore) ProductResponse {
 		Description:      dataCore.Description,
 		ItemCategoryName: dataCore.ItemCategory.Name,
 		City:             dataCore.City,
+		Thumbnail:        dataCore.Thumbnail,
 		ProductImage:     fromCoreListImage(dataCore.ProductImage),
 	}
 }
