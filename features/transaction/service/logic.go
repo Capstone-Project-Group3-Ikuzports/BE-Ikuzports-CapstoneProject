@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"ikuzports/features/product"
 	"ikuzports/features/transaction"
 	"ikuzports/features/user"
@@ -67,6 +68,33 @@ func (service *transactionService) Create(input transaction.TransactionCore) (da
 	for _, v := range dataMidtr.VaNumbers {
 		MidtrResp.VANumbers.Bank = v.Bank
 		MidtrResp.VANumbers.VANumber = v.VANumber
+	}
+
+	dataEmail := struct {
+		UserName    string
+		Time        string
+		OrderID     string
+		GrossAmount string
+		VANumber    string
+		VABank      string
+		Product     string
+	}{
+		UserName:    dataUser.Name,
+		Time:        input.TransactionTime,
+		OrderID:     dataMidtr.OrderID,
+		GrossAmount: dataMidtr.GrossAmount,
+		VABank:      MidtrResp.VANumbers.Bank,
+		VANumber:    MidtrResp.VANumbers.VANumber,
+		Product:     dataProduct.Name,
+	}
+
+	emailTo := dataUser.Email
+	fmt.Println("emailTo", emailTo)
+	fmt.Println("data", dataEmail)
+
+	errMail := thirdparty.SendEmailSMTPCheckup([]string{emailTo}, dataEmail, "email_transaksi.html") //send mail
+	if errMail != nil {
+		fmt.Println(errMail, "Pengiriman Email Gagal")
 	}
 
 	return MidtrResp, nil
