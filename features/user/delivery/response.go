@@ -145,6 +145,7 @@ func fromProduct(dataCore user.ProductCore) _product.ProductResponse {
 		UserName:         dataCore.User.Name,
 		ItemCategoryName: dataCore.ItemCategory.Name,
 		City:             dataCore.City,
+		Thumbnail:        dataCore.Thumbnail,
 		ProductImage:     fromCoreListImage(dataCore.ProductImage),
 	}
 }

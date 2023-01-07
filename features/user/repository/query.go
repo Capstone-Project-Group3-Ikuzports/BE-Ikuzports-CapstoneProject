@@ -146,6 +146,7 @@ func (repo *userRepository) GetProducts(id int) (data []user.ProductCore, err er
 	}
 	// helper.LogDebug(products[1].ProductImage)
 	helper.LogDebug("==========")
+	helper.LogDebug("product thumb", products)
 	var dataCore = toProductList(products)
 	return dataCore, nil
 }

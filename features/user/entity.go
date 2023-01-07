@@ -55,6 +55,7 @@ type ProductCore struct {
 	ItemCategoryID uint
 	ItemCategory   ItemCategory
 	City           string
+	Thumbnail      string
 	ProductImage   []ProductImage
 }
 
