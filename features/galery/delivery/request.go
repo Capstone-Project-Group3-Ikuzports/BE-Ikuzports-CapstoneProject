@@ -8,9 +8,21 @@ type InsertRequest struct {
 	Caption string `json:"caption" form:"caption"`
 }
 
+type UpdateRequest struct {
+	ClubID  uint   `json:"club_id" form:"club_id"`
+	Caption string `json:"caption" form:"caption"`
+}
+
 func toCore(dataCore InsertRequest) galery.Core {
 	return galery.Core{
 		Url:     dataCore.Url,
+		ClubID:  dataCore.ClubID,
+		Caption: dataCore.Caption,
+	}
+}
+
+func toCoreUpdate(dataCore UpdateRequest) galery.Core {
+	return galery.Core{
 		ClubID:  dataCore.ClubID,
 		Caption: dataCore.Caption,
 	}

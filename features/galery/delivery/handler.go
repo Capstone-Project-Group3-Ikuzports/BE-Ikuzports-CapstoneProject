@@ -96,7 +96,7 @@ func (delivery *GaleryDelivery) Create(c echo.Context) error {
 
 func (delivery *GaleryDelivery) Update(c echo.Context) error {
 	idParam, _ := strconv.Atoi(c.Param("id"))
-	clubInput := InsertRequest{}
+	clubInput := UpdateRequest{}
 	errBind := c.Bind(&clubInput) // menangkap data yg dikirim dari req body dan disimpan ke variabel
 	if errBind != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error binding data. "+errBind.Error()))
@@ -105,7 +105,7 @@ func (delivery *GaleryDelivery) Update(c echo.Context) error {
 	if userId < 1 {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
 	}
-	dataCore := toCore(clubInput)
+	dataCore := toCoreUpdate(clubInput)
 	file, _ := c.FormFile("url")
 	if file != nil {
 		res, err := thirdparty.UploadProfile(c, "url")
@@ -114,8 +114,6 @@ func (delivery *GaleryDelivery) Update(c echo.Context) error {
 		}
 		log.Print(res)
 		dataCore.Url = res
-	} else {
-		dataCore.Url = "https://trilogi.ac.id/universitas/wp-content/uploads/2017/07/dummy-img.png"
 	}
 
 	err := delivery.galeryService.Update(dataCore, idParam, userId)
