@@ -64,7 +64,7 @@ func (service *eventService) Create(input event.EventCore) (err error) {
 }
 
 func (service *eventService) GetAll(queryCategoryID, queryPage int, queryCity, queryStatus string) (data []event.EventCore, err error) {
-	limit := 15
+	limit := 50
 	offset := (queryPage - 1) * limit
 
 	dataDate, errDate := service.eventRepository.GetDate()
