@@ -21,7 +21,7 @@ func New(repo product.RepositoryInterface) product.ServiceInterface {
 }
 
 func (service *productService) GetAll(queryItemCategoryID int, queryCity, queryName string, queryPage int) (data []product.ProductCore, page int, err error) {
-	limit := 9
+	limit := 12
 	offset := (queryPage - 1) * limit
 	var jumlahData int
 
