@@ -8,6 +8,7 @@ type TransactionResp struct {
 	TotalPrice      int    `json:"total_price"`
 	TotalQuantity   int    `json:"total_quantity"`
 	ProductID       uint   `json:"product_id"`
+	PaymentMethod   string `json:"payment_method"`
 	TransactionID   string `json:"transaction_id"`
 	StatusPayment   string `json:"status_payment"`
 	VirtualAccount  string `json:"virtual_account"`
@@ -34,6 +35,7 @@ func fromCore(dataCore transaction.TransactionCore) TransactionResp {
 		TotalPrice:      dataCore.TotalPrice,
 		TotalQuantity:   dataCore.TotalQuantity,
 		ProductID:       dataCore.ProductID,
+		PaymentMethod:   dataCore.PaymentMethod,
 		TransactionID:   dataCore.TransactionID,
 		StatusPayment:   dataCore.StatusPayment,
 		VirtualAccount:  dataCore.VirtualAccount,

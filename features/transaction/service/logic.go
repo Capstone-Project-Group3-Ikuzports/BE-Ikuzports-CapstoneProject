@@ -27,6 +27,10 @@ func New(repo transaction.RepositoryInterface, repoProduct product.RepositoryInt
 }
 
 func (service *transactionService) Create(input transaction.TransactionCore) (data transaction.MidtransCore, err error) {
+	if input.PaymentMethod != "bca" && input.PaymentMethod != "bri" && input.PaymentMethod != "bni" {
+		return data, errors.New("bank tidak terdaftar")
+	}
+
 	dataProduct, errProduct := service.productRepository.GetByID(int(input.ProductID))
 	if errProduct != nil {
 		log.Error(err.Error())

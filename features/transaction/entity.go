@@ -6,6 +6,7 @@ type TransactionCore struct {
 	TotalPrice      int
 	TotalQuantity   int
 	ProductID       uint
+	PaymentMethod   string
 	TransactionID   string
 	StatusPayment   string
 	VirtualAccount  string

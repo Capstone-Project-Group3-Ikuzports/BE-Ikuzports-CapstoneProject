@@ -42,6 +42,15 @@ func PaymentCoreApi(orderId string, transData transaction.TransactionCore, produ
 	c := coreapi.Client{}
 	c.New(os.Getenv("MIDTRANS_SERVER"), midtrans.Sandbox)
 
+	var inputBank midtrans.Bank
+	if transData.PaymentMethod == "bca" {
+		inputBank = midtrans.BankBca
+	} else if transData.PaymentMethod == "bri" {
+		inputBank = midtrans.BankBri
+	} else if transData.PaymentMethod == "bni" {
+		inputBank = midtrans.BankBni
+	}
+
 	productID := strconv.Itoa(int(productdata.ID))
 
 	req2 := &coreapi.ChargeReq{
@@ -51,7 +60,7 @@ func PaymentCoreApi(orderId string, transData transaction.TransactionCore, produ
 			GrossAmt: int64(transData.TotalPrice),
 		},
 		BankTransfer: &coreapi.BankTransferDetails{
-			Bank: midtrans.BankBca,
+			Bank: inputBank,
 		},
 		Items: &[]midtrans.ItemDetails{
 			midtrans.ItemDetails{
