@@ -100,10 +100,6 @@ In users feature, there are a feature to Create, Read, Update, Delete, Login for
 
  <a href="https://app.swaggerhub.com/apis-docs/RAMADINAAINIRIZKI/Ikuzports/1.0.0#/"> Click here to redirect to swagger </a>
 
-## Unit Test
-
-<img src="images/unittest.png">
-
 ## Getting Started
 
 ### Installation
